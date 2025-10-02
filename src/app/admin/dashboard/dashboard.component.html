@@ -1,0 +1,168 @@
+<div>
+    <header class="dashboard-header">
+        <div>
+            <h1>Welcome back, {{ user.name }}!</h1>
+            <p>Last login: {{ user.lastLogin | date:'medium' }}</p>
+        </div>
+        <div class="header-actions">
+            <div class="profile-card-header">
+                <div class="user-info">
+                    <h2>{{ user.name }}</h2>
+                    <span class="membership-badge">{{ user.membership }}</span>
+                </div>
+                <div class="avatar">
+                    <img [src]="user.avatarUrl" alt="User Avatar">
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="stats-grid">
+            <div class="stats-widget">
+                <div class="stat-icon-wrapper">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path
+                            d="m14.7 6.3-7.4 7.4a1 1 0 0 0 0 1.4l3.6 3.6a1 1 0 0 0 1.4 0L20 11.1a1 1 0 0 0 0-1.4l-3.6-3.6a1 1 0 0 0-1.7.3z" />
+                        <path d="m11.3 9.7 2.4 2.4" />
+                        <path d="m2.3 21.7.7-2.3 1.6 1.6-2.3.7Z" />
+                        <path
+                            d="M12.3 11.7 10 14l-1.6-1.6a1 1 0 0 0-1.4 0L3.4 16a1 1 0 0 0 0 1.4l3.6 3.6a1 1 0 0 0 1.4 0L16 13.4a1 1 0 0 0 0-1.4Z" />
+                    </svg>
+                </div>
+                <div class="stat-info">
+                    <p class="stat-value">{{ user.stats.toolsPurchased }}</p>
+                    <p class="stat-label">Tools Purchased</p>
+                </div>
+            </div>
+            <div class="stats-widget">
+                <div class="stat-icon-wrapper">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                        <polyline points="7 10 12 15 17 10" />
+                        <line x1="12" y1="15" x2="12" y2="3" />
+                    </svg>
+                </div>
+                <div class="stat-info">
+                    <p class="stat-value">{{ user.stats.downloads }}</p>
+                    <p class="stat-label">Total Downloads</p>
+                </div>
+            </div>
+            <div class="stats-widget">
+                <div class="stat-icon-wrapper">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10" />
+                        <path d="m9 12 2 2 4-4" />
+                    </svg>
+                </div>
+                <div class="stat-info">
+                    <p class="stat-value">{{ user.stats.tutorialsCompleted }}</p>
+                    <p class="stat-label">Tutorials Done</p>
+                </div>
+            </div>
+        </section>
+
+        <div class="dashboard-grid">
+            <section class="dashboard-card">
+                <h2>My Tools & Updates</h2>
+                <h3>Available Tools</h3>
+                <div *ngIf="tools.length > 0; else noTools">
+                    <ul class="tool-list">
+                        <li *ngFor="let tool of tools">
+                            <span>{{ tool.name }} (v{{ tool.version }})</span>
+                            <a href="#" class="cyber-button">Download</a>
+                        </li>
+                    </ul>
+                </div>
+                <ng-template #noTools>
+                    <p>No tools downloaded yet.</p>
+                </ng-template>
+
+                <h3>Updates</h3>
+                <div *ngIf="updates.length > 0; else noUpdates">
+                    <div *ngFor="let update of updates" class="update-notification">
+                        <p>{{ update.name }} v{{ update.newVersion }} is available. <a href="#">Update now</a>
+                    </div>
+                </div>
+                <ng-template #noUpdates>
+                    <p>All tools are up to date.</p>
+                </ng-template>
+            </section>
+
+            <section class="dashboard-card">
+                <h2>Orders / Purchases</h2>
+                <div *ngIf="orders.length > 0; else noOrders">
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Order ID</th>
+                                    <th>Date</th>
+                                    <th>Status</th>
+                                    <th>Total</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let order of orders">
+                                    <td>{{ order.id }}</td>
+                                    <td>{{ order.date | date }}</td>
+                                    <td><span class="status-badge status-{{ order.status.toLowerCase() }}">{{
+                                            order.status }}</span></td>
+                                    <td>{{ order.total | currency }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <ng-template #noOrders>
+                    <p>You have no orders.</p>
+                </ng-template>
+            </section>
+
+            <section class="dashboard-card learning-card">
+                <h2>Learning Progress</h2>
+                <div class="progress-rings">
+                    <div *ngFor="let p of learning.progress" class="progress-ring-wrapper">
+                        <div class="progress-ring" [style.--progress-value]="p.value">
+                            <span class="progress-value">{{ p.value }}%</span>
+                        </div>
+                        <p>{{ p.name }}</p>
+                    </div>
+                </div>
+                <h3>Completed Tutorials</h3>
+                <ul class="link-list">
+                    <li *ngFor="let item of learning.read"><a href="#">{{ item }}</a></li>
+                </ul>
+            </section>
+
+            <section class="dashboard-card announcements-card">
+                <h2>Announcements</h2>
+                <div *ngFor="let notice of announcements" class="announcement-item">
+                    <h4>{{ notice.title }}</h4>
+                    <p>{{ notice.date | date }} - <a href="#">Read more</a></p>
+                </div>
+            </section>
+
+            <section class="dashboard-card">
+                <h2>Profile Settings</h2>
+                <ul class="link-list">
+                    <li><a href="#">Edit Name, Email, or Password</a></li>
+                    <li><a href="#">Change Theme</a></li>
+                    <li><a href="#">Enable 2FA/Security Settings</a></li>
+                </ul>
+            </section>
+
+            <section class="dashboard-card">
+                <h2>Support & Community</h2>
+                <ul class="link-list">
+                    <li><a href="#">Contact Helpdesk</a></li>
+                    <li><a href="#">FAQs</a></li>
+                    <li><a href="#">Community Forum</a></li>
+                </ul>
+            </section>
+        </div>
+    </main>
+</div>

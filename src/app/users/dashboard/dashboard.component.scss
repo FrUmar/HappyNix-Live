@@ -1,0 +1,596 @@
+@import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
+
+@keyframes matrix-scroll {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(-2px);
+  }
+}
+
+// Slider
+.slider-container {
+  position: relative;
+  width: 100%;
+  height: 400px;
+  margin-bottom: 40px;
+  border: 2px solid #0ff;
+  border-radius: 30px;
+  box-shadow: 0 0 15px #0ff, inset 0 0 15px #0ff;
+  overflow: hidden;
+  background: rgba(15, 15, 15, 0.8);
+
+  .slide {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    opacity: 0;
+    transition: opacity 1s ease-in-out;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+
+    &.active {
+      opacity: 1;
+      z-index: 1;
+    }
+
+    .slide-content {
+      background: rgba(15, 15, 15, 0.8);
+      padding: 15px;
+      border-radius: 5px;
+      color: #fff;
+
+      h1.glitch {
+        font-size: 1.8rem;
+      }
+
+      p.glitch {
+        font-size: 1rem;
+      }
+    }
+  }
+}
+
+// Glitch Effect
+.glitch {
+  position: relative;
+  color: #fff;
+  text-shadow: 0 0 5px #0ff, 0 0 10px #0ff;
+
+  &::before,
+  &::after {
+    content: attr(data-text);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #000;
+    overflow: hidden;
+    clip: rect(0, 900px, 0, 0);
+  }
+
+  &::before {
+    left: 2px;
+    text-shadow: -2px 0 #0ff;
+    animation: glitch-anim-1 2s infinite linear alternate-reverse;
+  }
+
+  &::after {
+    left: -2px;
+    text-shadow: -2px 0 #f0f, 2px 2px #0ff;
+    animation: glitch-anim-2 3s infinite linear alternate-reverse;
+  }
+}
+
+// Categories
+.categories-container {
+  // display: flex;
+  justify-content: center;
+  margin-bottom: 40px;
+  gap: 15px;
+  // flex-wrap: wrap;
+
+  .category-card {
+    background: rgba(15, 15, 15, 0.8);
+    border: 1px solid #0ff;
+    border-radius: 20px;
+    padding: 15px;
+    text-align: center;
+    flex-grow: 1;
+    max-width: 200px;
+    min-width: 150px;
+    transition: all 0.3s ease;
+    box-shadow: 0 0 5px #0ff, inset 0 0 5px #0ff;
+    cursor: pointer;
+    opacity: 0;
+    transform: translateY(80px);
+    transition: opacity 0.6s ease-out, transform 0.6s ease-out, filter 0.3s ease, box-shadow 0.3s ease;
+
+    img {
+      border-radius: 15px;
+      border: 1px solid #0ff;
+      box-shadow: 0 0 10px #0ff, inset 0 0 10px #0ff;
+      width: 100%;
+      height: auto;
+      max-height: 120px;
+    }
+
+    .card-icon {
+      width: 100%;
+      height: 120px;
+    }
+
+    &:hover {
+      background: rgba(0, 255, 255, 0.15);
+      box-shadow: 0 8px 25px rgba(0, 255, 255, 0.3), inset 0 0 10px #0ff;
+      transform: translateY(-5px);
+      filter: brightness(1.1);
+
+      .card-icon {
+        transform: scale(1.2) rotate(5deg);
+      }
+    }
+
+    .card-name {
+      margin-top: 1rem;
+      font-size: 1rem;
+      color: #fff;
+    }
+  }
+
+  &.is-visible {
+    .category-card {
+      opacity: 1;
+      transform: translateY(0);
+
+      @for $i from 1 through 4 {
+        &:nth-child(#{$i}) {
+          transition-delay: #{$i * 0.1}s;
+        }
+      }
+    }
+  }
+}
+
+// Tools Section
+.tools-section {
+  margin-bottom: 40px;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+
+  &.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  h2 {
+    font-size: 1.8rem;
+    color: #0ff;
+    text-shadow: 0 0 10px #0ff;
+    border-bottom: 2px solid #0ff;
+    padding-bottom: 8px;
+    margin-bottom: 15px;
+    text-align: center;
+  }
+
+  .tools-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 15px;
+  }
+
+  .tool-card {
+    background: rgba(15, 15, 15, 0.8);
+    border: 1px solid #0ff;
+    border-radius: 20px;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 0 5px #0ff, inset 0 0 5px #0ff;
+    transition: all 0.3s ease;
+    opacity: 0;
+    transform: translateY(80px);
+    transition: opacity 2s ease-out, transform 2s ease-out, filter 0.3s ease, box-shadow 0.3s ease;
+
+    img {
+      border-radius: 15px;
+      border: 1px solid #0ff;
+      box-shadow: 0 0 10px #0ff, inset 0 0 10px #0ff;
+      width: 100%;
+      height: auto;
+      max-height: 120px;
+    }
+
+    .tool-icon {
+      width: 100%;
+      height: 120px;
+    }
+
+    &:hover {
+      transform: scale(1.05);
+      box-shadow: 0 10px 30px rgba(0, 255, 255, 0.35), inset 0 0 15px #0ff;
+      filter: brightness(1.1);
+
+      .tool-icon {
+        transform: scale(1.2) rotate(-5deg);
+      }
+    }
+
+    .tool-name {
+      font-size: 1.3rem;
+      color: #fff;
+      margin-bottom: 8px;
+      text-align: center;
+    }
+
+    .tool-description {
+      color: #ccc;
+      flex-grow: 1;
+      margin-bottom: 15px;
+      text-align: center;
+      font-size: 0.9rem;
+    }
+
+    .tool-actions {
+      display: flex;
+      justify-content: space-around;
+    }
+  }
+
+  &.is-visible .tools-grid {
+    .tool-card {
+      opacity: 1;
+      transform: translateY(0);
+
+      @for $i from 1 through 10 {
+        &:nth-child(#{$i}) {
+          transition-delay: #{$i * 0.08}s;
+        }
+      }
+    }
+  }
+}
+
+// Neon Button
+.neon-button {
+  background: transparent;
+  border: 1px solid #0ff;
+  border-radius: 20px;
+  color: #0ff;
+  padding: 8px 15px;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-shadow: 0 0 5px #0ff;
+  box-shadow: 0 0 5px #0ff, inset 0 0 5px #0ff;
+
+  &:hover {
+    background: rgba(0, 255, 255, 0.2);
+    color: #fff;
+    box-shadow: 0 0 15px #0ff;
+  }
+
+  &.green {
+    border-color: #39ff14;
+    color: #39ff14;
+    text-shadow: 0 0 5px #39ff14;
+    box-shadow: 0 0 5px #39ff14, inset 0 0 5px #39ff14;
+
+    &:hover {
+      background: rgba(57, 255, 20, 0.2);
+      color: #fff;
+      box-shadow: 0 0 15px #39ff14;
+    }
+  }
+}
+
+// VMware Section
+.vmware-section {
+  background: rgba(15, 15, 15, 0.8);
+  border: 1px solid #4a4a4a;
+  border-radius: 20px;
+  padding: 20px;
+  margin-bottom: 40px;
+  box-shadow: 0 0 25px rgba(0, 255, 0, 0.2), inset 0 0 10px rgba(0, 255, 0, 0.1);
+  backdrop-filter: blur(5px);
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+
+  &.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .vmware-header {
+    text-align: center;
+    margin-bottom: 20px;
+
+    h2 {
+      font-size: 2rem;
+      color: #fff;
+      margin-bottom: 8px;
+    }
+
+    p {
+      font-size: 1rem;
+      color: #ccc;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+  }
+
+  .vmware-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+  }
+
+  .vmware-card {
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid #0ff;
+    border-radius: 15px;
+    padding: 20px;
+    display: flex;
+    gap: 15px;
+    align-items: flex-start;
+    transition: all 0.3s ease;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.5s ease-out, transform 0.5s ease-out, filter 0.3s ease, box-shadow 0.3s ease;
+
+    &:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 30px rgba(0, 255, 0, 0.4);
+      filter: brightness(1.1);
+
+      .vmware-card-icon {
+        transform: scale(1.1) rotate(3deg);
+      }
+    }
+
+    .vmware-card-icon {
+      font-size: 2.5rem;
+      flex-shrink: 0;
+      margin-top: 5px;
+      text-shadow: 0 0 10px #0ff;
+      transition: transform 0.3s ease;
+    }
+
+    .vmware-card-content {
+      h3 {
+        font-size: 1.2rem;
+        color: #fff;
+        margin-bottom: 8px;
+      }
+
+      p {
+        color: #ccc;
+        margin-bottom: 15px;
+        line-height: 1.6;
+        font-size: 0.9rem;
+      }
+
+      .neon-button {
+        width: 100%;
+        text-align: center;
+      }
+    }
+  }
+
+  &.is-visible .vmware-grid {
+    .vmware-card {
+      opacity: 1;
+      transform: translateY(0);
+
+      @for $i from 1 through 4 {
+        &:nth-child(#{$i}) {
+          transition-delay: #{$i * 0.1}s;
+        }
+      }
+    }
+  }
+}
+
+// Mobile Responsive Adjustments
+@media (max-width: 768px) {
+  .slider-container {
+    height: 300px;
+
+    .slide .slide-content {
+      padding: 10px;
+
+      h1.glitch {
+        font-size: 1.5rem;
+      }
+
+      p.glitch {
+        font-size: 0.9rem;
+      }
+    }
+  }
+
+  .categories-container {
+    .category-card {
+      max-width: calc(49% - 10px);
+      min-width: calc(49% - 10px);
+      padding: 10px;
+
+      img {
+        max-height: 100px;
+      }
+
+      .card-icon {
+        height: 100px;
+      }
+
+      .card-name {
+        font-size: 0.9rem;
+      }
+    }
+  }
+
+  .tools-section {
+    h2 {
+      font-size: 1.5rem;
+      padding-bottom: 6px;
+      margin-bottom: 12px;
+    }
+
+    .tools-grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+    }
+
+    .tool-card {
+      padding: 10px;
+
+      img {
+        max-height: 100px;
+      }
+
+      .tool-icon {
+        height: 100px;
+      }
+
+      .tool-name {
+        font-size: 1.1rem;
+      }
+
+      .tool-description {
+        font-size: 0.8rem;
+      }
+
+      .tool-actions {
+        flex-direction: column;
+        gap: 8px;
+      }
+    }
+  }
+
+  .neon-button {
+    padding: 6px 12px;
+    font-size: 0.8rem;
+  }
+
+  .vmware-section {
+    padding: 15px;
+
+    .vmware-header {
+      h2 {
+        font-size: 1.8rem;
+      }
+
+      p {
+        font-size: 0.9rem;
+      }
+    }
+
+    .vmware-grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 15px;
+    }
+
+    .vmware-card {
+      padding: 15px;
+
+      .vmware-card-icon {
+        font-size: 2rem;
+      }
+
+      .vmware-card-content {
+        h3 {
+          font-size: 1.1rem;
+        }
+
+        p {
+          font-size: 0.8rem;
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .slider-container {
+    height: 250px;
+
+    .slide .slide-content {
+      padding: 8px;
+
+      h1.glitch {
+        font-size: 1.2rem;
+      }
+
+      p.glitch {
+        font-size: 0.8rem;
+      }
+    }
+  }
+
+  .categories-container {
+    .category-card {
+      max-width: calc(50% - 8px);
+      min-width: calc(50% - 8px);
+      padding: 8px;
+
+      img {
+        max-height: 80px;
+      }
+
+      .card-icon {
+        height: 80px;
+      }
+
+      .card-name {
+        font-size: 0.8rem;
+      }
+    }
+  }
+
+  .tools-section {
+    .tools-grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+    }
+
+    .tool-card {
+      padding: 8px;
+
+      img {
+        max-height: 80px;
+      }
+
+      .tool-icon {
+        height: 80px;
+      }
+
+      .tool-name {
+        font-size: 1rem;
+      }
+
+      .tool-description {
+        font-size: 0.75rem;
+      }
+    }
+  }
+
+  .neon-button {
+    padding: 5px 10px;
+    font-size: 0.75rem;
+  }
+
+  .vmware-section {
+    .vmware-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+}

@@ -1,0 +1,66 @@
+<div class="main">
+    <div class="matrix-background"></div>
+    <div class="about-container">
+        <header class="about-header">
+            <h1 class="glitch" data-text="About CyberScreen Solutions">About CyberScreen Solutions</h1>
+            <p>Discover the vision behind our cutting-edge screen monitoring and remote administration tools.</p>
+        </header>
+
+        <section class="mission-section">
+            <h2>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round">
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                </svg>
+                Our Mission
+            </h2>
+            <p>
+                At CyberScreen Solutions, we empower security researchers, penetration testers, and system
+                administrators with advanced Remote Administration Tools (RATs) specializing in real-time screen
+                monitoring and control. Our flagship products, inspired by tools like AndroRAT, deliver unparalleled
+                screen streaming, capture, and remote interaction capabilities for Android and Windows platforms. We are
+                committed to pushing the boundaries of cybersecurity innovation while maintaining ethical standards and
+                robust encryption.
+            </p>
+        </section>
+
+        <section class="video-section">
+            <h2>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round">
+                    <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                </svg>
+                Our Story
+            </h2>
+            <p>Watch our journey to becoming leaders in screen-focused RAT development.</p>
+            <div class="video-container">
+                <iframe id="demo-player" [src]="videoUrl | safe: 'resourceUrl'" frameborder="0"
+                    allowfullscreen></iframe>
+            </div>
+        </section>
+
+        <section class="team-section">
+            <h2>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round">
+                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="9" cy="7" r="4"></circle>
+                    <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                    <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                </svg>
+                Our Team
+            </h2>
+            <div class="team-grid">
+                <div class="team-member" *ngFor="let member of team">
+                    <img [src]="member.photo" [alt]="member.name" class="member-photo">
+                    <h3>{{ member.name }}</h3>
+                    <p class="role">{{ member.role }}</p>
+                    <p>{{ member.bio }}</p>
+                </div>
+            </div>
+        </section>
+    </div>
+    <div class="loading-container" *ngIf="!videoUrl || !team.length">
+        <div class="glitch" data-text="Loading...">Loading...</div>
+    </div>
+</div>

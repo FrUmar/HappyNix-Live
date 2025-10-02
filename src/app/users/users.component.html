@@ -1,0 +1,81 @@
+<div class="main">
+    <video class="video-background" [autoplay]="true" [loop]="true" [muted]="true" playsinline>
+        <source src="video/background.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+    <div class="dashboard-container">
+        <header class="dashboard-header">
+            <div class="logo">
+                <span class="logo-icon">🛡️</span>
+                <span class="logo-text">CyberCore</span>
+            </div>
+            <!-- Hamburger Menu Button -->
+            <button class="menu-toggle" (click)="isMenuOpen = !isMenuOpen" [class.is-active]="isMenuOpen">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <div class="header-right" [class.is-open]="isMenuOpen">
+                <nav class="header-nav">
+                    <a [routerLink]="'/dashboard'" [routerLinkActive]="'router-link-active'">Home</a>
+                    <a [routerLink]="'/tutorials'" [routerLinkActive]="'router-link-active'">Tutorials</a>
+                    <a [routerLink]="'/about'" [routerLinkActive]="'router-link-active'">About</a>
+                </nav>
+                <div class="search-bar">
+                    <input type="search" placeholder="Search tools, exploits...">
+                    <button>Search</button>
+                </div>
+                <div class="user-actions">
+                    <div *ngIf="user.isLoggedIn; else loginButton" class="user-profile">
+                        <img [src]="user.avatar" [alt]="user.name" class="user-avatar">
+                        <span class="user-name">{{ user.name }}</span>
+                        <button class="neon-button" [routerLink]="'/profile'">My Profile</button>
+                    </div>
+                    <ng-template #loginButton>
+                        <button class="neon-button green" [routerLink]="'/auth/login'">Login</button>
+                    </ng-template>
+                </div>
+            </div>
+
+        </header>
+        <router-outlet></router-outlet>
+        <app-footer></app-footer>
+        <!-- From Uiverse.io by anon_2952 -->
+        <div class="tooltip-container">
+            <!-- Main button -->
+            <span class="text">
+                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="white" class="bi bi-send-fill"
+                    viewBox="0 0 16 16">
+                    <path
+                        d="M15.964.686a.5.5 0 0 0-.65-.65L.767 5.855H.766l-.452.18a.5.5 0 0 0-.082.887l.41.26.001.002 4.995 3.178 3.178 4.995.002.002.26.41a.5.5 0 0 0 .886-.083zm-1.833 1.89L6.637 10.07l-.215-.338a.5.5 0 0 0-.154-.154l-.338-.215 7.494-7.494 1.178-.471z" />
+                </svg>
+            </span>
+
+            <!-- Facebook -->
+            <span class="tooltip tooltip1">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 16 16">
+                    <path
+                        d="M8.945 8.54H7.594V16H5.308V8.54H4V6.534h1.308V5.185c0-1.105.59-2.685 2.685-2.685l1.97.008v2.195h-1.43c-.235 0-.565.117-.565.618v1.213h1.975l-.263 2.006z" />
+                </svg>
+            </span>
+
+            <!-- WhatsApp -->
+            <span class="tooltip tooltip2">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" class="bi bi-whatsapp"
+                    viewBox="0 0 16 16">
+                    <path
+                        d="M13.601 2.326A7.85 7.85 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.9 7.9 0 0 0 3.79.965c4.368 0 7.926-3.558 7.93-7.93a7.9 7.9 0 0 0-2.323-5.607z" />
+                </svg>
+            </span>
+
+            <!-- Telegram -->
+            <span class="tooltip tooltip3">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" class="bi bi-telegram"
+                    viewBox="0 0 16 16">
+                    <path
+                        d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0m-7.713-2.094q-1.168.486-4.666 2.01c-.567.225-.595.442-.625.685-.03.243.275.339.69.47l.175.055c.408.133.958.288 1.243.294q.39.01.868-.32 3.269-2.206 3.374-2.23c.05-.012.12-.026.166.016.046.042.042.12.037.141-.03.129-1.227 1.241-1.846 1.817-.193.18-.33.307-.358.336a8 8 0 0 1-.188.186c-.38.366-.664.64.015 1.088.327.216.589.393.85.571.284.194.568.387.936.629.14.092.27.187.331.236.63.448.997.414 1.557.255.265-1.417.786-4.486.906-5.751a1.4 1.4 0 0 0-.127-.532.53.53 0 0 0-.424-.217c-.3.005-.763.166-2.984 1.09z" />
+                </svg>
+            </span>
+        </div>
+    </div>
+</div>

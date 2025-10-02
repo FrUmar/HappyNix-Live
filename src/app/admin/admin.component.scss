@@ -1,0 +1,89 @@
+
+:host {
+  --primary-bg: #1a1d24;
+  --secondary-bg: #232831;
+  --card-bg: #232831;
+  --text-color: #e0e0e0;
+  --text-muted: #8e9297;
+  --header-color: #ffffff;
+  --accent-color: #00a8ff;
+  --accent-color-hover: #0097e6;
+  --border-color: #3a3f4c;
+  --status-completed: #2ecc71;
+  --status-pending: #f39c12;
+  --status-failed: #e74c3c;
+  --shadow-color: rgba(0, 0, 0, 0.2);
+}
+
+.dashboard-layout {
+    display: flex;
+    min-height: 100vh;
+    background-color: var(--primary-bg);
+    color: var(--text-color);
+    font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  }
+
+  .sidebar-nav {
+    width: 260px;
+    background-color: var(--secondary-bg);
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    border-right: 1px solid var(--border-color);
+    transition: width 0.3s ease;
+  
+    .logo {
+      font-family: 'Roboto Mono', monospace;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--accent-color);
+      margin-bottom: 2.5rem;
+      text-align: center;
+    }
+  
+    ul {
+      list-style-type: none;
+      padding: 0;
+      margin: 0;
+    }
+  
+    li a {
+      display: flex;
+      align-items: center;
+      padding: 0.9rem 1rem;
+      margin-bottom: 0.5rem;
+      border-radius: 8px;
+      color: var(--text-muted);
+      text-decoration: none;
+      font-weight: 500;
+      transition: background-color 0.2s ease, color 0.2s ease;
+  
+      svg {
+        margin-right: 1rem;
+        width: 22px;
+        height: 22px;
+        stroke-width: 2;
+      }
+  
+      &:hover {
+        background-color: rgba(255, 255, 255, 0.05);
+        color: var(--header-color);
+      }
+  
+      &.active {
+        background-color: var(--accent-color);
+        color: var(--header-color);
+        box-shadow: 0 4px 10px rgba(0, 168, 255, 0.2);
+      }
+    }
+  
+    .sidebar-bottom {
+      margin-top: auto;
+    }
+  }
+  .dashboard-container {
+    width: 100%;
+    flex: 1;
+    padding: 2rem 3rem;
+    overflow-y: auto;
+  }

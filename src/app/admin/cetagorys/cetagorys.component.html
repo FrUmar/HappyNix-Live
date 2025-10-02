@@ -1,0 +1,63 @@
+<header class="dashboard-header">
+    <h1>Category Management</h1>
+</header>
+
+<div class="category-layout">
+    <section class="dashboard-card">
+        <h2>All Categories ({{ categories.length }})</h2>
+        <div class="category-list">
+            <div *ngIf="categories.length === 0" class="empty-state">
+                <p>No categories found. Add one to get started!</p>
+            </div>
+            <div class="category-item" *ngFor="let category of categories">
+                <img [src]="category.image" alt="{{ category.name }}" class="category-image">
+                <div class="category-info">
+                    <h3>{{ category.name }}</h3>
+                    <p>{{ category.productCount }} Products</p>
+                </div>
+                <div class="category-actions">
+                    <button (click)="selectCategory(category)" class="action-btn edit-btn" title="Edit">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z" />
+                            <path d="m15 5 4 4" />
+                        </svg>
+                    </button>
+                    <button (click)="deleteCategory(category.id)" class="action-btn delete-btn" title="Delete">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M3 6h18" />
+                            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6" />
+                            <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="dashboard-card">
+        <h2>{{ isEditing ? 'Edit Category' : 'Add New Category' }}</h2>
+        <form (ngSubmit)="saveCategory()" #categoryForm="ngForm">
+            <div class="form-group">
+                <label for="name">Category Name</label>
+                <input type="text" id="name" name="name" [(ngModel)]="currentCategory.name" required>
+            </div>
+            <div class="form-group">
+                <label for="image">Image URL</label>
+                <input type="text" id="image" name="image" [(ngModel)]="currentCategory.image" required>
+                <small>Use a URL for the category image (e.g., from api.dicebear.com).</small>
+            </div>
+            <div class="form-actions">
+                <button type="submit" style="border-radius: 10px;" class="cyber-button"
+                    [disabled]="!categoryForm.form.valid">
+                    {{ isEditing ? 'Update Category' : 'Add Category' }}
+                </button>
+                <button type="button" (click)="resetForm()" style="border-radius: 10px;" class="cyber-button secondary"
+                    *ngIf="isEditing">
+                    Cancel
+                </button>
+            </div>
+        </form>
+    </section>
+</div>

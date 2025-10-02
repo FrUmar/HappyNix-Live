@@ -1,0 +1,17 @@
+<section #animatedSection class="tools-section">
+    <h2>{{paramName}}</h2>
+    <div class="tools-grid">
+        @for (tool of tools; track tool.toolId) {
+        <div class="tool-card">
+            <div class="tool-icon"><img [src]="tool.icon" [alt]="tool.name" alt=""></div>
+            <h3 class="tool-name">{{ tool.name }}</h3>
+            <p class="tool-description">{{ tool.description }}</p>
+            <div class="tool-actions">
+                <button class="neon-button" [routerLink]="'/details'"
+                    [queryParams]="{ toolId: tool.toolId}">Details</button>
+                <button class="neon-button green">Download</button>
+            </div>
+        </div>
+        }
+    </div>
+</section>

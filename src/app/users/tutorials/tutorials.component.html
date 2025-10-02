@@ -1,0 +1,20 @@
+<div class="main">
+    <div class="matrix-background"></div>
+    <div class="tutorials-container" *ngIf="tutorial">
+        <header class="tutorial-header">
+            <h1 class="glitch" [attr.data-text]="tutorial.title">{{ tutorial.title }}</h1>
+            <p>{{ tutorial.description }}</p>
+        </header>
+        <div class="video-container">
+            <iframe #youtubePlayer id="youtube-player" [src]="tutorial.videoUrl | safe: 'resourceUrl'" frameborder="0"
+                allowfullscreen></iframe>
+        </div>
+        <div class="tutorial-content">
+            <h2>Video Description</h2>
+            <p>{{ tutorial.longDescription }}</p>
+        </div>
+    </div>
+    <div class="loading-container" *ngIf="!tutorial">
+        <div class="glitch" data-text="Loading...">Loading...</div>
+    </div>
+</div>

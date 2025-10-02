@@ -1,0 +1,302 @@
+/* Keyframes for animations */
+@keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(15px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  @keyframes glitch-anim-1 {
+    0% { clip-path: inset(39% 0 62% 0); } 5% { clip-path: inset(45% 0 23% 0); } 10% { clip-path: inset(29% 0 43% 0); } 15% { clip-path: inset(86% 0 1% 0); } 20% { clip-path: inset(23% 0 48% 0); } 25% { clip-path: inset(25% 0 55% 0); } 30% { clip-path: inset(78% 0 1% 0); } 35% { clip-path: inset(43% 0 53% 0); } 40% { clip-path: inset(8% 0 50% 0); } 45% { clip-path: inset(78% 0 13% 0); } 50% { clip-path: inset(49% 0 45% 0); } 55% { clip-path: inset(13% 0 82% 0); } 60% { clip-path: inset(4% 0 95% 0); } 65% { clip-path: inset(57% 0 10% 0); } 70% { clip-path: inset(88% 0 1% 0); } 75% { clip-path: inset(20% 0 45% 0); } 80% { clip-path: inset(93% 0 3% 0); } 85% { clip-path: inset(62% 0 31% 0); } 90% { clip-path: inset(71% 0 24% 0); } 95% { clip-path: inset(8% 0 85% 0); } 100% { clip-path: inset(98% 0 1% 0); }
+  }
+  
+  @keyframes glitch-anim-2 {
+    0% { clip-path: inset(78% 0 2% 0); } 5% { clip-path: inset(53% 0 24% 0); } 10% { clip-path: inset(10% 0 33% 0); } 15% { clip-path: inset(86% 0 13% 0); } 20% { clip-path: inset(23% 0 12% 0); } 25% { clip-path: inset(5% 0 50% 0); } 30% { clip-path: inset(35% 0 48% 0); } 35% { clip-path: inset(1% 0 9% 0); } 40% { clip-path: inset(80% 0 1% 0); } 45% { clip-path: inset(23% 0 10% 0); } 50% { clip-path: inset(1% 0 82% 0); } 55% { clip-path: inset(93% 0 3% 0); } 60% { clip-path: inset(3% 0 85% 0); } 65% { clip-path: inset(55% 0 36% 0); } 70% { clip-path: inset(88% 0 11% 0); } 75% { clip-path: inset(48% 0 49% 0); } 80% { clip-path: inset(93% 0 3% 0); } 85% { clip-path: inset(2% 0 76% 0); } 90% { clip-path: inset(71% 0 24% 0); } 95% { clip-path: inset(8% 0 85% 0); } 100% { clip-path: inset(98% 0 1% 0); }
+  }
+  
+  :host {
+    display: block;
+    color: #0ff;
+    font-family: 'Share Tech Mono', monospace;
+  }
+  
+  .main {
+    position: relative;
+    min-height: 100vh;
+    padding: 15px;
+    overflow-x: hidden;
+  }
+  
+  .matrix-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+   
+    z-index: 0;
+    pointer-events: none;
+  }
+  
+  .tutorials-container {
+    position: relative;
+    z-index: 1;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 20px;
+    background: rgba(15, 15, 15, 0.8);
+    border: 1px solid #0ff;
+    border-radius: 20px;
+    box-shadow: 0 0 20px rgba(0, 255, 255, 0.3), inset 0 0 8px rgba(0, 255, 255, 0.2);
+    backdrop-filter: blur(6px);
+    animation: fadeInUp 0.7s ease-out forwards;
+  }
+  
+  .tutorial-header {
+    text-align: center;
+    margin-bottom: 30px;
+    border-bottom: 1px solid rgba(0, 255, 255, 0.3);
+    padding-bottom: 20px;
+    opacity: 0;
+    animation: fadeInUp 0.6s ease-out 0.1s forwards;
+  
+    h1 {
+      font-size: 2.2rem;
+      color: #fff;
+      margin: 0 0 10px;
+    }
+  
+    p {
+      font-size: 1rem;
+      color: #ccc;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+  }
+  
+  .glitch {
+    position: relative;
+    color: #fff;
+    text-shadow: 0 0 4px #0ff, 0 0 8px #0ff;
+    &::before,
+    &::after {
+      content: attr(data-text);
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(10, 10, 10, 0.8);
+      overflow: hidden;
+    }
+    &::before {
+      left: 2px;
+      text-shadow: -2px 0 #f0f;
+      animation: glitch-anim-1 2s infinite linear alternate-reverse;
+    }
+    &::after {
+      left: -2px;
+      text-shadow: -2px 0 #0ff, 2px 2px #f0f;
+      animation: glitch-anim-2 3s infinite linear alternate-reverse;
+    }
+  }
+  
+  .video-container {
+    position: relative;
+    padding-bottom: 56.25%; /* 16:9 aspect ratio */
+    height: 0;
+    overflow: hidden;
+    border-radius: 15px;
+    border: 2px solid #0ff;
+    box-shadow: 0 0 12px rgba(0, 255, 255, 0.3);
+    margin-bottom: 20px;
+    opacity: 0;
+    animation: fadeInUp 0.6s ease-out 0.2s forwards;
+  
+    iframe {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+    }
+  }
+  
+  
+  .neon-button {
+    background: transparent;
+    border: 1px solid #0ff;
+    border-radius: 25px;
+    color: #0ff;
+    padding: 8px 16px;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-shadow: 0 0 4px #0ff;
+    box-shadow: 0 0 4px #0ff, inset 0 0 4px #0ff;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  
+    &:hover {
+      background: rgba(0, 255, 255, 0.2);
+      color: #fff;
+      box-shadow: 0 0 15px #0ff;
+    }
+  
+    svg {
+      width: 16px;
+      height: 16px;
+    }
+  }
+  
+  .tutorial-content {
+    margin-top: 20px;
+    opacity: 0;
+    animation: fadeInUp 0.6s ease-out 0.4s forwards;
+  
+    h2 {
+      font-size: 1.5rem;
+      color: #0ff;
+      border-bottom: 1px solid #0ff;
+      padding-bottom: 8px;
+      margin-bottom: 15px;
+      text-shadow: 0 0 4px #0ff;
+    }
+  
+    p {
+      font-size: 0.95rem;
+      color: #ccc;
+      line-height: 1.6;
+    }
+  }
+  
+  .loading-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 80vh;
+    font-size: 1.5rem;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 992px) {
+    .tutorials-container {
+      max-width: 700px;
+      padding: 15px;
+      border-radius: 15px;
+    }
+  
+    .tutorial-header h1 {
+      font-size: 1.8rem;
+    }
+  
+    .tutorial-header p {
+      font-size: 0.9rem;
+    }
+  
+    .tutorial-content h2 {
+      font-size: 1.3rem;
+    }
+  
+    .tutorial-content p {
+      font-size: 0.9rem;
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .tutorials-container {
+      padding: 12px;
+      border-radius: 12px;
+    }
+  
+    .main {
+      padding: 10px;
+    }
+  
+    .tutorial-header {
+      margin-bottom: 20px;
+      padding-bottom: 15px;
+    }
+  
+    .tutorial-header h1 {
+      font-size: 1.6rem;
+    }
+  
+    .tutorial-header p {
+      font-size: 0.85rem;
+    }
+  
+    .video-container {
+      border-radius: 12px;
+    }
+  
+    .neon-button {
+      padding: 6px 12px;
+      font-size: 0.85rem;
+  
+      svg {
+        width: 14px;
+        height: 14px;
+      }
+    }
+  
+    .tutorial-content h2 {
+      font-size: 1.2rem;
+    }
+  
+    .tutorial-content p {
+      font-size: 0.85rem;
+    }
+  
+    .loading-container {
+      font-size: 1.3rem;
+    }
+  }
+  
+  @media (max-width: 576px) {
+    .tutorials-container {
+      padding: 10px;
+      border-radius: 10px;
+    }
+  
+    .tutorial-header h1 {
+      font-size: 1.4rem;
+    }
+  
+    .tutorial-header p {
+      font-size: 0.8rem;
+    }
+  
+    .video-container {
+      border-radius: 10px;
+    }
+  
+    .neon-button {
+      padding: 5px 10px;
+      font-size: 0.8rem;
+  
+      svg {
+        width: 12px;
+        height: 12px;
+      }
+    }
+  
+  
+    .tutorial-content h2 {
+      font-size: 1.1rem;
+    }
+  
+    .tutorial-content p {
+      font-size: 0.8rem;
+    }
+  
+    .loading-container {
+      font-size: 1.2rem;
+    }
+  }

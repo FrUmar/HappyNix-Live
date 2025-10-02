@@ -1,0 +1,517 @@
+// Keyframes reused from tool-details.component.scss (assuming they are defined globally or imported)
+@keyframes glitch-anim-1 {
+  0% { clip-path: inset(39% 0 62% 0); } 5% { clip-path: inset(45% 0 23% 0); } 10% { clip-path: inset(29% 0 43% 0); } 15% { clip-path: inset(86% 0 1% 0); } 20% { clip-path: inset(23% 0 48% 0); } 25% { clip-path: inset(25% 0 55% 0); } 30% { clip-path: inset(78% 0 1% 0); } 35% { clip-path: inset(43% 0 53% 0); } 40% { clip-path: inset(8% 0 50% 0); } 45% { clip-path: inset(78% 0 13% 0); } 50% { clip-path: inset(49% 0 45% 0); } 55% { clip-path: inset(13% 0 82% 0); } 60% { clip-path: inset(4% 0 95% 0); } 65% { clip-path: inset(57% 0 10% 0); } 70% { clip-path: inset(88% 0 1% 0); } 75% { clip-path: inset(20% 0 45% 0); } 80% { clip-path: inset(93% 0 3% 0); } 85% { clip-path: inset(62% 0 31% 0); } 90% { clip-path: inset(71% 0 24% 0); } 95% { clip-path: inset(8% 0 85% 0); } 100% { clip-path: inset(98% 0 1% 0); }
+}
+
+@keyframes glitch-anim-2 {
+  0% { clip-path: inset(78% 0 2% 0); } 5% { clip-path: inset(53% 0 24% 0); } 10% { clip-path: inset(10% 0 33% 0); } 15% { clip-path: inset(86% 0 13% 0); } 20% { clip-path: inset(23% 0 12% 0); } 25% { clip-path: inset(5% 0 50% 0); } 30% { clip-path: inset(35% 0 48% 0); } 35% { clip-path: inset(1% 0 9% 0); } 40% { clip-path: inset(80% 0 1% 0); } 45% { clip-path: inset(23% 0 10% 0); } 50% { clip-path: inset(1% 0 82% 0); } 55% { clip-path: inset(93% 0 3% 0); } 60% { clip-path: inset(3% 0 85% 0); } 65% { clip-path: inset(55% 0 36% 0); } 70% { clip-path: inset(88% 0 11% 0); } 75% { clip-path: inset(48% 0 49% 0); } 80% { clip-path: inset(93% 0 3% 0); } 85% { clip-path: inset(2% 0 76% 0); } 90% { clip-path: inset(71% 0 24% 0); } 95% { clip-path: inset(8% 0 85% 0); } 100% { clip-path: inset(98% 0 1% 0); }
+}
+
+:host {
+  display: block;
+  color: #0ff;
+  font-family: 'Share Tech Mono', monospace;
+}
+
+.profile-container {
+  position: relative;
+  z-index: 1;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 20px;
+  background: rgba(15, 15, 15, 0.8);
+  border: 1px solid #0ff;
+  border-radius: 20px;
+  box-shadow: 0 0 20px rgba(0, 255, 255, 0.3), inset 0 0 8px rgba(0, 255, 255, 0.2);
+  backdrop-filter: blur(6px);
+}
+
+.profile-header {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding-bottom: 20px;
+  margin-bottom: 20px;
+  border-bottom: 1px solid rgba(0, 255, 255, 0.3);
+
+  .avatar-container {
+    position: relative;
+    .avatar {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      border: 2px solid #0ff;
+      box-shadow: 0 0 12px #0ff;
+    }
+    .edit-avatar-btn {
+      position: absolute;
+      bottom: 4px;
+      right: 4px;
+      background: rgba(0, 0, 0, 0.7);
+      border: 1px solid #0ff;
+      color: #0ff;
+      border-radius: 50%;
+      width: 28px;
+      height: 28px;
+      cursor: pointer;
+      font-size: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+      &:hover {
+        background: rgba(0, 255, 255, 0.2);
+        box-shadow: 0 0 8px #0ff;
+      }
+    }
+  }
+
+  .user-info {
+    h1 {
+      font-size: 2.2rem;
+      color: #fff;
+      margin: 0 0 8px;
+    }
+    .user-email {
+      font-size: 1rem;
+      color: #ccc;
+      margin-bottom: 8px;
+    }
+    .join-date {
+      font-size: 0.9rem;
+      color: #888;
+    }
+  }
+}
+
+.profile-tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+
+  .tab-button {
+    background: transparent;
+    border: 1px solid #4a4a4a;
+    color: #888;
+    padding: 8px 16px;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border-radius: 15px;
+
+    &:hover {
+      color: #fff;
+      border-color: #0ff;
+    }
+
+    &.active {
+      background: rgba(0, 255, 255, 0.15);
+      color: #fff;
+      border-color: #0ff;
+      text-shadow: 0 0 8px #0ff;
+      box-shadow: 0 0 8px rgba(0, 255, 255, 0.3);
+    }
+  }
+}
+
+.tab-content {
+  h2 {
+    font-size: 1.5rem;
+    color: #0ff;
+    border-bottom: 1px solid #0ff;
+    padding-bottom: 8px;
+    margin-bottom: 15px;
+  }
+}
+
+.input-group {
+  position: relative;
+  margin-bottom: 25px;
+
+  input, textarea {
+    width: 100%;
+    padding: 8px 0;
+    font-size: 0.95rem;
+    color: #fff;
+    border: none;
+    border-bottom: 2px solid #0ff;
+    outline: none;
+    background: transparent;
+    font-family: 'Share Tech Mono', monospace;
+    resize: vertical;
+
+    &:focus ~ label,
+    &:valid ~ label,
+    &:disabled ~ label {
+      top: -18px;
+      left: 0;
+      color: #0ff;
+      font-size: 0.8rem;
+    }
+  }
+
+  label {
+    position: absolute;
+    top: 0;
+    left: 0;
+    padding: 8px 0;
+    font-size: 0.95rem;
+    color: #888;
+    pointer-events: none;
+    transition: 0.5s;
+  }
+
+  textarea + label {
+    top: 8px;
+  }
+}
+
+
+.table-container {
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  border: 2px solid #0ff;
+  box-shadow: 0 0 12px rgba(0, 255, 255, 0.3);
+
+  thead tr {
+    background-color: rgba(0, 255, 255, 0.1);
+  }
+
+  th, td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid rgba(0, 255, 255, 0.2);
+  }
+
+  th {
+    color: #fff;
+    font-size: 1rem;
+  }
+
+  td {
+    color: #ccc;
+    font-size: 0.9rem;
+  }
+
+  tbody tr {
+    transition: background-color 0.3s ease;
+    &:hover {
+      background-color: rgba(0, 255, 255, 0.08);
+    }
+  }
+
+  .status {
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-weight: bold;
+    &.completed {
+      background-color: rgba(0, 255, 0, 0.2);
+      color: #0ff;
+      border: 1px solid #0ff;
+    }
+    &.pending {
+      background-color: rgba(255, 255, 0, 0.2);
+      color: #ff0;
+      border: 1px solid #ff0;
+    }
+    &.failed {
+      background-color: rgba(255, 0, 0, 0.2);
+      color: #f00;
+      border: 1px solid #f00;
+    }
+  }
+}
+
+.no-orders {
+  text-align: center;
+  padding: 30px;
+  color: #888;
+  font-size: 1rem;
+}
+
+.glitch {
+  position: relative;
+  color: #fff;
+  text-shadow: 0 0 4px #0ff, 0 0 8px #0ff;
+
+  &::before,
+  &::after {
+    content: attr(data-text);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(10, 10, 10, 0.8);
+    overflow: hidden;
+  }
+
+  &::before {
+    left: 2px;
+    text-shadow: -2px 0 #0ff;
+    animation: glitch-anim-1 2s infinite linear alternate-reverse;
+  }
+
+  &::after {
+    left: -2px;
+    text-shadow: -2px 0 #f0f, 2px 2px #0ff;
+    animation: glitch-anim-2 3s infinite linear alternate-reverse;
+  }
+}
+
+// Responsive adjustments
+@media (max-width: 992px) {
+  .profile-container {
+    max-width: 700px;
+    padding: 15px;
+    border-radius: 15px;
+  }
+
+  .profile-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+  }
+
+  .profile-header .avatar-container .avatar {
+    width: 100px;
+    height: 100px;
+  }
+
+  .profile-header .user-info h1 {
+    font-size: 1.8rem;
+  }
+
+  .profile-header .user-info .user-email {
+    font-size: 0.9rem;
+  }
+
+  .profile-header .user-info .join-date {
+    font-size: 0.85rem;
+  }
+
+  .tab-content h2 {
+    font-size: 1.3rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .profile-container {
+    padding: 12px;
+    border-radius: 12px;
+  }
+
+  .profile-header {
+    padding-bottom: 15px;
+    margin-bottom: 15px;
+  }
+
+  .profile-header .avatar-container .avatar {
+    width: 80px;
+    height: 80px;
+    border: 2px solid #0ff;
+  }
+
+  .profile-header .avatar-container .edit-avatar-btn {
+    width: 24px;
+    height: 24px;
+    font-size: 0.9rem;
+  }
+
+  .profile-header .user-info h1 {
+    font-size: 1.6rem;
+  }
+
+  .profile-header .user-info .user-email {
+    font-size: 0.85rem;
+  }
+
+  .profile-header .user-info .join-date {
+    font-size: 0.8rem;
+  }
+
+  .profile-tabs {
+    gap: 6px;
+    margin-bottom: 15px;
+  }
+
+  .profile-tabs .tab-button {
+    padding: 6px 12px;
+    font-size: 0.85rem;
+    border-radius: 12px;
+  }
+
+  .tab-content h2 {
+    font-size: 1.2rem;
+    padding-bottom: 6px;
+    margin-bottom: 12px;
+  }
+
+  .input-group {
+    margin-bottom: 20px;
+  }
+
+  .input-group input,
+  .input-group textarea {
+    padding: 6px 0;
+    font-size: 0.9rem;
+  }
+
+  .input-group label {
+    padding: 6px 0;
+    font-size: 0.9rem;
+  }
+
+  .input-group input:focus ~ label,
+  .input-group input:valid ~ label,
+  .input-group input:disabled ~ label,
+  .input-group textarea:focus ~ label,
+  .input-group textarea:valid ~ label,
+  .input-group textarea:disabled ~ label {
+    top: -16px;
+    font-size: 0.75rem;
+  }
+
+  .input-group textarea + label {
+    top: 6px;
+  }
+
+  .neon-button {
+    padding: 6px 12px;
+    font-size: 0.85rem;
+    border-radius: 20px;
+  }
+
+  table {
+    thead {
+      display: none;
+    }
+    tr {
+      display: block;
+      margin-bottom: 15px;
+      border: 1px solid #0ff;
+      border-radius: 12px;
+      padding: 8px;
+    }
+    td {
+      display: block;
+      text-align: right;
+      border-bottom: 1px dotted rgba(0, 255, 255, 0.2);
+      padding-left: 50%;
+      position: relative;
+      font-size: 0.85rem;
+
+      &::before {
+        content: attr(data-label);
+        position: absolute;
+        left: 12px;
+        width: calc(50% - 24px);
+        text-align: left;
+        font-weight: bold;
+        color: #fff;
+      }
+    }
+  }
+
+  .no-orders {
+    padding: 20px;
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .profile-container {
+    padding: 10px;
+    border-radius: 10px;
+  }
+
+  .profile-header .avatar-container .avatar {
+    width: 70px;
+    height: 70px;
+  }
+
+  .profile-header .avatar-container .edit-avatar-btn {
+    width: 20px;
+    height: 20px;
+    font-size: 0.8rem;
+  }
+
+  .profile-header .user-info h1 {
+    font-size: 1.4rem;
+  }
+
+  .profile-header .user-info .user-email {
+    font-size: 0.8rem;
+  }
+
+  .profile-header .user-info .join-date {
+    font-size: 0.75rem;
+  }
+
+  .profile-tabs .tab-button {
+    padding: 5px 10px;
+    font-size: 0.8rem;
+    border-radius: 10px;
+  }
+
+  .tab-content h2 {
+    font-size: 1.1rem;
+  }
+
+  .input-group input,
+  .input-group textarea {
+    padding: 5px 0;
+    font-size: 0.85rem;
+  }
+
+  .input-group label {
+    padding: 5px 0;
+    font-size: 0.85rem;
+  }
+
+  .input-group input:focus ~ label,
+  .input-group input:valid ~ label,
+  .input-group input:disabled ~ label,
+  .input-group textarea:focus ~ label,
+  .input-group textarea:valid ~ label,
+  .input-group textarea:disabled ~ label {
+    top: -14px;
+    font-size: 0.7rem;
+  }
+
+  .input-group textarea + label {
+    top: 5px;
+  }
+
+  .neon-button {
+    padding: 5px 10px;
+    font-size: 0.8rem;
+    border-radius: 15px;
+  }
+
+  table {
+    tr {
+      margin-bottom: 12px;
+      padding: 6px;
+    }
+    td {
+      font-size: 0.8rem;
+      padding-left: 60%;
+      &::before {
+        left: 10px;
+        width: calc(60% - 20px);
+      }
+    }
+  }
+
+  .no-orders {
+    padding: 15px;
+    font-size: 0.85rem;
+  }
+}

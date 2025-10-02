@@ -1,0 +1,427 @@
+/* Keyframes for animations */
+@keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(15px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  @keyframes glitch-anim-1 {
+    0% { clip-path: inset(39% 0 62% 0); } 5% { clip-path: inset(45% 0 23% 0); } 10% { clip-path: inset(29% 0 43% 0); } 15% { clip-path: inset(86% 0 1% 0); } 20% { clip-path: inset(23% 0 48% 0); } 25% { clip-path: inset(25% 0 55% 0); } 30% { clip-path: inset(78% 0 1% 0); } 35% { clip-path: inset(43% 0 53% 0); } 40% { clip-path: inset(8% 0 50% 0); } 45% { clip-path: inset(78% 0 13% 0); } 50% { clip-path: inset(49% 0 45% 0); } 55% { clip-path: inset(13% 0 82% 0); } 60% { clip-path: inset(4% 0 95% 0); } 65% { clip-path: inset(57% 0 10% 0); } 70% { clip-path: inset(88% 0 1% 0); } 75% { clip-path: inset(20% 0 45% 0); } 80% { clip-path: inset(93% 0 3% 0); } 85% { clip-path: inset(62% 0 31% 0); } 90% { clip-path: inset(71% 0 24% 0); } 95% { clip-path: inset(8% 0 85% 0); } 100% { clip-path: inset(98% 0 1% 0); }
+  }
+  
+  @keyframes glitch-anim-2 {
+    0% { clip-path: inset(78% 0 2% 0); } 5% { clip-path: inset(53% 0 24% 0); } 10% { clip-path: inset(10% 0 33% 0); } 15% { clip-path: inset(86% 0 13% 0); } 20% { clip-path: inset(23% 0 12% 0); } 25% { clip-path: inset(5% 0 50% 0); } 30% { clip-path: inset(35% 0 48% 0); } 35% { clip-path: inset(1% 0 9% 0); } 40% { clip-path: inset(80% 0 1% 0); } 45% { clip-path: inset(23% 0 10% 0); } 50% { clip-path: inset(1% 0 82% 0); } 55% { clip-path: inset(93% 0 3% 0); } 60% { clip-path: inset(3% 0 85% 0); } 65% { clip-path: inset(55% 0 36% 0); } 70% { clip-path: inset(88% 0 11% 0); } 75% { clip-path: inset(48% 0 49% 0); } 80% { clip-path: inset(93% 0 3% 0); } 85% { clip-path: inset(2% 0 76% 0); } 90% { clip-path: inset(71% 0 24% 0); } 95% { clip-path: inset(8% 0 85% 0); } 100% { clip-path: inset(98% 0 1% 0); }
+  }
+  
+  :host {
+    display: block;
+    color: #0ff;
+    font-family: 'Share Tech Mono', monospace;
+  }
+  
+  .main {
+    position: relative;
+    min-height: 100vh;
+    padding: 15px;
+    overflow-x: hidden;
+  }
+  
+  .matrix-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    
+    z-index: 0;
+    pointer-events: none;
+  }
+  
+  .about-container {
+    position: relative;
+    z-index: 1;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 20px;
+    background: rgba(15, 15, 15, 0.8);
+    border: 1px solid #0ff;
+    border-radius: 20px;
+    box-shadow: 0 0 20px rgba(0, 255, 255, 0.3), inset 0 0 8px rgba(0, 255, 255, 0.2);
+    backdrop-filter: blur(6px);
+    animation: fadeInUp 0.7s ease-out forwards;
+  }
+  
+  .about-header {
+    text-align: center;
+    margin-bottom: 30px;
+    border-bottom: 1px solid rgba(0, 255, 255, 0.3);
+    padding-bottom: 20px;
+    opacity: 0;
+    animation: fadeInUp 0.6s ease-out 0.1s forwards;
+  
+    h1 {
+      font-size: 2.2rem;
+      color: #fff;
+      margin: 0 0 10px;
+    }
+  
+    p {
+      font-size: 1rem;
+      color: #ccc;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+  }
+  
+  .glitch {
+    position: relative;
+    color: #fff;
+    text-shadow: 0 0 4px #0ff, 0 0 8px #0ff;
+    &::before,
+    &::after {
+      content: attr(data-text);
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(10, 10, 10, 0.8);
+      overflow: hidden;
+    }
+    &::before {
+      left: 2px;
+      text-shadow: -2px 0 #f0f;
+      animation: glitch-anim-1 2s infinite linear alternate-reverse;
+    }
+    &::after {
+      left: -2px;
+      text-shadow: -2px 0 #0ff, 2px 2px #f0f;
+      animation: glitch-anim-2 3s infinite linear alternate-reverse;
+    }
+  }
+  
+  .mission-section,
+  .video-section,
+  .team-section {
+    margin-bottom: 30px;
+    opacity: 0;
+    animation: fadeInUp 0.6s ease-out forwards;
+  }
+  
+  .mission-section { animation-delay: 0.2s; }
+  .video-section { animation-delay: 0.3s; }
+  .team-section { animation-delay: 0.4s; }
+  
+  section h2 {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 1.5rem;
+    color: #0ff;
+    border-bottom: 1px solid #0ff;
+    padding-bottom: 8px;
+    margin-bottom: 15px;
+    text-shadow: 0 0 4px #0ff;
+  
+    svg {
+      width: 20px;
+      height: 20px;
+    }
+  }
+  
+  .mission-section p,
+  .video-section p {
+    font-size: 0.95rem;
+    color: #ccc;
+    line-height: 1.6;
+  }
+  
+  .video-container {
+    position: relative;
+    padding-bottom: 56.25%; /* 16:9 aspect ratio */
+    height: 0;
+    overflow: hidden;
+    border-radius: 15px;
+    border: 2px solid #0ff;
+    box-shadow: 0 0 12px rgba(0, 255, 255, 0.3);
+    margin: 15px 0;
+  
+    iframe {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+    }
+  }
+  
+
+  .neon-button {
+    background: transparent;
+    border: 1px solid #0ff;
+    border-radius: 25px;
+    color: #0ff;
+    padding: 8px 16px;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-shadow: 0 0 4px #0ff;
+    box-shadow: 0 0 4px #0ff, inset 0 0 4px #0ff;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  
+    &:hover {
+      background: rgba(0, 255, 255, 0.2);
+      color: #fff;
+      box-shadow: 0 0 15px #0ff;
+    }
+  
+    svg {
+      width: 16px;
+      height: 16px;
+    }
+  }
+  
+  .team-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 20px;
+  }
+  
+  .team-member {
+    text-align: center;
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid #0ff;
+    border-radius: 15px;
+    padding: 15px;
+    box-shadow: 0 0 10px rgba(0, 255, 255, 0.2);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    opacity: 0;
+    animation: fadeInUp 0.6s ease-out forwards;
+  
+    &:nth-child(1) { animation-delay: 0.6s; }
+    &:nth-child(2) { animation-delay: 0.7s; }
+    &:nth-child(3) { animation-delay: 0.8s; }
+    &:nth-child(4) { animation-delay: 0.9s; }
+  
+    &:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 0 15px rgba(0, 255, 255, 0.4);
+    }
+  
+    .member-photo {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      border: 2px solid #0ff;
+      box-shadow: 0 0 8px #0ff;
+      margin: 0 auto 10px;
+      object-fit: cover;
+    }
+  
+    h3 {
+      font-size: 1.2rem;
+      color: #fff;
+      margin: 0 0 5px;
+    }
+  
+    .role {
+      font-size: 0.9rem;
+      color: #0ff;
+      margin-bottom: 10px;
+    }
+  
+    p {
+      font-size: 0.85rem;
+      color: #ccc;
+      line-height: 1.5;
+    }
+  }
+  
+  .loading-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 80vh;
+    font-size: 1.5rem;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 992px) {
+    .about-container {
+      max-width: 700px;
+      padding: 15px;
+      border-radius: 15px;
+    }
+  
+    .about-header h1 {
+      font-size: 1.8rem;
+    }
+  
+    .about-header p {
+      font-size: 0.9rem;
+    }
+  
+    section h2 {
+      font-size: 1.3rem;
+    }
+  
+    .mission-section p,
+    .video-section p {
+      font-size: 0.9rem;
+    }
+  
+    .team-member h3 {
+      font-size: 1.1rem;
+    }
+  
+    .team-member .role {
+      font-size: 0.85rem;
+    }
+  
+    .team-member p {
+      font-size: 0.8rem;
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .about-container {
+      padding: 12px;
+      border-radius: 12px;
+    }
+  
+    .main {
+      padding: 10px;
+    }
+  
+    .about-header {
+      margin-bottom: 20px;
+      padding-bottom: 15px;
+    }
+  
+    .about-header h1 {
+      font-size: 1.6rem;
+    }
+  
+    .about-header p {
+      font-size: 0.85rem;
+    }
+  
+    section h2 {
+      font-size: 1.2rem;
+      svg {
+        width: 18px;
+        height: 18px;
+      }
+    }
+  
+    .mission-section p,
+    .video-section p {
+      font-size: 0.85rem;
+    }
+  
+    .video-container {
+      border-radius: 12px;
+    }
+  
+    .neon-button {
+      padding: 6px 12px;
+      font-size: 0.85rem;
+  
+      svg {
+        width: 14px;
+        height: 14px;
+      }
+    }
+  
+    .team-grid {
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      gap: 15px;
+    }
+  
+    .team-member {
+      padding: 12px;
+    }
+  
+    .team-member .member-photo {
+      width: 80px;
+      height: 80px;
+    }
+  
+    .team-member h3 {
+      font-size: 1rem;
+    }
+  
+    .team-member .role {
+      font-size: 0.8rem;
+    }
+  
+    .team-member p {
+      font-size: 0.75rem;
+    }
+  
+    .loading-container {
+      font-size: 1.3rem;
+    }
+  }
+  
+  @media (max-width: 576px) {
+    .about-container {
+      padding: 10px;
+      border-radius: 10px;
+    }
+  
+    .about-header h1 {
+      font-size: 1.4rem;
+    }
+  
+    .about-header p {
+      font-size: 0.8rem;
+    }
+  
+    section h2 {
+      font-size: 1.1rem;
+      svg {
+        width: 16px;
+        height: 16px;
+      }
+    }
+  
+    .mission-section p,
+    .video-section p {
+      font-size: 0.8rem;
+    }
+  
+    .video-container {
+      border-radius: 10px;
+    }
+  
+    .neon-button {
+      padding: 5px 10px;
+      font-size: 0.8rem;
+  
+      svg {
+        width: 12px;
+        height: 12px;
+      }
+    }
+    .team-grid {
+      grid-template-columns: 1fr;
+    }
+  
+    .team-member .member-photo {
+      width: 70px;
+      height: 70px;
+    }
+  
+    .loading-container {
+      font-size: 1.2rem;
+    }
+  }
