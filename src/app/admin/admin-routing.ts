@@ -5,12 +5,13 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { OrdersComponent } from './orders/orders.component';
 import { MyToolsComponent } from './my-tools/my-tools.component';
 import { CetagorysComponent } from './cetagorys/cetagorys.component';
+import { adminAuthGuard } from '../services/Auth-Guard/auth-guard.guard';
 
 const routes: Routes = [
   {
     path: '',
     component: AdminComponent,
-    // canActivate: [AdminAuthGuard],
+    canActivate: [adminAuthGuard],
     children: [
       {
         path: '',

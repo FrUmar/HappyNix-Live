@@ -1,13 +1,15 @@
 <div class="main">
-    <video class="video-background" [autoplay]="true" [loop]="true" [muted]="true" playsinline>
+    <!-- <video class="video-background" [autoplay]="true" [loop]="true" [muted]="true" playsinline>
         <source src="video/background.mp4" type="video/mp4">
         Your browser does not support the video tag.
-    </video>
+    </video> -->
+    <app-matrix-rain></app-matrix-rain>
     <div class="dashboard-container">
         <header class="dashboard-header">
             <div class="logo">
                 <span class="logo-icon">🛡️</span>
-                <span class="logo-text">CyberCore</span>
+                <span class="logo-text">All Exploits
+                </span>
             </div>
             <!-- Hamburger Menu Button -->
             <button class="menu-toggle" (click)="isMenuOpen = !isMenuOpen" [class.is-active]="isMenuOpen">

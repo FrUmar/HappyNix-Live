@@ -53,7 +53,7 @@ export class ToolDetailsComponent implements OnInit, OnDestroy {
       features: ['TCP & UDP Scanning', 'Service Version Detection', 'OS Fingerprinting', 'Customizable Scan Speed'],
       version: '2.1.0',
       releaseDate: '2023-10-26',
-      author: 'CyberCore Inc.',
+      author: 'All Exploits Inc.',
       demoVideoUrl:
         'https://www.youtube.com/embed/BGfftZNynLc?si=DKYzaXtYryMT60vk'
     },

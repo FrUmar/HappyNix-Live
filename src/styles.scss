@@ -350,7 +350,11 @@
     box-shadow: 0 0 15px var(--glow-color);
   }
 }
-
+.errorValdation{
+  color: red;
+  font-size: 0.8rem;
+  margin-top: 0.25rem;
+}
 .announcement-banner {
   padding: 1rem;
   border: 1px solid var(--border-color);
