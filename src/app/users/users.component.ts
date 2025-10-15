@@ -17,5 +17,8 @@ export class UsersComponent {
     name: 'Cipher',
     avatar: 'https://img.freepik.com/premium-photo/portrait-anonymous-hacker-hacking-computer-system-cyber-crime-cyber-security-cybercrime_825385-827.jpg'
   };
-
+  logo: string;
+  constructor() {
+    this.logo = '../../assets/images/logo2.png';
+  }
 }

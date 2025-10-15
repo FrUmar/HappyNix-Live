@@ -32,7 +32,7 @@ export class AccountService {
       );
   }
   login(authenticateModel: AuthenticateModel) {
-    return this.repositoryService.post('ApplicationUser/login', authenticateModel, false).pipe(
+    return this.repositoryService.post('Auth/login', authenticateModel, false).pipe(
       map((user: any) => {
         localStorage.setItem('exploits_access_token', user.token);
         localStorage.setItem('exploits_userId', user.id);
@@ -48,7 +48,7 @@ export class AccountService {
   }
   //Auth/user-signup
   signUpUser(data: any) {
-    return this.repositoryService.post('Auth/signup', data, false).pipe(
+    return this.repositoryService.post('Auth/register', data, false).pipe(
       map((response: any) => {
         return response;
       })

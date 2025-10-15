@@ -4,10 +4,11 @@ import { Router, RouterModule } from '@angular/router';
 import { CommonModule, Location } from '@angular/common';
 import Swal from 'sweetalert2'
 import { AccountService } from '../../services/account/account.service';
+import { MatrixRainComponent } from '../../users/matrix-rain/matrix-rain.component';
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RouterModule],
+  imports: [CommonModule, ReactiveFormsModule, MatrixRainComponent, RouterModule],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',
 })
