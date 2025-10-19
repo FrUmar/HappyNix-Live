@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy, AfterViewInit, ElementRef, QueryList, ViewChildren } from '@angular/core';
-
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterModule } from '@angular/router';
+import { FormsModule } from '@angular/forms';
 
 interface Tool {
   toolId: number;
@@ -15,7 +15,7 @@ interface Tool {
 
 @Component({
   selector: 'app-tools-list',
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, FormsModule],
   templateUrl: './tools-list.component.html',
   styleUrls: ['./tools-list.component.scss', '../dashboard/dashboard.component.scss']
 })
@@ -72,10 +72,21 @@ export class ToolsListComponent {
     }
   ];
 
+  filter: 'all' | 'free' | 'paid' = 'all';
+  viewMode: 'grid' | 'list' = 'grid';
 
-  constructor(private route: ActivatedRoute,) {
+  get filteredTools(): Tool[] {
+    return this.tools.filter(tool => {
+      if (this.filter === 'free') return tool.isFree;
+      if (this.filter === 'paid') return !tool.isFree;
+      return true;
+    });
+  }
+
+  constructor(private route: ActivatedRoute) {
     this.paramName = this.route.snapshot.paramMap.get('toolId') || '';
   }
+
   ngAfterViewInit(): void {
     const options = {
       root: null,
@@ -94,5 +105,9 @@ export class ToolsListComponent {
     this.animatedSections.forEach(section => {
       this.observer?.observe(section.nativeElement);
     });
+  }
+
+  setViewMode(mode: 'grid' | 'list'): void {
+    this.viewMode = mode;
   }
 }

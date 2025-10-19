@@ -6,7 +6,7 @@
   --text-color: #e0e0e0;
   --text-muted: #8e9297;
   --header-color: #ffffff;
-  --accent-color: #00a8ff;
+  --accent-color: #41E6E8;
   --accent-color-hover: #0097e6;
   --border-color: #3a3f4c;
   --status-completed: #2ecc71;
@@ -31,15 +31,6 @@
     flex-direction: column;
     border-right: 1px solid var(--border-color);
     transition: width 0.3s ease;
-  
-    .logo {
-      font-family: 'Roboto Mono', monospace;
-      font-size: 1.5rem;
-      font-weight: 700;
-      color: var(--accent-color);
-      margin-bottom: 2.5rem;
-      text-align: center;
-    }
   
     ul {
       list-style-type: none;
@@ -72,7 +63,7 @@
   
       &.active {
         background-color: var(--accent-color);
-        color: var(--header-color);
+        color: var(--secondary-bg);
         box-shadow: 0 4px 10px rgba(0, 168, 255, 0.2);
       }
     }

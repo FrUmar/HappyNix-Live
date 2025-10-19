@@ -1,8 +1,9 @@
 <div class="dashboard-layout">
     <nav class="sidebar-nav">
-        <div class="logo">
-            &lt;HACKER_DASH /&gt;
-        </div>
+        <span class="logo-icon mb-3">
+            <img src="assets/images/logo2.png" width="100%" alt="Logo">
+        </span>
+
         <ul>
             <li>
                 <a [routerLink]="'/admin/dashboard'" [routerLinkActive]="'active'">
@@ -14,6 +15,7 @@
                     <span>Dashboard</span>
                 </a>
             </li>
+
             <li>
                 <a [routerLink]="'/admin/my-tools'" [routerLinkActive]="'active'">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
@@ -24,6 +26,7 @@
                     <span>My Tools</span>
                 </a>
             </li>
+
             <li>
                 <a [routerLink]="'/admin/orders'" [routerLinkActive]="'active'">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
@@ -34,6 +37,7 @@
                     <span>Orders</span>
                 </a>
             </li>
+
             <li>
                 <a [routerLink]="'/admin/category'" [routerLinkActive]="'active'">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
@@ -48,35 +52,51 @@
                         <path d="M12 20h-3.5a2.5 2.5 0 1 1 0-5H12" />
                         <path d="M12 20h3.5a2.5 2.5 0 1 0 0-5H12" />
                     </svg>
-                    <span>category's</span>
+                    <span>Category's</span>
+                </a>
+            </li>
+
+            <!-- ✅ New Link: Clients -->
+            <li>
+                <a [routerLink]="'/admin/clients'" [routerLinkActive]="'active'">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M16 21v-2a4 4 0 0 0-8 0v2" />
+                        <circle cx="12" cy="7" r="4" />
+                    </svg>
+                    <span>Clients</span>
+                </a>
+            </li>
+
+            <!-- ✅ New Link: Tutorials -->
+            <li>
+                <a [routerLink]="'/admin/tutorials'" [routerLinkActive]="'active'">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
+                        <path d="M4 4h16v13H4z" />
+                    </svg>
+                    <span>Tutorials</span>
                 </a>
             </li>
         </ul>
+
         <ul class="sidebar-bottom">
             <li>
-                <a href="#">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path
-                            d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 0 2l-.15.08a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.38a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1 0-2l.15-.08a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z" />
-                        <circle cx="12" cy="12" r="3" />
+                <a (click)="Logout()">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="svg" width="20px" height="20px" viewBox="0 0 24 24">
+                        <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5">
+                            <path stroke-linejoin="round" d="M15 12H6m0 0l2 2m-2-2l2-2" />
+                            <path
+                                d="M12 21.983c-1.553-.047-2.48-.22-3.121-.862c-.769-.768-.865-1.946-.877-4.121M16 21.998c2.175-.012 3.353-.108 4.121-.877C21 20.243 21 18.828 21 16V8c0-2.828 0-4.243-.879-5.121C19.243 2 17.828 2 15 2h-1c-2.828 0-4.243 0-5.121.879c-.769.768-.865 1.946-.877 4.121M3 9.5v5c0 2.357 0 3.535.732 4.268S5.643 19.5 8 19.5M3.732 5.232C4.464 4.5 5.643 4.5 8 4.5" />
+                        </g>
                     </svg>
-                    <span>Settings</span>
-                </a>
-            </li>
-            <li>
-                <a href="#">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <circle cx="12" cy="12" r="10" />
-                        <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
-                        <path d="M12 17h.01" />
-                    </svg>
-                    <span>Support</span>
+                    <span>Logout</span>
                 </a>
             </li>
         </ul>
     </nav>
+
     <div class="dashboard-container">
         <router-outlet></router-outlet>
     </div>

@@ -191,7 +191,7 @@ export class AccountService {
         removeUserType == null && removeUserName == null &&
         removeUserId == null && removeClientId == null && removeClientLogo == null
       ) {
-        this.router.navigateByUrl(`/auth/signIn`);
+        this.router.navigateByUrl(`/auth/login`);
       }
     }
   }

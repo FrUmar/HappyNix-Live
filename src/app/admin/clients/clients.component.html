@@ -1,0 +1,41 @@
+<div class="clients-layout">
+    <div class="card-header">
+        <h2>Clients</h2>
+        <div class="filter-bar">
+            <button *ngFor="let filter of filters" [class.active]="activeFilter === filter"
+                (click)="activeFilter = filter">
+                {{ filter }}
+            </button>
+        </div>
+    </div>
+
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Client</th>
+                    <th>Email</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let client of clients" (click)="selectClient(client)">
+                    <td>
+                        <div class="client-info">
+                            <img [src]="client.image" alt="client" />
+                            <span>{{ client.name }}</span>
+                        </div>
+                    </td>
+                    <td>{{ client.email }}</td>
+                    <td>
+                        <span class="status-badge" [ngClass]="'status-' + client.status.toLowerCase()">{{ client.status
+                            }}</span>
+                    </td>
+                </tr>
+                <tr *ngIf="clients.length === 0" class="empty-state-row">
+                    <td colspan="4">No Clients Found</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

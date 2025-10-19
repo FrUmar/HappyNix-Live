@@ -190,7 +190,7 @@
 @media (max-width: 1024px) {
   .dashboard-header {
     .search-bar {
-      max-width: 350px;
+      display: none !important;
     }
   }
 }
@@ -396,7 +396,6 @@ svg{
         font-size: 1.5rem;
       }
     }
-
     .header-right {
       padding: 10px;
       .neon-button {

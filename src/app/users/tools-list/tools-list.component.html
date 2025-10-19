@@ -1,15 +1,40 @@
 <section #animatedSection class="tools-section">
     <h2>{{paramName}}</h2>
-    <div class="tools-grid">
-        @for (tool of tools; track tool.toolId) {
+    <div class="controls">
+        <div class="filter">
+            <label>Filter:</label>
+            <select [(ngModel)]="filter">
+                <option value="all">All</option>
+                <option value="free">Free</option>
+                <option value="paid">Paid</option>
+            </select>
+        </div>
+        <div class="view-toggle">
+            <button [class.active]="viewMode === 'grid'" (click)="setViewMode('grid')">
+                <i class="fa fa-th-large"></i>
+            </button>
+            <button [class.active]="viewMode === 'list'" (click)="setViewMode('list')">
+                <i class="fa fa-th-list"></i>
+            </button>
+        </div>
+    </div>
+    <div [ngClass]="{'tools-grid': viewMode === 'grid', 'tools-list': viewMode === 'list'}">
+        @for (tool of filteredTools; track tool.toolId) {
         <div class="tool-card">
-            <div class="tool-icon"><img [src]="tool.icon" [alt]="tool.name" alt=""></div>
-            <h3 class="tool-name">{{ tool.name }}</h3>
-            <p class="tool-description">{{ tool.description }}</p>
+            <div class="tool-price-badge" [ngClass]="{'free': tool.isFree, 'paid': !tool.isFree}">
+                {{ tool.isFree ? 'Free' : ('$' + tool.price) }}
+            </div>
+            <div class="tool-icon"><img [src]="tool.icon" [alt]="tool.name"></div>
+            <div class="tool-details">
+                <h3 class="tool-name">{{ tool.name }}</h3>
+                <p class="tool-description">{{ tool.description }}</p>
+            </div>
             <div class="tool-actions">
                 <button class="neon-button" [routerLink]="'/details'"
                     [queryParams]="{ toolId: tool.toolId}">Details</button>
-                <button class="neon-button green">Download</button>
+                <button class="neon-button green" *ngIf="tool.isFree">Download</button>
+                <button class="neon-button green" *ngIf="!tool.isFree">Buy Now</button>
+
             </div>
         </div>
         }

@@ -83,7 +83,7 @@ export class RepositoryService {
             headers: new HttpHeaders({
                 'Content-Type': 'application/json',
                 Authorization:
-                    'bearer ' + localStorage.getItem('NT_access_token'),
+                    'bearer ' + localStorage.getItem('exploits_access_token'),
             }),
         };
     };
@@ -91,7 +91,7 @@ export class RepositoryService {
         return {
             headers: new HttpHeaders({
                 Authorization:
-                    'bearer ' + localStorage.getItem('NT_access_token'),
+                    'bearer ' + localStorage.getItem('exploits_access_token'),
             }),
         };
     };

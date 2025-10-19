@@ -6,6 +6,8 @@ import { OrdersComponent } from './orders/orders.component';
 import { MyToolsComponent } from './my-tools/my-tools.component';
 import { CetagorysComponent } from './cetagorys/cetagorys.component';
 import { adminAuthGuard } from '../services/Auth-Guard/auth-guard.guard';
+import { ClientsComponent } from './clients/clients.component';
+import { TutorialsComponent } from './tutorials/tutorials.component';
 
 const routes: Routes = [
   {
@@ -34,6 +36,14 @@ const routes: Routes = [
         path: 'category',
         component: CetagorysComponent,
       },
+      {
+        path: 'clients',
+        component: ClientsComponent,
+      },
+      {
+        path: 'tutorials',
+        component: TutorialsComponent,
+      }
 
     ],
   },

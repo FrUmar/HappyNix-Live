@@ -1,0 +1,63 @@
+.tutorials-container {
+    padding: 30px;
+    min-height: 100vh;
+  }
+  
+  .title {
+    margin-bottom: 30px;
+    color: var(--header-color);
+    font-weight: 600;
+  }
+    
+  .card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+  .language-selector {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 25px;
+    gap: 10px;
+  }
+  
+  .language-selector select {
+    padding: 8px 12px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    font-size: 16px;
+  }
+  
+  .tutorials-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 25px;
+  }
+  
+  .tutorial-card {
+    background:  rgba(255, 255, 255, 0.03);;
+    border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    padding: 15px;
+    transition: 0.3s;
+  }
+  
+  .tutorial-card:hover {
+    transform: translateY(-5px);
+  }
+  
+  .tutorial-title {
+    font-size: 18px;
+    font-weight: 600;
+    margin: 10px 0 5px;
+    color: #ffffff;
+  }
+  
+  .tutorial-language {
+    color: #cacaca;
+    font-size: 14px;
+  }
+  

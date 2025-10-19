@@ -1,15 +1,11 @@
 <div class="main">
-    <!-- <video class="video-background" [autoplay]="true" [loop]="true" [muted]="true" playsinline>
-        <source src="video/background.mp4" type="video/mp4">
-        Your browser does not support the video tag.
-    </video> -->
     <app-matrix-rain></app-matrix-rain>
     <div class="dashboard-container">
         <header class="dashboard-header">
             <div class="logo">
                 <span class="logo-icon">
                     <!-- <img src="../../assets/images/logo.png" alt="Exploit"> -->
-                    <img [src]="logo" width="100%" alt="Logo">
+                    <img src="assets/images/logo2.png" width="100%" alt="Logo">
 
                 </span>
                 <span class="logo-text">All Exploits
@@ -35,7 +31,17 @@
                     <div *ngIf="user.isLoggedIn; else loginButton" class="user-profile">
                         <img [src]="user.avatar" [alt]="user.name" class="user-avatar">
                         <span class="user-name">{{ user.name }}</span>
-                        <button class="neon-button" [routerLink]="'/profile'">My Profile</button>
+                        <button class="neon-button" [routerLink]="'/profile'" *ngIf="!isInProfilePage">My
+                            Profile</button>
+                        <button class="neon-button" (click)="Logout()" *ngIf="isInProfilePage">
+                            <svg xmlns="http://www.w3.org/2000/svg" class=" svg" width="20px" height="20px"
+                                viewBox="0 0 24 24">
+                                <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5">
+                                    <path stroke-linejoin="round" d="M15 12H6m0 0l2 2m-2-2l2-2" />
+                                    <path
+                                        d="M12 21.983c-1.553-.047-2.48-.22-3.121-.862c-.769-.768-.865-1.946-.877-4.121M16 21.998c2.175-.012 3.353-.108 4.121-.877C21 20.243 21 18.828 21 16V8c0-2.828 0-4.243-.879-5.121C19.243 2 17.828 2 15 2h-1c-2.828 0-4.243 0-5.121.879c-.769.768-.865 1.946-.877 4.121M3 9.5v5c0 2.357 0 3.535.732 4.268S5.643 19.5 8 19.5M3.732 5.232C4.464 4.5 5.643 4.5 8 4.5" />
+                                </g>
+                            </svg> Logout</button>
                     </div>
                     <ng-template #loginButton>
                         <button class="neon-button green" [routerLink]="'/auth/login'">Login</button>

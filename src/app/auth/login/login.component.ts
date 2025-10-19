@@ -91,8 +91,8 @@ export class LoginComponent {
               }
             });
             Toast.fire({
-              icon: "error",
-              title: "You are not authorized to access this page."
+              icon: "success",
+              title: "Login Successfully"
             });
           }
           this.loginLoading = false;

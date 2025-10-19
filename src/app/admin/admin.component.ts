@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { RouterModule, RouterOutlet } from '@angular/router';
+import { AccountService } from '../services/account/account.service';
 
 @Component({
   selector: 'app-admin',
@@ -8,5 +9,8 @@ import { RouterModule, RouterOutlet } from '@angular/router';
   styleUrl: './admin.component.scss'
 })
 export class AdminComponent {
-
+  constructor(private accountService: AccountService) { }
+  public Logout() {
+    this.accountService.doLogout();
+  }
 }
