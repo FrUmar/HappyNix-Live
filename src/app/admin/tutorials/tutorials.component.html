@@ -11,7 +11,7 @@
     </div>
     <div class="tutorials-grid">
         <div class="tutorial-card" *ngFor="let tutorial of filteredTutorials">
-            <iframe width="100%" height="200" [src]="getSafeUrl(tutorial.videoUrl)" frameborder="0"
+            <iframe width="100%" height="400" [src]="getSafeUrl(tutorial.videoUrl)" frameborder="0"
                 allowfullscreen></iframe>
             <h3 class="tutorial-title">{{ tutorial.title }}</h3>
             <p class="tutorial-language">Language: {{ tutorial.language }}</p>

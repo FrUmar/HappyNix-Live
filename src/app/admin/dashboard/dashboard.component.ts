@@ -6,7 +6,7 @@ import { Title } from '@angular/platform-browser';
   selector: 'app-dashboard',
   imports: [CommonModule],
   templateUrl: './dashboard.component.html',
-  styleUrl: './dashboard.component.scss'
+  styleUrls: ['./dashboard.component.scss', '../admin.component.scss']
 })
 export class DashboardComponent {
   user = {

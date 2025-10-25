@@ -91,44 +91,6 @@
     }
 }
 
-.form-group {
-    margin-bottom: 1.5rem;
-
-    label {
-        display: block;
-        margin-bottom: 0.5rem;
-        color: var(--text-muted);
-        font-weight: 500;
-        font-size: 0.9rem;
-    }
-
-    input[type="text"] {
-        width: 100%;
-        padding: 0.75rem;
-        background-color: var(--primary-bg);
-        border: 1px solid var(--border-color);
-        border-radius: 6px;
-        color: var(--text-color);
-        font-family: inherit;
-        font-size: 1rem;
-        box-sizing: border-box;
-        transition: border-color 0.2s ease, box-shadow 0.2s ease;
-
-        &:focus {
-            outline: none;
-            border-color: var(--accent-color);
-            box-shadow: 0 0 0 3px rgba(0, 168, 255, 0.2);
-        }
-    }
-
-    small {
-        display: block;
-        margin-top: 0.5rem;
-        font-size: 0.8rem;
-        color: var(--text-muted);
-    }
-}
-
 .form-actions {
     display: flex;
     gap: 1rem;

@@ -1,63 +1,108 @@
-<header class="dashboard-header">
-    <h1>Category Management</h1>
-</header>
+<div class="container mt-4">
+    <header class="dashboard-header">
+        <h2>Category Management</h2>
+    </header>
 
-<div class="category-layout">
-    <section class="dashboard-card">
-        <h2>All Categories ({{ categories.length }})</h2>
-        <div class="category-list">
-            <div *ngIf="categories.length === 0" class="empty-state">
-                <p>No categories found. Add one to get started!</p>
-            </div>
-            <div class="category-item" *ngFor="let category of categories">
-                <img [src]="category.image" alt="{{ category.name }}" class="category-image">
-                <div class="category-info">
-                    <h3>{{ category.name }}</h3>
-                    <p>{{ category.productCount }} Products</p>
-                </div>
-                <div class="category-actions">
-                    <button (click)="selectCategory(category)" class="action-btn edit-btn" title="Edit">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
-                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z" />
-                            <path d="m15 5 4 4" />
-                        </svg>
-                    </button>
-                    <button (click)="deleteCategory(category.id)" class="action-btn delete-btn" title="Delete">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
-                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M3 6h18" />
-                            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6" />
-                            <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
-                        </svg>
-                    </button>
-                </div>
-            </div>
+    <div *ngIf="isLoading" class="d-flex justify-content-center my-3">
+        <div class="spinner-border" role="status">
+            <span class="visually-hidden">Loading...</span>
         </div>
-    </section>
+    </div>
 
-    <section class="dashboard-card">
-        <h2>{{ isEditing ? 'Edit Category' : 'Add New Category' }}</h2>
-        <form (ngSubmit)="saveCategory()" #categoryForm="ngForm">
-            <div class="form-group">
-                <label for="name">Category Name</label>
-                <input type="text" id="name" name="name" [(ngModel)]="currentCategory.name" required>
-            </div>
-            <div class="form-group">
-                <label for="image">Image URL</label>
-                <input type="text" id="image" name="image" [(ngModel)]="currentCategory.image" required>
-                <small>Use a URL for the category image (e.g., from api.dicebear.com).</small>
-            </div>
-            <div class="form-actions">
-                <button type="submit" style="border-radius: 10px;" class="cyber-button"
-                    [disabled]="!categoryForm.form.valid">
-                    {{ isEditing ? 'Update Category' : 'Add Category' }}
-                </button>
-                <button type="button" (click)="resetForm()" style="border-radius: 10px;" class="cyber-button secondary"
-                    *ngIf="isEditing">
-                    Cancel
-                </button>
-            </div>
-        </form>
-    </section>
+    <div *ngIf="!isLoading" class="row g-4">
+        <!-- All Categories Section (Left Column) -->
+        <div class="col-md-7">
+            <section class="dashboard-card p-3 shadow-sm">
+                <h2>All Categories ({{ categories.length }})</h2>
+                <div class="list-group">
+                    <div *ngIf="categories.length === 0" class="list-group-item text-muted">
+                        <p class="mb-0">No categories found. Add one to get started!</p>
+                    </div>
+                    <a *ngFor="let category of categories"
+                        class="category-item mb-2 d-flex justify-content-between align-items-center">
+                        <div class="d-flex align-items-center">
+                            <img [src]="category.imageUrl || 'https://via.placeholder.com/50'" alt="{{ category.name }}"
+                                class="img-thumbnail me-3" style="width: 70px; height: 70px; object-fit: cover;">
+                            <div class="category-info">
+                                <h5 class="mb-1">{{ category.name }}</h5>
+                                <p class="mb-0 text-muted">{{ category.description }}</p>
+
+                                <p class="mb-0 text-muted">{{ category.totalItems }} Tools</p>
+                            </div>
+                        </div>
+                        <div class="category-actions">
+                            <button (click)="OpenPopUp(PopupTriggerModel,category); $event.stopPropagation();"
+                                class="btn btn-sm btn-primary me-2" title="Edit">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z" />
+                                    <path d="m15 5 4 4" />
+                                </svg>
+                            </button>
+                        </div>
+                    </a>
+                </div>
+            </section>
+        </div>
+
+        <!-- Add/Edit Category Section (Right Column) -->
+
+    </div>
 </div>
+<!--Pop up-->
+<ng-template #PopupTriggerModel let-modal>
+    <div class="modal-body">
+        <div class="d-flex justify-content-end">
+            <svg style="position: relative; top: -60px" viewBox="0 -0.5 25 25" height="32" width="32"
+                (click)="CancelPopUp()" class="d-pointer cancel" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                <g id="SVGRepo_iconCarrier">
+                    <path
+                        d="M6.96967 16.4697C6.67678 16.7626 6.67678 17.2374 6.96967 17.5303C7.26256 17.8232 7.73744 17.8232 8.03033 17.5303L6.96967 16.4697ZM13.0303 12.5303C13.3232 12.2374 13.3232 11.7626 13.0303 11.4697C12.7374 11.1768 12.2626 11.1768 11.9697 11.4697L13.0303 12.5303ZM11.9697 11.4697C11.6768 11.7626 11.6768 12.2374 11.9697 12.5303C12.2626 12.8232 12.7374 12.8232 13.0303 12.5303L11.9697 11.4697ZM18.0303 7.53033C18.3232 7.23744 18.3232 6.76256 18.0303 6.46967C17.7374 6.17678 17.2626 6.17678 16.9697 6.46967L18.0303 7.53033ZM13.0303 11.4697C12.7374 11.1768 12.2626 11.1768 11.9697 11.4697C11.6768 11.7626 11.6768 12.2374 11.9697 12.5303L13.0303 11.4697ZM16.9697 17.5303C17.2626 17.8232 17.7374 17.8232 18.0303 17.5303C18.3232 17.2374 18.3232 16.7626 18.0303 16.4697L16.9697 17.5303ZM11.9697 12.5303C12.2626 12.8232 12.7374 12.8232 13.0303 12.5303C13.3232 12.2374 13.3232 11.7626 13.0303 11.4697L11.9697 12.5303ZM8.03033 6.46967C7.73744 6.17678 7.26256 6.17678 6.96967 6.46967C6.67678 6.76256 6.67678 7.23744 6.96967 7.53033L8.03033 6.46967ZM8.03033 17.5303L13.0303 12.5303L11.9697 11.4697L6.96967 16.4697L8.03033 17.5303ZM13.0303 12.5303L18.0303 7.53033L16.9697 6.46967L11.9697 11.4697L13.0303 12.5303ZM11.9697 12.5303L16.9697 17.5303L18.0303 16.4697L13.0303 11.4697L11.9697 12.5303ZM13.0303 11.4697L8.03033 6.46967L6.96967 7.53033L11.9697 12.5303L13.0303 11.4697Z"
+                        fill="#fff"></path>
+                </g>
+            </svg>
+        </div>
+        <div class="px-1">
+            <section class="dashboard-card card p-3 shadow-sm">
+                <h2 style="color: aliceblue;">{{ isEditing ? 'Edit Category' : 'Add New Category' }}</h2>
+                <form (ngSubmit)="saveCategory()" #categoryForm="ngForm" class="form-group">
+                    <div class="mb-3">
+                        <label for="categoryName">Category Name</label>
+                        <input type="text" id="categoryName" name="name" [(ngModel)]="currentCategory.name" required
+                            #nameField="ngModel">
+                        <div *ngIf="nameField.invalid && (nameField.dirty || nameField.touched)"
+                            class="text-danger mt-1">
+                            <small *ngIf="nameField.errors?.['required']">Category name is required.</small>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="categoryDescription">Description</label>
+                        <textarea id="categoryDescription" name="description" [(ngModel)]="currentCategory.description"
+                            rows="3"></textarea>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="categoryImageUrl">Image URL</label>
+                        <input type="text" id="categoryImageUrl" name="imageUrl" [(ngModel)]="currentCategory.imageUrl">
+                        <small class="form-text text-muted">Use a URL for the category image (e.g., from
+                            api.dicebear.com).</small>
+                        <div *ngIf="currentCategory.imageUrl" class="mt-2">
+                            <img [src]="currentCategory.imageUrl" alt="Image preview" class="img-thumbnail"
+                                style="max-width: 100px; height: 100px; object-fit: cover;">
+                        </div>
+                    </div>
+
+                    <div class="form-actions d-flex justify-content-end mt-4">
+                        <button type="submit" class="btn btn-primary me-2" [disabled]="!categoryForm.form.valid">
+                            {{ isEditing ? 'Update Category' : 'Add Category' }}
+                        </button>
+                    </div>
+                </form>
+            </section>
+        </div>
+    </div>
+</ng-template>

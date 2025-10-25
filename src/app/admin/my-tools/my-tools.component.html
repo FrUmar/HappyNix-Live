@@ -1,101 +1,210 @@
-<header class="dashboard-header">
-    <h1>Tool Management</h1>
-</header>
+<div class="container-fluid mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2>My Tools/Products</h2>
+        <button class="btn btn-primary cyber-button" (click)="openToolModal(toolModal)">Add New Tool</button>
+    </div>
+    <!-- Loading Indicator -->
+    <div *ngIf="isLoading && !modalService.hasOpenModals()" class="d-flex justify-content-center my-3">
+        <div class="spinner-border" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+    </div>
+    <!-- Tools List -->
+    <div class="tool-layout">
+        <section class="dashboard-card">
+            <h2>All Tools ({{ tools.length }})</h2>
+            <div class="tool-list">
+                <div class="table-responsive">
 
-<div class="tool-layout">
-    <section class="dashboard-card">
-        <h2>All Tools ({{ tools.length }})</h2>
-        <div class="tool-list">
-            <div *ngIf="tools.length === 0" class="empty-state">
-                <p>No tools found. Add one to get started!</p>
-            </div>
-            <div class="tool-item" *ngFor="let tool of tools">
-                <img [src]="tool.image" alt="{{ tool.name }}" class="tool-image">
-                <div class="tool-info">
-                    <h3>{{ tool.name }}</h3>
-                    <p class="tool-description">{{ tool.description }}</p>
-                    <div class="tool-meta">
-                        <span class="tool-type-badge type-{{ tool.type.toLowerCase() }}">{{ tool.type }}</span>
-                        <span *ngIf="tool.type === 'Paid'" class="tool-price">{{ tool.price | currency }}</span>
-                        <a *ngIf="tool.type === 'Free'" [href]="tool.downloadLink"
-                            class="tool-download-link">Download</a>
+                    <div class="tool-item" *ngFor="let tool of tools">
+                        <img [src]="tool.mainImage" alt="{{ tool.name }}" class="tool-image">
+                        <div class="tool-info">
+                            <h3>{{ tool.name }}</h3>
+                            <p class="tool-description">{{ tool.longDescription }}</p>
+                            <div class="tool-meta">
+                                <span class="tool-type-badge type-{{ tool.isFree? 'free' : 'paid' }}">{{
+                                    tool.isFree? 'Free' :
+                                    'Paid'
+                                    }}</span>
+                                <span *ngIf="tool.isPaid" class="tool-price">{{ tool.price | currency }}</span>
+                                <a *ngIf="tool.isFree" [href]="tool.downloadLink"
+                                    class="tool-download-link">Download</a>
+                            </div>
+                        </div>
+
+                        <div class="tool-actions">
+                            <button (click)="openToolModal(toolModal, tool)" class="action-btn edit-btn" title="Edit">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z" />
+                                    <path d="m15 5 4 4" />
+                                </svg>
+                            </button>
+                            <button (click)="deleteTool(tool.productId)" class="action-btn delete-btn" title="Delete">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <path d="M3 6h18" />
+                                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6" />
+                                    <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+                                </svg>
+                            </button>
+                        </div>
                     </div>
-                    <div class="tool-gallery" *ngIf="tool.descriptionImages.length > 0">
-                        <h4>Images</h4>
-                        <div class="gallery-images">
-                            <img *ngFor="let img of tool.descriptionImages" [src]="img" alt="Description Image">
+                    <tr *ngIf="tools.length === 0 && !isLoading">
+                        <td colspan="5" class="text-center empty-state">No tools found.</td>
+                    </tr>
+
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
+
+<!-- Modal for Add/Edit Tool -->
+<ng-template #toolModal let-modal>
+    <div class="modal-body tool-modal-content">
+        <div class="d-flex justify-content-end">
+            <svg style="position: relative; top: -60px" viewBox="0 -0.5 25 25" height="32" width="32"
+                (click)="modal.dismiss('Cross click')" class="d-pointer cancel" fill="none"
+                xmlns="http://www.w3.org/2000/svg">
+                <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                <g id="SVGRepo_iconCarrier">
+                    <path
+                        d="M6.96967 16.4697C6.67678 16.7626 6.67678 17.2374 6.96967 17.5303C7.26256 17.8232 7.73744 17.8232 8.03033 17.5303L6.96967 16.4697ZM13.0303 12.5303C13.3232 12.2374 13.3232 11.7626 13.0303 11.4697C12.7374 11.1768 12.2626 11.1768 11.9697 11.4697L13.0303 12.5303ZM11.9697 11.4697C11.6768 11.7626 11.6768 12.2374 11.9697 12.5303C12.2626 12.8232 12.7374 12.8232 13.0303 12.5303L11.9697 11.4697ZM18.0303 7.53033C18.3232 7.23744 18.3232 6.76256 18.0303 6.46967C17.7374 6.17678 17.2626 6.17678 16.9697 6.46967L18.0303 7.53033ZM13.0303 11.4697C12.7374 11.1768 12.2626 11.1768 11.9697 11.4697C11.6768 11.7626 11.6768 12.2374 11.9697 12.5303L13.0303 11.4697ZM16.9697 17.5303C17.2626 17.8232 17.7374 17.8232 18.0303 17.5303C18.3232 17.2374 18.3232 16.7626 18.0303 16.4697L16.9697 17.5303ZM11.9697 12.5303C12.2626 12.8232 12.7374 12.8232 13.0303 12.5303C13.3232 12.2374 13.3232 11.7626 13.0303 11.4697L11.9697 12.5303ZM8.03033 6.46967C7.73744 6.17678 7.26256 6.17678 6.96967 6.46967C6.67678 6.76256 6.67678 7.23744 6.96967 7.53033L8.03033 6.46967ZM8.03033 17.5303L13.0303 12.5303L11.9697 11.4697L6.96967 16.4697L8.03033 17.5303ZM13.0303 12.5303L18.0303 7.53033L16.9697 6.46967L11.9697 11.4697L13.0303 12.5303ZM11.9697 12.5303L16.9697 17.5303L18.0303 16.4697L13.0303 11.4697L11.9697 12.5303ZM13.0303 11.4697L8.03033 6.46967L6.96967 7.53033L11.9697 12.5303L13.0303 11.4697Z"
+                        fill="#fff"></path>
+                </g>
+            </svg>
+        </div>
+        <div class="px-4">
+
+            <form (ngSubmit)="saveTool()" id="toolForm" class="form-group">
+                <!-- Loading indicator inside modal -->
+                <div *ngIf="isLoading" class="d-flex justify-content-center my-3">
+                    <div class="spinner-border" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="toolName">Name</label>
+                        <input type="text" id="toolName" placeholder="Enter tool name" [(ngModel)]="currentTool.name"
+                            name="name" required>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="toolCategory">Category</label>
+                        <select id="toolCategory" class="form-select" [(ngModel)]="currentTool.categoryId"
+                            name="categoryId" required>
+                            <option value="" disabled>Select a category</option>
+                            <option *ngFor="let category of categories" [value]="category.categoryId">{{
+                                category.name
+                                }}</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="shortDescription">Short Description</label>
+                    <textarea id="shortDescription" placeholder="Enter short description" rows="3"
+                        [(ngModel)]="currentTool.shortDescription" name="shortDescription"></textarea>
+                </div>
+
+                <div class="mb-3">
+                    <label for="longDescription">Long Description</label>
+                    <textarea id="longDescription" placeholder="Enter long description" rows="3"
+                        [(ngModel)]="currentTool.longDescription" name="longDescription"></textarea>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="mainImage">Main Image URL</label>
+                        <input type="text" id="mainImage" [(ngModel)]="currentTool.mainImage" name="mainImage">
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="videoLink">Video Link</label>
+                        <input type="text" id="videoLink" [(ngModel)]="currentTool.videoLink" name="videoLink">
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        <label for="version">Version</label>
+                        <input type="text" placeholder="Enter version" id="version" [(ngModel)]="currentTool.version"
+                            name="version">
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label for="releaseDate">Release Date</label>
+                        <input type="date" id="releaseDate" [(ngModel)]="currentTool.releaseDate" name="releaseDate">
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label for="price">Price</label>
+                        <input type="number" placeholder="Enter price" id="price" [(ngModel)]="currentTool.price"
+                            name="price" [disabled]="currentTool.isFree ?? false">
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <!-- Is Free -->
+                    <div class="col-md-6">
+                        <div class=" custom-check">
+                            <input class="form-check-input" type="radio" id="isFree" name="priceType"
+                                [(ngModel)]="priceType" value="free" (change)="onPriceTypeChange('free')" required />
+                            <label for="isFree" class="mt-2 d-pointer"> Is Free</label>
+                        </div>
+                    </div>
+
+                    <!-- Is Paid -->
+                    <div class="col-md-6">
+                        <div class="custom-check">
+                            <input class="form-check-input" type="radio" id="isPaid" name="priceType"
+                                [(ngModel)]="priceType" value="paid" (change)="onPriceTypeChange('paid')" required />
+                            <label class="mt-2 d-pointer" for="isPaid">Is Paid</label>
                         </div>
                     </div>
                 </div>
-                <div class="tool-actions">
-                    <button (click)="selectTool(tool)" class="action-btn edit-btn" title="Edit">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
-                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z" />
-                            <path d="m15 5 4 4" />
-                        </svg>
-                    </button>
-                    <button (click)="deleteTool(tool.id)" class="action-btn delete-btn" title="Delete">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
-                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M3 6h18" />
-                            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6" />
-                            <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
-                        </svg>
-                    </button>
+
+
+                <div class="mb-3">
+                    <label for="downloadLink">Download Link</label>
+                    <input type="text" id="downloadLink" [(ngModel)]="currentTool.downloadLink" name="downloadLink">
                 </div>
-            </div>
+
+                <!-- <div class="mb-3">
+                    <label for="features">Features</label>
+                    <textarea id="features" [(ngModel)]="currentTool.features" name="features"></textarea>
+                </div> -->
+                <div class="mb-3">
+                    <label for="featureInput" class="form-label">Features</label>
+                    <div class="row">
+                        <div style="height: 50px;" class="d-flex mb-2 col-6">
+                            <input type="text" id="featureInput" [(ngModel)]="newFeature" name="newFeature"
+                                class="form-control me-2" placeholder="Enter a feature" />
+                            <button type="button" class="btn btn-primary" (click)="addFeature()">Add</button>
+                        </div>
+
+                        <!-- Feature boxes -->
+                        <div class="feature-boxes  col-6">
+                            <span *ngFor="let feature of currentTool.features; let i = index" class="badge me-2 mb-2">
+                                {{ feature }}
+                                <button type="button" class="btn-close btn-close-white btn-sm ms-1"
+                                    (click)="removeFeature(i)"></button>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+            </form>
         </div>
-    </section>
-
-    <section class="dashboard-card">
-        <h2>{{ isEditing ? 'Edit Tool' : 'Add New Tool' }}</h2>
-        <form (ngSubmit)="saveTool()" #toolForm="ngForm">
-            <div class="form-group">
-                <label for="name">Tool Name</label>
-                <input type="text" id="name" name="name" [(ngModel)]="currentTool.name" required>
-            </div>
-            <div class="form-group">
-                <label for="description">Description</label>
-                <textarea id="description" name="description" [(ngModel)]="currentTool.description" rows="4"
-                    required></textarea>
-            </div>
-            <div class="form-group">
-                <label for="image">Main Image URL</label>
-                <input type="text" id="image" name="image" [(ngModel)]="currentTool.image" required>
-            </div>
-            <div class="form-group">
-                <label>Type</label>
-                <div class="radio-group">
-                    <label><input type="radio" name="type" value="Free" [(ngModel)]="currentTool.type"> Free</label>
-                    <label><input type="radio" name="type" value="Paid" [(ngModel)]="currentTool.type"> Paid</label>
-                </div>
-            </div>
-
-            <div *ngIf="currentTool.type === 'Free'" class="form-group">
-                <label for="downloadLink">Download Link</label>
-                <input type="text" id="downloadLink" name="downloadLink" [(ngModel)]="currentTool.downloadLink"
-                    required>
-            </div>
-
-            <div *ngIf="currentTool.type === 'Paid'" class="form-group">
-                <label for="price">Price</label>
-                <input type="number" id="price" name="price" [(ngModel)]="currentTool.price" required>
-            </div>
-
-            <div class="form-group">
-                <label for="descriptionImages">Description Images</label>
-                <textarea id="descriptionImages" name="descriptionImages" [(ngModel)]="descriptionImagesString"
-                    rows="3"></textarea>
-                <small>Enter image URLs, separated by commas.</small>
-            </div>
-
-            <div class="form-actions">
-                <button style="border-radius: 10px;" type="submit" class="cyber-button"
-                    [disabled]="!toolForm.form.valid">{{ isEditing ? 'Update Tool' : 'Add Tool' }}</button>
-                <button style="border-radius: 10px;" type="button" (click)="resetForm()" class="cyber-button secondary"
-                    *ngIf="isEditing">Cancel</button>
-            </div>
-        </form>
-    </section>
-</div>
+        <div class="modal-footer">
+            <button type="button" class="btn px-4 secondary" (click)="modal.dismiss('cancel click')">Cancel</button>
+            <button type="submit" form="toolForm" class="btn px-4 btn-primary " [disabled]="isLoading">{{
+                isEditing ?
+                'Update'
+                :
+                'Save' }}</button>
+        </div>
+    </div>
+</ng-template>

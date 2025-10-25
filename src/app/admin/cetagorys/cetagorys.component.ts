@@ -1,39 +1,55 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { finalize } from 'rxjs';
+import { AdminCategory } from '../../models/admin';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { AdminService } from '../../services/Admin/admin.service';
 
-interface Category {
-  id: number;
+// It's a good practice to define a type for the object used in the form.
+// This payload seems to match the commented out JSON in the original `resetForm`.
+interface CategoryPayload {
+  categoryId: string;
   name: string;
-  image: string;
-  productCount: number;
+  description: string;
+  imageUrl: string;
+  userId: string;
 }
 
 @Component({
   selector: 'app-cetagorys',
+  standalone: true, // The 'imports' property makes this a standalone component.
   imports: [CommonModule, FormsModule],
   templateUrl: './cetagorys.component.html',
-  styleUrl: './cetagorys.component.scss'
+  styleUrls: ['./cetagorys.component.scss', '../admin.component.scss']
 })
-export class CetagorysComponent {
-  categories: Category[] = [
-    { id: 1, name: 'RATs', image: 'https://api.dicebear.com/8.x/icons/svg?seed=skull&backgroundColor=232831&iconColor=00a8ff', productCount: 12 },
-    { id: 2, name: 'Remote Tools', image: 'https://api.dicebear.com/8.x/icons/svg?seed=network&backgroundColor=232831&iconColor=00a8ff', productCount: 8 },
-    { id: 3, name: 'Monitoring', image: 'https://api.dicebear.com/8.x/icons/svg?seed=eye&backgroundColor=232831&iconColor=00a8ff', productCount: 5 },
-    { id: 4, name: 'Educational', image: 'https://api.dicebear.com/8.x/icons/svg?seed=book&backgroundColor=232831&iconColor=00a8ff', productCount: 25 }
-  ];
-
+export class CetagorysComponent implements OnInit {
+  categories: AdminCategory[] = [];
+  isLoading = false;
   isEditing = false;
-  currentCategory: Category = this.getEmptyCategory();
+  currentCategory: Partial<CategoryPayload> = this.getEmptyCategory();
 
-  private getEmptyCategory(): Category {
-    return { id: 0, name: '', image: '', productCount: 0 };
+  constructor(private adminService: AdminService, private modalService: NgbModal,) { }
+
+  ngOnInit(): void {
+    this.loadCategories();
   }
 
-  selectCategory(category: Category): void {
-    this.isEditing = true;
-    this.currentCategory = { ...category };
+  loadCategories(): void {
+    this.isLoading = true;
+    this.adminService.getCategoryList()
+      .pipe(finalize(() => this.isLoading = false))
+      .subscribe({
+        next: (data: AdminCategory[]) => {
+          this.categories = data;
+        },
+        error: (err) => {
+          console.error('Error fetching categories:', err);
+        }
+      });
   }
+
+
 
   resetForm(): void {
     this.isEditing = false;
@@ -41,24 +57,53 @@ export class CetagorysComponent {
   }
 
   saveCategory(): void {
-    if (this.isEditing) {
-      // Update existing category
-      const index = this.categories.findIndex(c => c.id === this.currentCategory.id);
-      if (index !== -1) {
-        this.categories[index] = this.currentCategory;
-      }
-    } else {
-      // Add new category
-      this.currentCategory.id = this.categories.length > 0 ? Math.max(...this.categories.map(c => c.id)) + 1 : 1;
-      this.categories.push(this.currentCategory);
+    if (this.isEditing && this.currentCategory.categoryId) {
+      this.isLoading = true;
+      this.adminService.updateCategoryInfo(this.currentCategory.categoryId, this.currentCategory as CategoryPayload)
+        .pipe(finalize(() => {
+          this.isLoading = false;
+          this.resetForm();
+        }))
+        .subscribe({
+          next: (updatedCategory: AdminCategory) => {
+            const index = this.categories.findIndex(c => c.categoryId === updatedCategory.categoryId);
+            if (index !== -1) {
+              this.categories[index] = updatedCategory;
+            } else {
+              // If not found, reload the list to ensure data consistency
+              this.loadCategories();
+            }
+            this.CancelPopUp()
+          },
+          error: (err) => console.error('Failed to update category:', err)
+        });
     }
-    this.resetForm();
   }
 
-  deleteCategory(id: number): void {
-    this.categories = this.categories.filter(c => c.id !== id);
-    if (this.currentCategory.id === id) {
-      this.resetForm();
-    }
+  private getEmptyCategory(): Partial<CategoryPayload> {
+    return {
+      name: '',
+      description: '',
+      imageUrl: '',
+      userId: 'string',
+    };
+  }
+  CancelPopUp() {
+    this.modalService.dismissAll();
+  }
+  OpenPopUp(notificationModal: any, category: AdminCategory): void {
+    this.isEditing = true;
+    this.currentCategory = {
+      categoryId: category.categoryId,
+      name: category.name,
+      description: category.description,
+      imageUrl: category.imageUrl,
+      userId: "string", // This seems to be a placeholder for the current user's ID
+    };
+    this.modalService.open(notificationModal, {
+      size: 'md',
+      centered: true,
+      backdrop: 'static',
+    });
   }
 }

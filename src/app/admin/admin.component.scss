@@ -14,7 +14,13 @@
   --status-failed: #e74c3c;
   --shadow-color: rgba(0, 0, 0, 0.2);
 }
-
+.dashboard-card {
+  background-color: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 1.5rem;
+  box-shadow: 0 0 15px rgba(0, 247, 255, 0.05);
+}
 .dashboard-layout {
     display: flex;
     min-height: 100vh;

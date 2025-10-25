@@ -1,39 +1,52 @@
 <div class="clients-layout">
     <div class="card-header">
         <h2>Clients</h2>
-        <div class="filter-bar">
-            <button *ngFor="let filter of filters" [class.active]="activeFilter === filter"
-                (click)="activeFilter = filter">
-                {{ filter }}
-            </button>
-        </div>
+        <!-- Filter bar removed as status is not available for clients from getUserRoles -->
     </div>
 
     <div class="table-container">
-        <table>
+        <div *ngIf="isLoading" class="loading-indicator">
+            <p>Loading...</p>
+        </div>
+
+        <table *ngIf="!isLoading">
             <thead>
                 <tr>
-                    <th>Client</th>
+                    <th></th>
+                    <th>Name</th>
                     <th>Email</th>
-                    <th>Status</th>
+                    <th>Phone</th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
                 <tr *ngFor="let client of clients" (click)="selectClient(client)">
                     <td>
+                        <!-- user image circle icon  -->
+                        <div class="user-icon-circle">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                <circle cx="12" cy="7" r="4"></circle>
+                            </svg>
+                        </div>
+
+                    </td>
+                    <td>
                         <div class="client-info">
-                            <img [src]="client.image" alt="client" />
+                            <!-- Image removed as it's not available in AdminUserWithRole -->
                             <span>{{ client.name }}</span>
                         </div>
                     </td>
                     <td>{{ client.email }}</td>
-                    <td>
-                        <span class="status-badge" [ngClass]="'status-' + client.status.toLowerCase()">{{ client.status
-                            }}</span>
+                    <td>{{ client.phoneNumber??'+92000000000' }}</td>
+                    <td> <span class="status-active status-badge">Customer</span> &nbsp;
+                        <span class="status-new status-badge" *ngIf="client.isNew">New</span>
                     </td>
                 </tr>
-                <tr *ngIf="clients.length === 0" class="empty-state-row">
-                    <td colspan="4">No Clients Found</td>
+                <tr *ngIf="!isLoading && clients.length === 0" class="empty-state-row">
+                    <td colspan="2">No Clients Found</td>
                 </tr>
             </tbody>
         </table>

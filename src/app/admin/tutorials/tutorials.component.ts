@@ -18,8 +18,8 @@ export class TutorialsComponent {
   tutorials = [
     {
       title: 'Getting Started with AllExploid',
-      videoUrl: 'https://www.youtube.com/embed/ysz5S6PUM-U',
-      language: 'English'
+      videoUrl: 'https://www.youtube.com/embed/wBU-I6Ej-08?si=X3BYAV-Z_XxNU0n0',
+      language: 'Hindi'
     },
     {
       title: 'AllExploid Basic Setup (Urdu)',
