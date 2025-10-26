@@ -1,4 +1,4 @@
-<section #animatedSection class="tools-section">
+<section class="tools-section">
     <h2>{{paramName}}</h2>
     <div class="controls">
         <div class="filter">
@@ -18,25 +18,32 @@
             </button>
         </div>
     </div>
+    @if (isLoading) {
+    <app-card-loading [loop]="5" [type]="2"></app-card-loading>
+    } @else {
     <div [ngClass]="{'tools-grid': viewMode === 'grid', 'tools-list': viewMode === 'list'}">
-        @for (tool of filteredTools; track tool.toolId) {
-        <div class="tool-card">
+        @for (tool of filteredTools; track tool.productId) {
+        <div class="tool-card" #animatedSection>
             <div class="tool-price-badge" [ngClass]="{'free': tool.isFree, 'paid': !tool.isFree}">
                 {{ tool.isFree ? 'Free' : ('$' + tool.price) }}
             </div>
-            <div class="tool-icon"><img [src]="tool.icon" [alt]="tool.name"></div>
+            <div class="tool-icon"><img [src]="tool.mainImage" [alt]="tool.name"></div>
             <div class="tool-details">
                 <h3 class="tool-name">{{ tool.name }}</h3>
-                <p class="tool-description">{{ tool.description }}</p>
+                <p class="tool-description">{{ tool.shortDescription }}</p>
             </div>
             <div class="tool-actions">
                 <button class="neon-button" [routerLink]="'/details'"
-                    [queryParams]="{ toolId: tool.toolId}">Details</button>
+                    [queryParams]="{ toolId: tool.productId}">Details</button>
                 <button class="neon-button green" *ngIf="tool.isFree">Download</button>
                 <button class="neon-button green" *ngIf="!tool.isFree">Buy Now</button>
-
             </div>
+        </div>
+        } @empty {
+        <div class="no-tools">
+            <p>No tools found in this category.</p>
         </div>
         }
     </div>
+    }
 </section>

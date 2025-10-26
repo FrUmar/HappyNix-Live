@@ -1,0 +1,134 @@
+.loading-wrapper-1 {
+    display: flex;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+    padding: 1.5rem;
+    justify-content: center ;
+    align-items: center;
+  }
+.loading-wrapper-2 {
+    display: grid;
+    gap: 1.5rem;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    padding: 1.5rem;
+    justify-content: center ;
+    align-items: center;
+  
+  }
+  
+  /* CATEGORY SKELETON */
+  .category-skeleton {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 200px;
+    height: 200px;
+    align-self: center;
+    gap: 0.8rem;
+    padding: 1.5rem;
+    border-radius: 16px;
+  
+    /* Glass & neon glow effect */
+    background: radial-gradient(circle at top left, #0f2027, #203a43, #2c5364);
+    backdrop-filter: blur(14px);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    box-shadow:
+      0 4px 25px rgba(0, 0, 0, 0.4),
+      inset 0 0 10px rgba(255, 255, 255, 0.05);
+  
+    transition: transform 0.25s ease, box-shadow 0.3s ease;
+  
+    &:hover {
+      transform: translateY(-6px);
+      box-shadow:
+        0 6px 30px rgba(0, 0, 0, 0.5),
+        0 0 12px rgba(0, 255, 255, 0.4);
+    }
+  
+    .cat-img {
+      width: 100%;
+      min-height: 120px;
+      border-radius: 15px;
+      background: linear-gradient(110deg, rgba(255, 255, 255, 0.15) 8%, rgba(255, 255, 255, 0.05) 18%, rgba(255, 255, 255, 0.15) 33%);
+      background-size: 200% 100%;
+      animation: shimmer 1.6s linear infinite;
+    }
+  
+    .cat-title {
+      width: 60%;
+      min-height: 14px;
+      border-radius: 8px;
+      background: linear-gradient(110deg, rgba(255, 255, 255, 0.15) 8%, rgba(255, 255, 255, 0.05) 18%, rgba(255, 255, 255, 0.15) 33%);
+      background-size: 200% 100%;
+      animation: shimmer 1.6s linear infinite;
+    }
+  }
+  
+  /* PRODUCT SKELETON */
+  .product-skeleton {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1.5rem;
+    border-radius: 16px;
+  
+    background: radial-gradient(circle at top left, #0f2027, #203a43, #2c5364);
+    backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    box-shadow:
+      0 6px 25px rgba(0, 0, 0, 0.45),
+      inset 0 0 12px rgba(255, 255, 255, 0.05);
+  
+    transition: transform 0.25s ease, box-shadow 0.3s ease;
+  
+    &:hover {
+      transform: translateY(-6px);
+      box-shadow:
+        0 8px 35px rgba(0, 0, 0, 0.6),
+        0 0 15px rgba(0, 255, 255, 0.4);
+    }
+  
+    .prod-img {
+      width: 100%;
+      min-height: 120px;
+      border-radius: 12px;
+      background: linear-gradient(110deg, rgba(255, 255, 255, 0.15) 8%, rgba(255, 255, 255, 0.05) 18%, rgba(255, 255, 255, 0.15) 33%);
+      background-size: 200% 100%;
+      animation: shimmer 1.6s linear infinite;
+    }
+  
+    .prod-info {
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+  
+      .prod-title,
+      .prod-price {
+        border-radius: 8px;
+        background: linear-gradient(110deg, rgba(255, 255, 255, 0.15) 8%, rgba(255, 255, 255, 0.05) 18%, rgba(255, 255, 255, 0.15) 33%);
+        background-size: 200% 100%;
+        animation: shimmer 1.6s linear infinite;
+      }
+  
+      .prod-title {
+        width: 80%;
+        min-height: 30px;
+      }
+  
+      .prod-price {
+        width: 40%;
+        min-height: 14px;
+      }
+    }
+  }
+  
+  /* ✨ Shimmer animation */
+  @keyframes shimmer {
+    0% {
+      background-position: -200px 0;
+    }
+    100% {
+      background-position: 200px 0;
+    }
+  }
+  

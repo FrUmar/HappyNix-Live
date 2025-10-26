@@ -4,13 +4,13 @@
             stroke-linecap="round" stroke-linejoin="round">
             <path d="M19 12H5M12 19l-7-7 7-7" />
         </svg>
-        Back to Dashboard
+        Go Back
     </button>
 
     <header class="tool-header">
-        <img class="tool-icon" [src]="tool.icon" [alt]="tool.name">
+        <img class="tool-icon" [src]="tool.mainImage" [alt]="tool.name">
         <h1 class="glitch" [attr.data-text]="tool.name">{{ tool.name }}</h1>
-        <p>{{ tool.description }}</p>
+        <p>{{ tool.shortDescription }}</p>
     </header>
 
     <div class="details-grid">
@@ -23,7 +23,7 @@
                 <p>{{ tool.longDescription }}</p>
             </section>
 
-            <section class="image-gallery" *ngIf="tool.descriptionImages?.length">
+            <!-- <section class="image-gallery" *ngIf="tool.descriptionImages?.length">
                 <h2><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                         stroke-linecap="round" stroke-linejoin="round">
                         <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
@@ -33,8 +33,8 @@
                 <div class="gallery-grid">
                     <img *ngFor="let img of tool.descriptionImages" [src]="img" [alt]="tool.name + ' screenshot'">
                 </div>
-            </section>
-            <section class="demo-section">
+            </section> -->
+            <section class="demo-section" *ngIf="tool.videoLink">
                 <h2><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                         stroke-linecap="round" stroke-linejoin="round">
                         <rect x="3" y="7" width="18" height="13"></rect>
@@ -42,7 +42,7 @@
                     </svg> Live Demo</h2>
                 <p>Experience the power of ScreenRAT with our live demo video.</p>
                 <div class="video-container">
-                    <iframe id="demo-player" [src]="tool.demoVideoUrl | safe: 'resourceUrl'" frameborder="0"
+                    <iframe id="demo-player" [src]="tool.videoLink| safe: 'resourceUrl'" frameborder="0"
                         allowfullscreen></iframe>
                 </div>
 
@@ -111,7 +111,7 @@
                             <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
                             <circle cx="12" cy="7" r="4"></circle>
                         </svg>
-                        <strong>Author:</strong> {{ tool.author }}
+                        <strong>Author:</strong> All Exploits Inc
                     </li>
                 </ul>
             </div>

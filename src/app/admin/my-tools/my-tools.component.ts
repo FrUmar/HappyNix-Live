@@ -44,7 +44,7 @@ export class MyToolsComponent implements OnInit {
   }
 
   loadCategories(): void {
-    this.adminService.getCategoryList().subscribe({
+    this.adminService.getCategoryNameList().subscribe({
       next: (data) => {
         this.categories = data;
       },

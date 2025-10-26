@@ -1,6 +1,12 @@
-import { Component, OnInit, OnDestroy, AfterViewInit, ElementRef, QueryList, ViewChildren } from '@angular/core';
+import { Component, OnInit, OnDestroy, AfterViewInit, ElementRef, QueryList, ViewChildren, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { CardLoadingComponent } from "../../reuse/card-loading/card-loading.component";
+import { UserService } from '../../services/User/user.service';
+import { toolDetails } from '../../models/user';
+import { forkJoin, Subscription } from 'rxjs';
+import { AdminCategory } from '../../models/admin';
+import { UserCacheService } from '../../services/UserCacheData/userCacheService';
 
 // Define interfaces for better type safety
 interface Slide {
@@ -9,20 +15,7 @@ interface Slide {
   description: string;
 }
 
-interface Category {
-  name: string;
-  icon: string;
-}
 
-interface Tool {
-  toolId: number;
-  icon: string;
-  name: string;
-  description: string;
-  isFree: boolean;
-  price: number;
-  downloadLink: string;
-}
 
 interface VmwareTool {
   icon: string;
@@ -35,11 +28,12 @@ interface VmwareTool {
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, CardLoadingComponent],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss'
 })
 export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
+  private behaviorSubject = inject(UserCacheService);
 
   slides: Slide[] = [
     {
@@ -59,60 +53,12 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
     }
   ];
 
-  categories: Category[] = [
-    { name: 'Android', icon: 'https://osm.eu.com/wp-content/uploads/2022/04/osm_rat_risk_analysis_tool.jpg' },
-    { name: 'Windows', icon: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRdWePDsOXD_C9BbzLpRYoUXDL-EzAjGqGH0Q&s' },
-    { name: 'Other', icon: 'https://cdn.softwareportal.com/wp-content/uploads/best-server-monitoring-software-and-tools-650x400.png' },
-    // { name: 'Educational', icon: 'https://media.licdn.com/dms/image/v2/D4D12AQFdvK62HWKJGA/article-cover_image-shrink_720_1280/article-cover_image-shrink_720_1280/0/1730812750277?e=2147483647&v=beta&t=LdJtlUAJZ3Giz9J3VfVXhZjoA1OciIJQ8lPtiaichSM' }
-  ];
+  categories: AdminCategory[] = [];
+  freeTools: toolDetails[] = [];
+  paidTools: toolDetails[] = [];
 
-  tools: Tool[] = [
-    {
-      toolId: 1,
-      icon: 'https://hackersonlineclub.com/wp-content/uploads/2020/03/Port-Scanning.png',
-      name: 'Port Scanner',
-      description: 'A basic tool to scan for open ports on a target system.',
-      isFree: false,
-      price: 150,
-      downloadLink: '#'
-    },
-    {
-      toolId: 2,
-      icon: 'https://prod.ifacet.in/images/uploads/basic-quantum-programming-1751535338126.jpg',
-      name: 'Wi-Fi Cracker',
-      description: 'A simple WPA/WPA2 password cracker for educational purposes.',
-      isFree: true,
-      price: 0,
-      downloadLink: '#'
-    },
-    {
-      toolId: 3,
-      icon: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTONrp_VqP1hIBL6Wm8XGm4z2iofoPkRuLyTw&s',
-      name: 'Zero-Day Exploit Kit',
-      description: 'A comprehensive kit with the latest zero-day exploits.',
-      isFree: false,
-      price: 50,
-      downloadLink: '#'
-    },
-    {
-      toolId: 4,
-      icon: 'https://mobileimages.lowes.com/productimages/7d3df928-b690-4670-91e5-09b65ec21d68/67150973.jpeg',
-      name: 'Ghost Cloaker',
-      description: 'Become completely anonymous with our advanced cloaking technology.',
-      isFree: false,
-      price: 500,
-      downloadLink: '#'
-    },
-    {
-      toolId: 5,
-      icon: 'https://image-optimizer.cyberriskalliance.com/unsafe/1920x0/https://files.cyberriskalliance.com/wp-content/uploads/2023/07/0725_phishing.jpg',
-      name: 'AI Phisher',
-      description: 'Automated phishing campaigns with social engineering AI.',
-      isFree: true,
-      price: 0,
-      downloadLink: '#'
-    }
-  ];
+  categoriesLoading = true;
+  toolsLoading = true;
 
   vmwareTools: VmwareTool[] = [
     {
@@ -150,20 +96,43 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
 
   @ViewChildren('animatedSection', { read: ElementRef }) animatedSections!: QueryList<ElementRef>;
   private observer?: IntersectionObserver;
-
-  get freeTools(): Tool[] {
-    return this.tools.filter(tool => tool.isFree);
-  }
-
-  get paidTools(): Tool[] {
-    return this.tools.filter(tool => !tool.isFree);
-  }
+  private sectionsSubscription?: Subscription;
 
   ngOnInit(): void {
     this.sliderInterval = setInterval(() => {
       this.nextSlide();
     }, 5000);
+    this.loadDashboardData();
   }
+
+  loadDashboardData(): void {
+    this.categoriesLoading = true;
+    this.toolsLoading = true;
+
+    const categories$ = this.behaviorSubject.getCategoryNameList();
+    const freeTools$ = this.behaviorSubject.getFreeProductsList();
+    const paidTools$ = this.behaviorSubject.getPaidProductsList();
+
+    forkJoin({
+      categories: categories$,
+      freeTools: freeTools$,
+      paidTools: paidTools$
+    }).subscribe({
+      next: (data) => {
+        this.categories = data.categories;
+        this.freeTools = data.freeTools;
+        this.paidTools = data.paidTools;
+        this.categoriesLoading = false;
+        this.toolsLoading = false;
+      },
+      error: (err) => {
+        console.error('Failed to load dashboard data', err);
+        this.categoriesLoading = false;
+        this.toolsLoading = false;
+      }
+    });
+  }
+
 
   ngAfterViewInit(): void {
     const options = {
@@ -181,8 +150,16 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
       });
     }, options);
 
+    // This will likely be empty on first run because of the *ngIfs
     this.animatedSections.forEach(section => {
       this.observer?.observe(section.nativeElement);
+    });
+
+    // Subscribe to changes in the QueryList to handle elements that appear later
+    this.sectionsSubscription = this.animatedSections.changes.subscribe((sections: QueryList<ElementRef>) => {
+      sections.forEach(section => {
+        this.observer?.observe(section.nativeElement);
+      });
     });
   }
 
@@ -191,6 +168,7 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
       clearInterval(this.sliderInterval);
     }
     this.observer?.disconnect();
+    this.sectionsSubscription?.unsubscribe();
   }
 
   nextSlide(): void {

@@ -1,0 +1,32 @@
+@if (type === 1) {
+<div class="loading-wrapper-1">
+    <ng-container *ngFor="let _ of [1,1,1,1]">
+
+        <!-- Category Skeleton -->
+        <div class="category-skeleton">
+            <p-skeleton class="cat-img"></p-skeleton>
+            <p-skeleton class="cat-title"></p-skeleton>
+
+        </div>
+    </ng-container>
+</div>
+} @else if (type === 2) {
+<div class="loading-wrapper-2">
+    <ng-container *ngFor="let _ of [].constructor(loop)">
+        <!-- Product Skeleton -->
+        <div *ngIf="type === 2" class="product-skeleton">
+            <p-skeleton class="prod-img"></p-skeleton>
+            <div class="prod-info">
+                <p-skeleton class="prod-title"></p-skeleton>
+                <p-skeleton class="prod-price"></p-skeleton>
+                <div class="d-flex justify-content-between gap-2 align-items-center">
+                    <p-skeleton class="prod-price"></p-skeleton>
+                    <p-skeleton class="prod-price"></p-skeleton>
+
+                </div>
+            </div>
+        </div>
+
+    </ng-container>
+</div>
+}

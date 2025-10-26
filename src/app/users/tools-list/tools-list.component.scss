@@ -8,24 +8,17 @@ $card-bg: rgba(20, 20, 20, 0.8);
 $red-accent: #ff4757;
 
 .tools-section {
-    padding: 2rem;
+    padding: 2rem 0;
     color: $light-text;
-    max-width: 1200px;
+    width: 100%;
     margin: 0 auto;
     font-family: 'Poppins', sans-serif;
-
-    // Animation hook from tools-list.component.ts
-    &.is-visible .tool-card {
-        opacity: 1;
-        transform: translateY(0);
-    }
 
     h2 {
         text-align: center;
         font-size: 2.5rem;
         color: $neon-green;
         text-transform: uppercase;
-        margin-bottom: 2rem;
         text-shadow: 0 0 5px $neon-green, 0 0 10px $neon-green;
         font-weight: 700;
     }
@@ -34,14 +27,13 @@ $red-accent: #ff4757;
         display: flex;
         justify-content: space-between;
         align-items: center;
-        margin-bottom: 2rem;
         flex-wrap: wrap;
         gap: 1rem;
         padding: 1rem;
         background: rgba(0,0,0,0.3);
         border: 1px solid $border-color;
         border-radius: 8px;
-
+margin: 2rem 30%;
         .filter,
         .view-toggle {
             display: flex;
@@ -92,8 +84,8 @@ $red-accent: #ff4757;
     // Grid View
     .tools-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-        gap: 1.5rem;
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 1rem;
     }
 
     // List View
@@ -140,18 +132,23 @@ $red-accent: #ff4757;
     .tool-card {
         background-color: $card-bg;
         border: 1px solid $border-color;
-        border-radius: 8px;
-        padding: 1.5rem;
+        border-radius: 20px;
+        padding: 15px;
         display: flex;
         flex-direction: column;
         text-align: center;
         position: relative;
-        overflow: hidden;
         
         // For animation
         opacity: 0;
         transform: translateY(20px);
         transition: opacity 0.5s ease, transform 0.5s ease, box-shadow 0.3s ease;
+
+        // When the card is intersecting the viewport, make it visible
+        &.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
 
         @for $i from 1 through 20 { // Staggered animation for up to 20 cards
             &:nth-child(#{$i}) {
@@ -162,6 +159,9 @@ $red-accent: #ff4757;
         &:hover {
             transform: translateY(-5px);
             box-shadow: 0 0 15px rgba($neon-green, 0.7);
+            .tool-icon {
+                transform: scale(1.2) rotate(-5deg);
+              }
         }
 
         .tool-price-badge {
@@ -188,8 +188,8 @@ $red-accent: #ff4757;
         }
 
         .tool-icon {
-            width: 100px;
-            height: 100px;
+            width: 100%;
+            height: 120px;
             margin: 0 auto 1rem;
             
             img {
@@ -221,6 +221,12 @@ $red-accent: #ff4757;
             flex-grow: 1;
             margin-bottom: 1rem;
             line-height: 1.5;
+            // view 2 line then ellipsis
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         .tool-actions {
@@ -236,11 +242,6 @@ $red-accent: #ff4757;
 @media (min-width: 769px) and (max-width: 1024px) {
     .tools-section {
         padding: 1.5rem;
-    }
-
-    .tools-grid {
-        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-        gap: 1.25rem;
     }
 
     .tools-list {
@@ -296,7 +297,39 @@ $red-accent: #ff4757;
         }
     }
 }
-
+// Neon Button
+.neon-button {
+    background: transparent;
+    border: 1px solid #0ff;
+    border-radius: 20px;
+    color: #0ff;
+    padding: 8px 15px;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-shadow: 0 0 5px #0ff;
+    box-shadow: 0 0 5px #0ff, inset 0 0 5px #0ff;
+  
+    &:hover {
+      background: rgba(0, 255, 255, 0.2);
+      color: #fff;
+      box-shadow: 0 0 15px #0ff;
+    }
+  
+    &.green {
+      border-color: #39ff14;
+      color: #39ff14;
+      text-shadow: 0 0 5px #39ff14;
+      box-shadow: 0 0 5px #39ff14, inset 0 0 5px #39ff14;
+  
+      &:hover {
+        background: rgba(57, 255, 20, 0.2);
+        color: #fff;
+        box-shadow: 0 0 15px #39ff14;
+      }
+    }
+  }
 // Mobile view adjustments (max-width: 768px)
 @media (max-width: 768px) {
     .tools-section {
@@ -307,15 +340,15 @@ $red-accent: #ff4757;
         }
 
         .controls {
-            flex-direction: column;
+            // flex-direction: column;
             align-items: stretch;
-
+margin: 2rem 20%;
             .filter {
                 justify-content: flex-start;
-                width: 100%;
-
+                width: 50%;
                 label {
                     white-space: nowrap;
+                    display: none;
                 }
 
                 select {
@@ -331,11 +364,6 @@ $red-accent: #ff4757;
                 }
             }
         }
-    }
-
-    .tools-grid {
-        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-        gap: 1rem;
     }
 
     .tools-list {
@@ -362,11 +390,11 @@ $red-accent: #ff4757;
             }
 
             .tool-actions {
-                margin-left: 0;
-                justify-content: center;
-                flex-direction: column;
-                width: 100%;
-                gap: 0.5rem;
+                // margin-left: 0;
+                // justify-content: center;
+                // flex-direction: column;
+                // width: 100%;
+                // gap: 0.5rem;
 
                 button {
                     width: 100%;
@@ -402,6 +430,10 @@ $red-accent: #ff4757;
 
 // Small mobile adjustments (max-width: 480px)
 @media (max-width: 480px) {
+    .tool-price-badge{
+        font-size: 0.5rem !important;
+        padding: 0.15rem 0.5rem !important;
+    }
     .tools-section {
         padding: 0.75rem;
 
@@ -413,7 +445,7 @@ $red-accent: #ff4757;
         .controls {
             padding: 0.75rem;
             gap: 0.75rem;
-
+            margin: 1rem !important;
             .filter {
                 flex-direction: column;
                 align-items: stretch;
@@ -441,7 +473,7 @@ $red-accent: #ff4757;
     }
 
     .tools-grid {
-        grid-template-columns: 1fr; // Single column for very small screens
+        grid-template-columns: repeat(2, 1fr) !important;
         gap: 1rem;
     }
 
@@ -457,18 +489,17 @@ $red-accent: #ff4757;
             }
 
             .tool-name {
-                font-size: 1rem;
+                font-size: 0.8rem !important;
             }
 
             .tool-description {
-                font-size: 0.75rem;
+                font-size: 0.5rem !important;
             }
-
             .tool-actions {
                 gap: 0.5rem;
 
                 button {
-                    font-size: 0.85rem;
+                    font-size: 0.5rem;
                 }
             }
         }
@@ -483,19 +514,21 @@ $red-accent: #ff4757;
         }
 
         .tool-name {
-            font-size: 1rem;
+            font-size: 0.8rem !important;
+
         }
 
         .tool-description {
-            font-size: 0.75rem;
+            font-size: 0.5rem !important;
         }
 
         .tool-actions {
             flex-direction: column;
-            gap: 0.5rem;
+            gap: 0.5rem !important;
 
             button {
                 width: 100%;
+                font-size: 0.5rem !important;
             }
         }
     }

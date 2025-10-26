@@ -34,6 +34,13 @@ export class AdminService {
                 map((data: any) => data as AdminCategory[])
             );
     }
+    // category/get-category-list
+    getCategoryNameList(): Observable<AdminCategory[]> {
+        return this.repositoryService.get('category/get-category-name-list', true)
+            .pipe(
+                map((data: any) => data as AdminCategory[])
+            );
+    }
     // category/update-category-info/4b3c1bc8-d5eb-4060-83bf-8597ad6c6d50
     updateCategoryInfo(categoryId: string, body: any): Observable<AdminCategory> {
         return this.repositoryService.putWithOutFile(`category/update-category-info/${categoryId}`, body)
@@ -51,6 +58,13 @@ export class AdminService {
     // admin/add-Product
     addProduct(body: AdminProductPayload): Observable<AdminProduct> {
         return this.repositoryService.post('admin/add-Product', body, true)
+            .pipe(
+                map((data: any) => data as AdminProduct)
+            );
+    }
+    // admin/get-product-details/c7db46a8-a18c-4655-afb4-cec9aa50b472
+    getProductDetails(productId: string): Observable<AdminProduct> {
+        return this.repositoryService.get(`admin/get-product-details/${productId}`, true)
             .pipe(
                 map((data: any) => data as AdminProduct)
             );
