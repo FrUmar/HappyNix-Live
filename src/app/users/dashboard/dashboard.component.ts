@@ -7,6 +7,8 @@ import { toolDetails } from '../../models/user';
 import { forkJoin, Subscription } from 'rxjs';
 import { AdminCategory } from '../../models/admin';
 import { UserCacheService } from '../../services/UserCacheData/userCacheService';
+import { BuyNowComponent } from '../buy-now/buy-now.component';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 // Define interfaces for better type safety
 interface Slide {
@@ -97,7 +99,9 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChildren('animatedSection', { read: ElementRef }) animatedSections!: QueryList<ElementRef>;
   private observer?: IntersectionObserver;
   private sectionsSubscription?: Subscription;
+  constructor(private modalService: NgbModal) {
 
+  }
   ngOnInit(): void {
     this.sliderInterval = setInterval(() => {
       this.nextSlide();
@@ -162,7 +166,16 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
       });
     });
   }
-
+  OpenBuyNowPopUp(id: any, tool: toolDetails): void {
+    const modalRef = this.modalService.open(BuyNowComponent, {
+      size: 'lg',
+      centered: true,
+      backdrop: true,
+    });
+    modalRef.componentInstance.nTitleMatterStatusId = id
+    modalRef.componentInstance.modalRef = modalRef;
+    modalRef.componentInstance.product = tool;
+  }
   ngOnDestroy(): void {
     if (this.sliderInterval) {
       clearInterval(this.sliderInterval);

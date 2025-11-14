@@ -1,0 +1,278 @@
+/* Base Modal (Assuming a dark background for the cyberpunk theme) */
+.modal-body {
+    background: #111;
+    border: 2px solid #0ff; /* Subtle outer glow */
+    box-shadow: 0 0 25px rgba(0, 247, 255, 0.3);
+    padding: 25px;
+    position: relative;
+    color: #fff;
+    border-radius: 10px;
+}
+.modal-header {
+    text-align: center;
+    margin-bottom: 20px;
+    position: relative;
+}
+.modal-header h2 {
+    color: #fff;
+    font-size: 1.8rem;
+    font-weight: 700;
+    text-shadow: 0 0 10px #0ff; /* Stronger neon glow */
+    text-transform: uppercase;
+}
+
+/* Close Button */
+.close-button {
+    position: absolute;
+    top: 5px;
+    right: 10px;
+    background: transparent;
+    border: none;
+    color: #0ff; /* Neon blue */
+    font-size: 2rem;
+    cursor: pointer;
+    transition: color 0.3s, text-shadow 0.3s;
+}
+.close-button:hover {
+    color: #fff;
+    text-shadow: 0 0 10px rgba(0, 247, 255, 0.5); /* Pink/Purple hover effect */
+}
+
+/* Common Headers */
+.payment-header {
+    font-size: 1.2rem;
+    color: #0ff;
+    text-align: center;
+    margin-bottom: 20px;
+    text-shadow: 0 0 8px #0ff, 0 0 4px #0ff;
+    text-transform: uppercase;
+}
+
+/* Payment Method Selection */
+.payment-method-selection {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    margin-bottom: 35px;
+}
+.method-option {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 15px 25px;
+    border: 2px solid #333;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    width: 180px;
+    background: rgba(0, 0, 0, 0.5);
+    span {
+        color: #fff;
+        font-size: 0.95rem;
+        margin-top: 5px;
+    }
+}
+.method-option svg {
+    width: 45px;
+    height: 45px;
+    color: #0ff;
+    transition: all 0.3s;
+}
+.method-option:hover {
+    border-color: #0ff;
+    box-shadow: 0 0 15px rgba(0, 247, 255, 0.5);
+}
+.method-option.selected {
+    border-color: #0ff; /* Neon Green Border for selection */
+    box-shadow: 0 0 15px #0ff; /* Strong green glow */
+    // background: rgba(57, 255, 20, 0.1);
+    span{
+        color: #0ff;
+        font-weight: bold;
+    }
+}
+.method-option.selected svg {
+    color: #0ff; /* Neon green icon */
+    transform: scale(1.1);
+}
+
+/* Crypto Selection */
+.crypto {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 30px;
+}
+.crypto-option {
+    /* Inherits most styles from .method-option but can be adjusted for size/padding */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px 15px;
+    border: 1px solid #333;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+    width: 100px;
+}
+.crypto-option.selected {
+    /* Using the same selected look for consistency */
+    border-color: #0ff; 
+    box-shadow: 0 0 10px #0ff;
+    background: rgba(57, 255, 20, 0.1);
+}
+
+
+/* Card Payment Form */
+.card-payment-form {
+    background: rgba(0, 0, 0, 0.7);
+    border: 1px solid #0ff;
+    padding: 10px;
+    border-radius: 10px;
+    margin-bottom: 30px;
+    box-shadow: 0 0 10px rgba(0, 247, 255, 0.2);
+}
+.form-header {
+    font-size: 0.95rem;
+    color: #fff;
+    text-align: center;
+    margin-top: 0;
+    margin-bottom: 25px;
+    text-shadow: 0 0 8px rgba(0, 247, 255, 0.5); /* Pink/Purple glow for form header */
+}
+.form-group {
+    margin-bottom: 20px;
+}
+.form-group-inline {
+    display: flex;
+    gap: 20px;
+    .form-group {
+        flex: 1;
+    }
+}
+.card-payment-form label {
+    display: block;
+    font-size: 0.75rem;
+    color: #0ff;
+    margin-bottom: 8px;
+    text-shadow: 0 0 3px rgba(0, 255, 255, 0.5);
+    text-transform: uppercase;
+}
+.card-payment-form input[type="text"] {
+    width: 100%;
+    padding: 5px 15px;
+    background: #000;
+    border: 1px solid #555;
+    color: #fff;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 1rem;
+    border-radius: 5px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+    transition: all 0.3s;
+}
+.card-payment-form input[type="text"]:focus {
+    outline: none;
+    border-color: #0ff; /* Focus with neon green border */
+    box-shadow: 0 0 10px #0ff, inset 0 0 3px #0ff; /* Intense green glow */
+}
+/* Style for invalid input */
+.card-payment-form input:invalid:not([ng-untouched]):not(:focus) {
+    border-color: rgba(0, 247, 255, 0.5); /* Pink/Purple for error */
+    box-shadow: 0 0 5px rgba(0, 247, 255, 0.5), inset 0 0 2px rgba(0, 247, 255, 0.5);
+}
+
+
+/* Modal Actions and Status */
+.modal-actions {
+    text-align: center;
+    margin-top: 20px;
+}
+
+/* Neon Button Styling */
+.neon-button {
+    padding: 12px 25px;
+    font-size: 1rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s;
+    letter-spacing: 1px;
+}
+
+.neon-button.green {
+    color: #0ff;
+    border: 1px solid #0ff;
+    background-color: transparent;
+    box-shadow: 0 0 15px #0ff, 0 0 5px #0ff;
+    border-radius: 50px;
+}
+
+.neon-button.green:hover:not([disabled]) {
+   
+    transform: translateY(-2px);
+}
+
+.neon-button[disabled] {
+    opacity: 0.8;
+    cursor: not-allowed;
+    box-shadow: none;
+    transform: none;
+}
+
+/* Status Messages */
+.status-message {
+    padding: 15px;
+    margin-bottom: 10px;
+    border-radius: 8px;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-size: 1rem;
+}
+
+.status-message.success {
+    background: rgba(57, 255, 20, 0.1);
+    color: #0ff;
+    border: 1px solid #0ff;
+    box-shadow: 0 0 10px rgba(57, 255, 20, 0.5);
+}
+
+.status-message.error {
+    background: rgba(255, 0, 255, 0.1);
+    color: rgba(0, 247, 255, 0.5);
+    border: 1px solid rgba(0, 247, 255, 0.5);
+    box-shadow: 0 0 10px rgba(255, 0, 255, 0.5);
+}
+
+/* Mobile Responsive Adjustments */
+@media (max-width: 768px) {
+    .payment-method-selection {
+        gap: 15px;
+    }
+    .method-option {
+        width: 130px;
+        padding: 10px 15px;
+    }
+    .form-group-inline {
+        flex-direction: column;
+    }
+}
+@media (max-width: 480px) {
+    .payment-method-selection {
+        flex-wrap: wrap;
+    }
+    .method-option {
+        width: 100%; /* Full width for better tapping */
+        margin-bottom: 10px;
+    }
+    .crypto {
+        flex-wrap: wrap;
+    }
+    .crypto-option {
+        width: 45%;
+    }
+    .modal-body {
+        padding: 15px;
+    }
+}

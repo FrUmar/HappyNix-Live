@@ -62,7 +62,7 @@
                 <div class="tool-actions">
                     <button class="neon-button" [routerLink]="'/details'"
                         [queryParams]="{ toolId: tool.productId}">Details</button>
-                    <button class="neon-button green">Buy Now</button>
+                    <button class="neon-button green" (click)="OpenBuyNowPopUp(tool.productId,tool)">Buy Now</button>
                 </div>
             </div>
             }

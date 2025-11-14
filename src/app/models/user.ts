@@ -11,7 +11,7 @@ export interface toolDetails {
     price: number;
     version: string;
     releaseDate: string;
-    features: string;
+    features: string | string[];
     videoLink: string;
     categoryId: string;
     categoryName: string | null;
