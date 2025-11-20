@@ -1,5 +1,5 @@
 <div class="payment-title">
-    <h1>Payment Information</h1>
+    <h1>Card Information</h1>
 </div>
 <div class="container" [class.preload]="!isViewInitialized">
     <div class="creditcard" [class.flipped]="isCardFlipped" (click)="toggleFlipCard()">
@@ -66,47 +66,50 @@
         </div>
     </div>
 </div>
-<div class="form-container">
-    <form [formGroup]="creditCardForm">
-        <div class="input-group">
-            <input #nameInput id="name" formControlName="name" maxlength="20" type="text" (focus)="flipCard(false)">
-            <label for="name">Name</label>
-            <div *ngIf="name?.invalid && (name?.dirty || name?.touched)" class="error-message">
-                <div *ngIf="name?.errors?.['required']">Name is required.</div>
-                <div *ngIf="name?.errors?.['pattern']">Name can only contain letters and spaces.</div>
+<div class="form-container mt-4">
+    <form [formGroup]="creditCardForm" class="row">
+        <div class="row p-0 m-0">
+            <div class="input-group col-6">
+                <input #nameInput id="name" formControlName="name" maxlength="20" type="text" (focus)="flipCard(false)">
+                <label for="name">Name</label>
+                <div *ngIf="name?.invalid && (name?.dirty || name?.touched)" class="error-message">
+                    <div *ngIf="name?.errors?.['required']">Name is required.</div>
+                    <div *ngIf="name?.errors?.['pattern']">Name can only contain letters and spaces.</div>
+                </div>
             </div>
-        </div>
-        <div class="input-group">
-            <input id="cardnumber" formControlName="cardnumber" type="text" pattern="[0-9]*" inputmode="numeric"
-                (focus)="flipCard(false)">
-            <label for="cardnumber">Card Number</label>
-            <span id="generatecard" (click)="generateRandomCard()">generate random</span>
-            <svg #cciconContainer id="ccicon" class="ccicon" width="750" height="471" viewBox="0 0 750 471"
-                version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-                [innerHTML]="svgIconHtml">
-            </svg>
-            <div *ngIf="cardnumber?.invalid && (cardnumber?.dirty || cardnumber?.touched)" class="error-message">
-                <div *ngIf="cardnumber?.errors?.['required']">Card number is required.</div>
-                <div *ngIf="cardnumber?.errors?.['pattern']">Card number must be 13-19 digits.</div>
+            <div class="input-group col-6">
+                <input id="cardnumber" formControlName="cardnumber" type="text" pattern="[0-9]*" inputmode="numeric"
+                    (focus)="flipCard(false)">
+                <label for="cardnumber">Card Number</label>
+                <span id="generatecard" (click)="generateRandomCard()">generate random</span>
+                <svg #cciconContainer id="ccicon" class="ccicon" width="750" height="471" viewBox="0 0 750 471"
+                    version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                    [innerHTML]="svgIconHtml">
+                </svg>
+                <div *ngIf="cardnumber?.invalid && (cardnumber?.dirty || cardnumber?.touched)" class="error-message">
+                    <div *ngIf="cardnumber?.errors?.['required']">Card number is required.</div>
+                    <div *ngIf="cardnumber?.errors?.['pattern']">Card number must be 13-19 digits.</div>
+                </div>
             </div>
-        </div>
-        <div class="input-group">
-            <input id="expirationdate" formControlName="expirationdate" type="text" pattern="[0-9]*" inputmode="numeric"
-                (focus)="flipCard(false)">
-            <label for="expirationdate">Expiration (mm/yy)</label>
-            <div *ngIf="expirationdate?.invalid && (expirationdate?.dirty || expirationdate?.touched)"
-                class="error-message">
-                <div *ngIf="expirationdate?.errors?.['required']">Expiration date is required.</div>
-                <div *ngIf="expirationdate?.errors?.['pattern']">Use MMYY format (e.g., 0125).</div>
+            <div class="input-group">
+                <input id="expirationdate" formControlName="expirationdate" type="text" pattern="[0-9]*"
+                    inputmode="numeric" (focus)="flipCard(false)">
+                <label for="expirationdate">Expiration (MMYY)</label>
+                <div *ngIf="expirationdate?.invalid && (expirationdate?.dirty || expirationdate?.touched)"
+                    class="error-message">
+                    <div *ngIf="expirationdate?.errors?.['required']">Expiration date is required.</div>
+                    <div *ngIf="expirationdate?.errors?.['pattern']">Use MMYY format (e.g., 0125).</div>
+                </div>
             </div>
-        </div>
-        <div class="input-group">
-            <input id="securitycode" formControlName="securitycode" type="text" pattern="[0-9]*" inputmode="numeric"
-                (focus)="flipCard(true)">
-            <label for="securitycode">Security Code</label>
-            <div *ngIf="securitycode?.invalid && (securitycode?.dirty || securitycode?.touched)" class="error-message">
-                <div *ngIf="securitycode?.errors?.['required']">Security code is required.</div>
-                <div *ngIf="securitycode?.errors?.['pattern']">Security code must be 3 or 4 digits.</div>
+            <div class="input-group">
+                <input id="securitycode" formControlName="securitycode" type="text" pattern="[0-9]*" inputmode="numeric"
+                    (focus)="flipCard(true)">
+                <label for="securitycode">Security Code</label>
+                <div *ngIf="securitycode?.invalid && (securitycode?.dirty || securitycode?.touched)"
+                    class="error-message">
+                    <div *ngIf="securitycode?.errors?.['required']">Security code is required.</div>
+                    <div *ngIf="securitycode?.errors?.['pattern']">Security code must be 3 or 4 digits.</div>
+                </div>
             </div>
         </div>
     </form>

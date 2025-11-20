@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { AdminCategory } from '../../models/admin';
-import { toolDetails } from '../../models/user';
+import { toolDetails, userDetails } from '../../models/user';
 import { UserService } from '../User/user.service';
 
 @Injectable({
@@ -12,6 +12,7 @@ export class UserCacheService {
     private categoriesSubject = new BehaviorSubject<AdminCategory[] | null>(null);
     private freeToolsSubject = new BehaviorSubject<toolDetails[] | null>(null);
     private paidToolsSubject = new BehaviorSubject<toolDetails[] | null>(null);
+    private userProfileSubject = new BehaviorSubject<userDetails | null>(null);
 
     constructor(private userService: UserService) { }
 
@@ -51,4 +52,27 @@ export class UserCacheService {
         this.freeToolsSubject.next(null);
         this.paidToolsSubject.next(null);
     }
+    /** ✅ Get cached user profile or load from API once */
+    clearCacheUserDetails(): void {
+        this.userProfileSubject.next(null);
+    }
+    getUserProfile(): Observable<userDetails> {
+        if (this.userProfileSubject.value) {
+            return of(this.userProfileSubject.value);
+        }
+        return this.userService.getUserProfile().pipe(
+            tap(data => this.userProfileSubject.next(data))
+        );
+    }
+    patchUserProfile(changes: Partial<userDetails>): void {
+        const current = this.userProfileSubject.value;
+
+        if (current) {
+            this.userProfileSubject.next({
+                ...current,
+                ...changes
+            });
+        }
+    }
+
 }

@@ -106,7 +106,14 @@
     background-color: rgba(46, 204, 113, 0.1);
     color: var(--status-inactive);
   }
-  
+  .change-password{
+    cursor: pointer;
+    color:#e73c3c;
+    &:hover{
+  color:#ffffff;
+
+}
+  }
   .empty-state-row td {
     text-align: center;
     color: var(--text-muted);

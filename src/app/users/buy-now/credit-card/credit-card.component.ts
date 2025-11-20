@@ -91,7 +91,7 @@ export class CreditCardComponent implements OnInit, AfterViewInit, OnDestroy {
     if (nameControl) {
       this.formValueChangesSub.add(
         nameControl.valueChanges.subscribe(value => {
-          this.svgNameDisplay = value && value.length > 0 ? value.toUpperCase() : 'JOHN DOE';
+          this.svgNameDisplay = value && value.length > 0 ? value.toUpperCase() : 'Your Name';
         })
       );
     }

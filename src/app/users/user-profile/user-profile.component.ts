@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { CommonModule, Location } from '@angular/common';
+import { userDetails } from '../../models/user';
+import { UserCacheService } from '../../services/UserCacheData/userCacheService';
 
 interface User {
   name: string;
@@ -27,12 +29,14 @@ interface Order {
   styleUrls: ['./user-profile.component.scss']
 })
 export class UserProfileComponent implements OnInit {
-  user: User = {
-    name: 'Cipher',
-    email: 'cipher@cybercore.io',
-    avatar: 'https://img.freepik.com/premium-photo/portrait-anonymous-hacker-hacking-computer-system-cyber-crime-cyber-security-cybercrime_825385-827.jpg',
-    bio: 'Netrunner, code-slinger, and ghost in the machine. I navigate the digital highways, looking for the next big score. If it\'s encrypted, I can crack it.',
-    joinedDate: '2023-01-15'
+  user: userDetails = {
+    id: '',
+    name: '',
+    phoneNumber: '',
+    avatarUrl: 'https://img.freepik.com/premium-photo/portrait-anonymous-hacker-hacking-computer-system-cyber-crime-cyber-security-cybercrime_825385-827.jpg',
+    email: '',
+    createdAt: '',
+    applicationUserTypeId: 0
   };
 
   orders: Order[] = [
@@ -44,14 +48,28 @@ export class UserProfileComponent implements OnInit {
 
   activeTab: 'profile' | 'orders' = 'profile';
 
-  constructor(private location: Location) { }
+  constructor(private location: Location, private userCacheService: UserCacheService) { }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {
+    this.getUserProfile()
+  }
 
   setActiveTab(tab: 'profile' | 'orders') {
     this.activeTab = tab;
   }
-
+  getUserProfile(): void {
+    this.userCacheService.getUserProfile().subscribe(current => {
+      this.user = {
+        id: current.id,
+        name: current.name,
+        phoneNumber: current.phoneNumber,
+        avatarUrl: 'https://img.freepik.com/premium-photo/portrait-anonymous-hacker-hacking-computer-system-cyber-crime-cyber-security-cybercrime_825385-827.jpg',
+        email: current.email,
+        createdAt: current.createdAt,
+        applicationUserTypeId: current.applicationUserTypeId
+      };
+    });
+  }
   updateProfile() {
     console.log('Updating profile...', this.user);
     // Add logic to save user data to a backend service

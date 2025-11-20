@@ -16,3 +16,13 @@ export interface toolDetails {
     categoryId: string;
     categoryName: string | null;
 }
+
+export interface userDetails {
+    id: string;
+    name: string;
+    phoneNumber: string | null;
+    email: string;
+    createdAt: string;
+    applicationUserTypeId: number;
+    avatarUrl: string | null;
+}

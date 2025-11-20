@@ -17,6 +17,7 @@
                     <th>Email</th>
                     <th>Phone</th>
                     <th></th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
@@ -43,6 +44,9 @@
                     <td>{{ client.phoneNumber??'+92000000000' }}</td>
                     <td> <span class="status-active status-badge">Customer</span> &nbsp;
                         <span class="status-new status-badge" *ngIf="client.isNew">New</span>
+                    </td>
+                    <td>
+                        <span class="change-password status-badge">Reset password</span>
                     </td>
                 </tr>
                 <tr *ngIf="!isLoading && clients.length === 0" class="empty-state-row">

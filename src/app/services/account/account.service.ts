@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { map } from 'rxjs/internal/operators/map';
 import { RepositoryService } from '../repository/repository.service';
+import { UserCacheService } from '../UserCacheData/userCacheService';
 export class AuthenticateModel {
   email!: string;
   password!: string;
@@ -13,7 +14,8 @@ export class AccountService {
   history: any[] = [];
   constructor(
     private router: Router,
-    private repositoryService: RepositoryService
+    private repositoryService: RepositoryService,
+    private userCacheService: UserCacheService
   ) { }
 
   AddUser(data: any) {
@@ -180,7 +182,7 @@ export class AccountService {
       let removeExpiration = localStorage.removeItem(
         'exploits_expiration'
       );
-
+      this.userCacheService.clearCacheUserDetails()
       let removeUserId = localStorage.removeItem('exploits_userId');
       let removeUserName = localStorage.removeItem('exploits_user_name');
       let removeClientId = localStorage.removeItem('exploits_user_clientId');

@@ -1,6 +1,6 @@
 <!-- <div class="main"> -->
 <!-- <div class="matrix-background"></div> -->
-<div class="profile-container">
+<div class="profile-container mb-4">
     <button class="neon-button back-button" (click)="goBack()" data-text="Back to Dashboard">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
             stroke-linecap="round" stroke-linejoin="round">
@@ -10,13 +10,13 @@
     </button>
     <header class="profile-header">
         <div class="avatar-container">
-            <img [src]="user.avatar" [alt]="user.name" class="avatar">
+            <img [src]="user.avatarUrl" [alt]="user.name" class="avatar">
             <button class="edit-avatar-btn">⚙️</button>
         </div>
         <div class="user-info">
             <h1 class="glitch" [attr.data-text]="user.name">{{ user.name }}</h1>
             <p class="user-email">{{ user.email }}</p>
-            <p class="join-date">Joined: {{ user.joinedDate }}</p>
+            <p class="join-date">Joined: {{ user.createdAt | date: 'fullDate' }}</p>
         </div>
     </header>
 
@@ -41,10 +41,16 @@
                     <input type="email" disabled id="email" name="email" [(ngModel)]="user.email" required>
                     <label for="email">Email</label>
                 </div>
-                <div class="input-group">
+                <!-- <div class="input-group">
                     <textarea id="bio" name="bio" rows="4" [(ngModel)]="user.bio" required></textarea>
                     <label for="bio">Bio</label>
+                </div> -->
+                <!-- phone number -->
+                <div class="input-group">
+                    <input type="tel" id="phone" name="phone" [(ngModel)]="user.phoneNumber" required>
+                    <label for="phone">Phone Number</label>
                 </div>
+
                 <button type="submit" class="neon-button green">Save Changes</button>
             </form>
         </section>

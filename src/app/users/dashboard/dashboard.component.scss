@@ -609,3 +609,18 @@
     }
   }
 }
+
+// tost styles
+::ng-deep {
+  .swal2-toast {
+    background-color: #010409 !important;
+
+    .swal2-title {
+      color: #c9d1d9 !important;
+    }
+
+    .swal2-timer-progress-bar {
+      background: #00f7ff !important;
+    }
+  }
+}

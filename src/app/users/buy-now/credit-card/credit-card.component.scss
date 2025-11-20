@@ -43,6 +43,7 @@ body {
 .input-group {
     position: relative;
     margin-bottom: 35px;
+    width: 50%;
 }
 
 .form-container {
@@ -51,7 +52,7 @@ body {
     grid-template-columns: auto auto;
     grid-template-rows: auto;
     grid-template-areas: "name name""number number""expiration security";
-    max-width: 400px;
+    max-width: 100%;
     padding: 30px;
     color: #707070;
     background-color: #1a1d24;
