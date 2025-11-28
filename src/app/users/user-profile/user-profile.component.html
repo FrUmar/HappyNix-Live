@@ -24,7 +24,8 @@
         <button class="tab-button" [class.active]="activeTab === 'profile'" (click)="setActiveTab('profile')">
             Profile Details
         </button>
-        <button class="tab-button" [class.active]="activeTab === 'orders'" (click)="setActiveTab('orders')">
+        <button class="tab-button" [class.active]="activeTab === 'orders'"
+            (click)="setActiveTab('orders');getUserOrdersHistory()">
             Order History
         </button>
     </nav>
@@ -51,7 +52,10 @@
                     <label for="phone">Phone Number</label>
                 </div>
 
-                <button type="submit" class="neon-button green">Save Changes</button>
+                <button type="submit" class="neon-button green">Save Changes&nbsp;<i class="fa fa-refresh fa-spin"
+                        style="font-size: 15px" *ngIf="isUpdating">
+                    </i>
+                </button>
             </form>
         </section>
 
@@ -71,12 +75,12 @@
                     </thead>
                     <tbody>
                         <tr *ngFor="let order of orders">
-                            <td data-label="Order ID">{{ order.orderId }}</td>
-                            <td data-label="Date">{{ order.date }}</td>
-                            <td data-label="Item">{{ order.item }}</td>
-                            <td data-label="Price">$ {{ order.price }}</td>
+                            <td data-label="Order ID">{{ order.id.slice(0,6)}}</td>
+                            <td data-label="Date">{{ order.createdAt }}</td>
+                            <td data-label="Item">{{ order.productName }}</td>
+                            <td data-label="Price">$ {{ order.amount }}</td>
                             <td data-label="Status">
-                                <span class="status" [ngClass]="order.status.toLowerCase()">{{ order.status
+                                <span class="status" [ngClass]="order.statusName.toLowerCase()">{{ order.statusName
                                     }}</span>
                             </td>
                         </tr>

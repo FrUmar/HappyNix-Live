@@ -90,7 +90,13 @@ export class AdminService {
                 map((data: any) => data as AdminUserWithRole[])
             );
     }
-
+    // /User/admin/orders
+    getAllOrders(filter: any): Observable<any> {
+        return this.repositoryService.post('User/admin/orders', filter, true)
+            .pipe(
+                map((data: any) => data as any)
+            );
+    }
 
 
 }

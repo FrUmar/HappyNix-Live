@@ -8,12 +8,11 @@
         <div class="card-header">
             <h2>All Orders</h2>
             <div class="filter-bar">
-                <button (click)="filterOrders('All')" [class.active]="currentFilter === 'All'">All</button>
-                <button (click)="filterOrders('Pending')" [class.active]="currentFilter === 'Pending'">Pending</button>
-                <button (click)="filterOrders('Shipped')" [class.active]="currentFilter === 'Shipped'">Shipped</button>
-                <button (click)="filterOrders('Completed')"
-                    [class.active]="currentFilter === 'Completed'">Completed</button>
-                <button (click)="filterOrders('Failed')" [class.active]="currentFilter === 'Failed'">Failed</button>
+                <button (click)="getOrderList(null)" [class.active]="currentFilter === 'All'">All</button>
+                <button (click)="getOrderList(1)" [class.active]="currentFilter === 'Pending'">Pending</button>
+                <button (click)="getOrderList(2)" [class.active]="currentFilter === 'Processing'">Processing</button>
+                <button (click)="getOrderList(3)" [class.active]="currentFilter === 'Completed'">Completed</button>
+                <button (click)="getOrderList(4)" [class.active]="currentFilter === 'Failed'">Failed</button>
             </div>
         </div>
 
@@ -28,18 +27,37 @@
                         <th>Total</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody *ngIf="!isLoading">
                     <tr *ngFor="let order of filteredOrders" (click)="selectOrder(order)"
                         [class.selected]="selectedOrder?.id === order.id">
-                        <td>{{ order.id }}</td>
+                        <td>{{ order.id.slice(0,5) }}</td>
                         <td>{{ order.customerName }}</td>
                         <td>{{ order.date | date:'medium' }}</td>
                         <td><span class="status-badge status-{{ order.status.toLowerCase() }}">{{ order.status }}</span>
                         </td>
                         <td>{{ order.total | currency }}</td>
                     </tr>
-                    <tr *ngIf="filteredOrders.length === 0">
+                    <tr *ngIf="!isLoading && filteredOrders.length === 0">
                         <td colspan="5" class="empty-state-row">No orders found for this filter.</td>
+                    </tr>
+                </tbody>
+                <tbody *ngIf="isLoading">
+                    <tr *ngFor="let i of [1, 2, 3, 4, 5]">
+                        <td>
+                            <div class="skeleton-loader"></div>
+                        </td>
+                        <td>
+                            <div class="skeleton-loader"></div>
+                        </td>
+                        <td>
+                            <div class="skeleton-loader"></div>
+                        </td>
+                        <td>
+                            <div class="skeleton-loader"></div>
+                        </td>
+                        <td>
+                            <div class="skeleton-loader"></div>
+                        </td>
                     </tr>
                 </tbody>
             </table>

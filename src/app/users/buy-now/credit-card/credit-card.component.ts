@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnDestroy, OnInit, AfterViewInit, ViewChild, ElementRef, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs';
@@ -44,6 +44,7 @@ const CARD_TYPE_REGEX: { type: string, regex: RegExp }[] = [
   styleUrl: './credit-card.component.scss'
 })
 export class CreditCardComponent implements OnInit, AfterViewInit, OnDestroy {
+  @Output() formValidityChange = new EventEmitter<boolean>();
   public isCardFlipped: boolean = false;
   public cardColorClass: string = 'grey'; // For dynamic color swapping
   public isViewInitialized: boolean = false; // For preload class management
@@ -62,6 +63,7 @@ export class CreditCardComponent implements OnInit, AfterViewInit, OnDestroy {
   ngOnInit(): void {
     this.initializeForm();
     this.subscribeToFormChanges();
+    this.formValidityChange.emit(this.creditCardForm.valid);
   }
 
   ngAfterViewInit(): void {
@@ -127,6 +129,10 @@ export class CreditCardComponent implements OnInit, AfterViewInit, OnDestroy {
         })
       );
     }
+
+    this.formValueChangesSub.add(
+      this.creditCardForm.statusChanges.subscribe(status => this.formValidityChange.emit(status === 'VALID'))
+    );
   }
 
   // ------------------------------------------------------------------
@@ -137,6 +143,10 @@ export class CreditCardComponent implements OnInit, AfterViewInit, OnDestroy {
   get cardnumber() { return this.creditCardForm.get('cardnumber'); }
   get expirationdate() { return this.creditCardForm.get('expirationdate'); }
   get securitycode() { return this.creditCardForm.get('securitycode'); }
+
+  public getFormValue() {
+    return this.creditCardForm.value;
+  }
 
   private updateCardVisuals(cardNumber: string): void {
     const unformattedValue = cardNumber.replace(/\D/g, '');

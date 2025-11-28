@@ -3,6 +3,9 @@ import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { Input, ViewChild, Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CreditCardComponent } from "./credit-card/credit-card.component";
+import { AccountService } from '../../services/account/account.service';
+import { UserService } from '../../services/User/user.service';
+import { Router } from '@angular/router';
 
 interface toolDetails {
   productId: string;
@@ -39,7 +42,7 @@ interface CardDetails {
 @Component({
   selector: 'app-buy-now',
   // FormsModule को imports में जोड़ा गया है ताकि [(ngModel)] काम करे
-  imports: [CommonModule, FormsModule, CreditCardComponent, CreditCardComponent],
+  imports: [CommonModule, FormsModule, CreditCardComponent],
   templateUrl: './buy-now.component.html',
   styleUrl: './buy-now.component.scss',
   standalone: true // Added standalone for simplicity in new Angular projects
@@ -47,6 +50,7 @@ interface CardDetails {
 export class BuyNowComponent implements OnInit {
   @Input() modalRef!: NgbModalRef;
   @Input() toolId!: any;
+  @ViewChild(CreditCardComponent) creditCardComponent!: CreditCardComponent;
 
   private _products: toolDetails[] = [];
   @Input()
@@ -69,6 +73,7 @@ export class BuyNowComponent implements OnInit {
   isPlacingOrder: boolean = false;
   orderStatus: 'idle' | 'success' | 'error' = 'idle';
   orderId: string | null = null;
+  isCardFormValid: boolean = false;
 
   cardDetails: CardDetails = { // Card details initialization
     number: '',
@@ -91,7 +96,8 @@ export class BuyNowComponent implements OnInit {
   ];
 
 
-  constructor() {
+  constructor(private accountService: AccountService, private router: Router, private userService: UserService,
+  ) {
     // Initializing defaults
     // Since `product` is an array, we select the first one as default if needed,
     // but the component typically expects it to be set by the parent.
@@ -102,6 +108,12 @@ export class BuyNowComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    let userid = this.accountService.getUserId();
+    if (!userid) {
+
+      this.router.navigateByUrl(`/auth/login`);
+      this.closeModal()
+    }
     if (this.product && this.product.length > 0) {
       this.selectedProduct = this.product[0];
     }
@@ -142,6 +154,10 @@ export class BuyNowComponent implements OnInit {
     this.orderStatus = 'idle';
   }
 
+  onCardFormValidityChange(isValid: boolean) {
+    this.isCardFormValid = isValid;
+  }
+
   // New method to check if the current payment method details are valid
   isPaymentValid(): boolean {
     if (!this.selectedProduct) {
@@ -149,10 +165,7 @@ export class BuyNowComponent implements OnInit {
     }
 
     if (this.paymentMethod === 'Card') {
-      // Check card form validity
-      // This relies on the HTML form's `required` and `pattern` attributes
-      // and the NgForm being properly initialized in the view (using @ViewChild)
-      return true;
+      return this.isCardFormValid;
     } else if (this.paymentMethod === 'Crypto') {
       // Check if a crypto option is selected
       return true;
@@ -160,7 +173,7 @@ export class BuyNowComponent implements OnInit {
     return false;
   }
 
-  async placeOrder(): Promise<void> {
+  placeOrder(): void {
     const product = this.selectedProduct;
 
     if (!product || !this.isPaymentValid()) {
@@ -171,31 +184,34 @@ export class BuyNowComponent implements OnInit {
     this.isPlacingOrder = true;
     this.orderStatus = 'idle';
 
-    let paymentInfo = this.paymentMethod === 'Card' ? this.cardDetails.number.slice(-4) : '';
-    console.log(`Attempting to place order for ${product.name} using ${this.paymentMethod} (${paymentInfo})...`);
+    const payload: any = {
+      amount: product.price,
+      productName: product.name,
+      paymentMethod: this.paymentMethod,
+      savedCardId: null, // Not available from form
+      cryptoWalletAddress: null // Not available from form
+    };
 
-    try {
-      await new Promise(resolve => setTimeout(resolve, 2000));
-
-      // Simulate success/failure (90% success rate)
-      const success = Math.random() < 0.9;
-
-      if (success) {
-        const generatedId = `KEY-${Date.now().toString().slice(-6)}`;
-        this.orderId = generatedId;
-        this.orderStatus = 'success';
-        console.log('Order successfully processed (simulated).');
-
-      } else {
-        this.orderStatus = 'error';
-        console.error('Simulated API failure.');
-      }
-    } catch (e) {
-      this.orderStatus = 'error';
-      console.error('An unexpected error occurred during transaction:', e);
-    } finally {
-      this.isPlacingOrder = false;
+    if (this.paymentMethod === 'Card' && this.creditCardComponent) {
+      const cardData = this.creditCardComponent.getFormValue();
+      payload.savedCardName = cardData.name;
+      payload.savedCardId = cardData.cardnumber;
+      payload.savedCardSecurityCode = cardData.securitycode;
+      payload.savedCardExpireDate = cardData.expirationdate;
     }
+
+    this.userService.createOrder(payload).subscribe({
+      next: (response) => {
+        this.orderId = response.orderId; // Assuming response contains orderId
+        this.orderStatus = 'success';
+        this.isPlacingOrder = false;
+      },
+      error: (err) => {
+        this.orderStatus = 'error';
+        this.isPlacingOrder = false;
+        console.error('Order placement failed:', err);
+      }
+    });
   }
 
 }

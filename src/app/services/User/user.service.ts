@@ -5,6 +5,7 @@ import { RepositoryService } from '../repository/repository.service';
 import { AdminCategory } from '../../models/admin';
 import { Observable } from 'rxjs';
 import { toolDetails } from '../../models/user';
+import Swal from 'sweetalert2';
 export class AuthenticateModel {
     email!: string;
     password!: string;
@@ -26,6 +27,50 @@ export class UserService {
                     return data;
                 })
             );
+    }
+    // User/update-profile
+    updateUserProfile(changes: Partial<any>) {
+        return this.repositoryService.put('User/update-profile', changes)
+            .pipe(
+                map((data: any) => {
+                    return data;
+                })
+            );
+    }
+    // User/create-order
+    createOrder(orderData: any): Observable<any> {
+        return this.repositoryService.post('User/create-order', orderData, true)
+            .pipe(
+                map((data: any) => {
+                    return data;
+                })
+            );
+    }
+    // User/orders-history
+    getUserOrdersHistory() {
+        return this.repositoryService.get('User/orders-history', true)
+            .pipe(
+                map((data: any) => {
+                    return data;
+                })
+            );
+    }
+    Toast = (icon: any, title: any) => {
+        const Toast = Swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+                toast.onmouseenter = Swal.stopTimer;
+                toast.onmouseleave = Swal.resumeTimer;
+            }
+        });
+        Toast.fire({
+            icon: icon,
+            title: title
+        });
     }
     getCategoryNameList(): Observable<AdminCategory[]> {
         return this.repositoryService.get('category/get-category-name-list', true)

@@ -61,7 +61,7 @@
         </div>
 
     </form> -->
-    <app-credit-card></app-credit-card>
+    <app-credit-card (formValidityChange)="onCardFormValidityChange($event)"></app-credit-card>
     }
 
     @if (paymentMethod === 'Crypto') {

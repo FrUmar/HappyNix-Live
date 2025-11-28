@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { CommonModule, Location } from '@angular/common';
 import { userDetails } from '../../models/user';
 import { UserCacheService } from '../../services/UserCacheData/userCacheService';
+import { UserService } from '../../services/User/user.service';
+import { AccountService } from '../../services/account/account.service';
 
 interface User {
   name: string;
@@ -12,13 +14,21 @@ interface User {
   bio: string;
   joinedDate: string;
 }
+// orderId: string;
+// date: string;
+// item: string;
+// price: number;
+// status: 'Completed' | 'Pending' | 'Failed';
 
 interface Order {
-  orderId: string;
-  date: string;
-  item: string;
-  price: number;
-  status: 'Completed' | 'Pending' | 'Failed';
+  id: string;
+  userId: string;
+  paymentMethod: string;
+  amount: number;
+  productName: string;
+  createdAt: string;
+  statusId: number;
+  statusName: string;
 }
 
 @Component({
@@ -38,19 +48,19 @@ export class UserProfileComponent implements OnInit {
     createdAt: '',
     applicationUserTypeId: 0
   };
-
-  orders: Order[] = [
-    { orderId: 'ORD-7C4A1B', date: '2024-05-10', item: 'Ghost Cloaker', price: 500, status: 'Pending' },
-    { orderId: 'ORD-9F2D8E', date: '2024-04-22', item: 'Zero-Day Exploit Kit', price: 50, status: 'Completed' },
-    { orderId: 'ORD-3B6E7A', date: '2024-03-15', item: 'Port Scanner', price: 150, status: 'Completed' },
-    { orderId: 'ORD-1A9C5F', date: '2024-02-01', item: 'AI Phisher', price: 0, status: 'Failed' }
-  ];
+  isUpdating: boolean = false;
+  orders: Order[] = [];
 
   activeTab: 'profile' | 'orders' = 'profile';
 
-  constructor(private location: Location, private userCacheService: UserCacheService) { }
+  constructor(private location: Location, private userCacheService: UserCacheService, private userService: UserService, private accountService: AccountService, private router: Router,) { }
 
   ngOnInit(): void {
+    let userid = this.accountService.getUserId();
+    if (!userid) {
+      this.router.navigateByUrl(`/auth/login`);
+      return;
+    }
     this.getUserProfile()
   }
 
@@ -71,9 +81,34 @@ export class UserProfileComponent implements OnInit {
     });
   }
   updateProfile() {
-    console.log('Updating profile...', this.user);
+    this.isUpdating = true;
     // Add logic to save user data to a backend service
+    let data = {
+      name: this.user.name,
+      phoneNumber: this.user.phoneNumber
+    }
+    this.userService.updateUserProfile(data).subscribe(response => {
+      this.isUpdating = false;
+      this.userCacheService.patchUserProfile(data);
+      this.userService.Toast('success', 'Profile updated successfully');
+    });
   }
+  getUserOrdersHistory(): void {
+    this.userService.getUserOrdersHistory().subscribe(response => {
+      // Map the response to the Order interface if necessary
+      this.orders = response.map((order: any) => ({
+        id: order.id,
+        userId: order.userId,
+        paymentMethod: order.paymentMethod,
+        amount: order.amount,
+        createdAt: order.createdAt,
+        statusId: order.statusId,
+        statusName: order.statusName,
+        productName: order.productName
+      }));
+    });
+  }
+
   goBack(): void {
     this.location.back();
   }
