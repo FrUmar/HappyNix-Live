@@ -25,6 +25,7 @@ export class ToolsListComponent implements OnInit, AfterViewInit, OnDestroy {
   categoryId: string = '';
   filter: 'all' | 'free' | 'paid' = 'all';
   viewMode: 'grid' | 'list' = 'grid';
+  searchQuery: string = '';
 
   get filteredTools(): toolDetails[] {
     return this.tools.filter(tool => {
@@ -39,30 +40,49 @@ export class ToolsListComponent implements OnInit, AfterViewInit, OnDestroy {
     private userCacheService: UserCacheService,
     private userService: UserService
   ) {
-    this.paramName = this.route.snapshot.paramMap.get('toolId') || '';
+    this.paramName = this.route.snapshot.paramMap.get('mainId') || '';
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('Search')) {
+      this.searchQuery = urlParams.get('Search') || '';
+    }
   }
 
   ngOnInit(): void {
-    this.isLoading = true;
-    this.userCacheService.getCategoryNameList().pipe(
-      switchMap(categories => {
-        const category = categories.find(c => c.name.toLowerCase() === this.paramName.toLowerCase());
-        if (category) {
-          this.categoryId = category.categoryId;
-          return this.userService.getProductsByCategory(this.categoryId);
-        } else {
-          console.error(`Category '${this.paramName}' not found.`);
-          return of([]); // Return an empty array if category is not found
-        }
-      }),
-      catchError(err => {
-        console.error('Error fetching tools:', err);
-        return of([]); // Return an empty array on error
-      }),
-      finalize(() => this.isLoading = false)
-    ).subscribe(tools => {
-      this.tools.push(...tools);
-    });
+    if (this.paramName) {
+      this.isLoading = true;
+      this.userCacheService.getCategoryNameList().pipe(
+        switchMap(categories => {
+          const category = categories.find(c => c.name.toLowerCase() === this.paramName.toLowerCase());
+          if (category) {
+            this.categoryId = category.categoryId;
+            return this.userService.getProductsByCategory(this.categoryId);
+          } else {
+            console.error(`Category '${this.paramName}' not found.`);
+            return of([]); // Return an empty array if category is not found
+          }
+        }),
+        catchError(err => {
+          console.error('Error fetching tools:', err);
+          return of([]); // Return an empty array on error
+        }),
+        finalize(() => this.isLoading = false)
+      ).subscribe(tools => {
+        this.tools.push(...tools);
+      });
+    }
+    else if (this.searchQuery) {
+      this.isLoading = true;
+
+      this.userService.searchProducts(this.searchQuery).pipe(
+        catchError(err => {
+          console.error('Error searching tools:', err);
+          return of([]); // Return an empty array on error
+        }),
+        finalize(() => this.isLoading = false)
+      ).subscribe(tools => {
+        this.tools.push(...tools);
+      });
+    }
   }
 
   ngAfterViewInit(): void {

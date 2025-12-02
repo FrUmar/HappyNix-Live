@@ -8,11 +8,13 @@
         <div class="card-header">
             <h2>All Orders</h2>
             <div class="filter-bar">
-                <button (click)="getOrderList(null)" [class.active]="currentFilter === 'All'">All</button>
-                <button (click)="getOrderList(1)" [class.active]="currentFilter === 'Pending'">Pending</button>
-                <button (click)="getOrderList(2)" [class.active]="currentFilter === 'Processing'">Processing</button>
-                <button (click)="getOrderList(3)" [class.active]="currentFilter === 'Completed'">Completed</button>
-                <button (click)="getOrderList(4)" [class.active]="currentFilter === 'Failed'">Failed</button>
+                <button (click)="filterBy('All')" [class.active]="currentFilter === 'All'">All</button>
+                <button (click)="filterBy('Pending')" [class.active]="currentFilter === 'Pending'">Pending</button>
+                <button (click)="filterBy('Processing')"
+                    [class.active]="currentFilter === 'Processing'">Processing</button>
+                <button (click)="filterBy('Completed')"
+                    [class.active]="currentFilter === 'Completed'">Completed</button>
+                <button (click)="filterBy('Failed')" [class.active]="currentFilter === 'Failed'">Failed</button>
             </div>
         </div>
 
@@ -24,17 +26,23 @@
                         <th>Customer</th>
                         <th>Date</th>
                         <th>Status</th>
+                        <th>Payment type</th>
                         <th>Total</th>
                     </tr>
                 </thead>
                 <tbody *ngIf="!isLoading">
-                    <tr *ngFor="let order of filteredOrders" (click)="selectOrder(order)"
+                    <tr *ngFor="let order of filteredOrders" (click)="openToolModal(orderModal,order)"
                         [class.selected]="selectedOrder?.id === order.id">
                         <td>{{ order.id.slice(0,5) }}</td>
                         <td>{{ order.customerName }}</td>
-                        <td>{{ order.date | date:'medium' }}</td>
+                        <td>{{ order.date | date:'EEE, dd MMM yyyy' }}
+                            , {{
+                            order.date |
+                            date:'shortTime' }}
+                        </td>
                         <td><span class="status-badge status-{{ order.status.toLowerCase() }}">{{ order.status }}</span>
                         </td>
+                        <td>{{ order.paymentMethod === 'Download' ? 'N/A' : order.paymentMethod }}</td>
                         <td>{{ order.total | currency }}</td>
                     </tr>
                     <tr *ngIf="!isLoading && filteredOrders.length === 0">
@@ -58,74 +66,12 @@
                         <td>
                             <div class="skeleton-loader"></div>
                         </td>
+                        <td>
+                            <div class="skeleton-loader"></div>
+                        </td>
                     </tr>
                 </tbody>
             </table>
-        </div>
-    </section>
-
-    <section class="dashboard-card order-details-card" *ngIf="selectedOrder">
-        <div class="card-header">
-            <h2>Order Details</h2>
-            <button class="close-btn" (click)="clearSelection()" title="Close">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <line x1="18" y1="6" x2="6" y2="18"></line>
-                    <line x1="6" y1="6" x2="18" y2="18"></line>
-                </svg>
-            </button>
-        </div>
-
-        <div class="details-content">
-            <div class="detail-group">
-                <span class="detail-label">Order ID</span>
-                <span class="detail-value">{{ selectedOrder.id }}</span>
-            </div>
-            <div class="detail-group">
-                <span class="detail-label">Customer</span>
-                <span class="detail-value">{{ selectedOrder.customerName }}</span>
-                <span class="detail-sub-value">{{ selectedOrder.customerEmail }}</span>
-            </div>
-            <div class="detail-group">
-                <span class="detail-label">Order Date</span>
-                <span class="detail-value">{{ selectedOrder.date | date:'full' }}</span>
-            </div>
-            <div class="detail-group">
-                <label for="status-update" class="detail-label">Status</label>
-                <div class="status-update-wrapper">
-                    <select id="status-update" [ngModel]="selectedOrder.status"
-                        (ngModelChange)="updateOrderStatus($event)">
-                        <option *ngFor="let status of orderStatuses" [value]="status">{{ status }}</option>
-                    </select>
-                </div>
-            </div>
-
-            <h3>Items in Order</h3>
-            <ul class="item-list">
-                <li *ngFor="let item of selectedOrder.items">
-                    <div class="item-info">
-                        <span class="item-name">{{ item.toolName }} (x{{ item.quantity }})</span>
-                        <span class="item-price">{{ item.price * item.quantity | currency }}</span>
-                    </div>
-                </li>
-            </ul>
-
-            <div class="order-total">
-                <span>Total</span>
-                <span>{{ selectedOrder.total | currency }}</span>
-            </div>
-        </div>
-    </section>
-
-    <section class="dashboard-card empty-details" *ngIf="!selectedOrder">
-        <h2>Select an Order</h2>
-        <p>Click on an order from the list to view its details here.</p>
-        <div class="placeholder-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none"
-                stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                <rect width="20" height="14" x="2" y="7" rx="2" ry="2" />
-                <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" />
-            </svg>
         </div>
     </section>
 </div>
@@ -133,7 +79,7 @@
 <section class="dashboard-card downloads-card">
     <h2>Recent Downloads</h2>
     <div class="downloads-list">
-        <div class="download-item" *ngFor="let download of downloadActivities">
+        <div class="download-item" *ngFor="let order of downloadOrders">
             <div class="download-icon">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -143,12 +89,80 @@
                 </svg>
             </div>
             <div class="download-info">
-                <p><strong>{{ download.customerName }}</strong> downloaded <strong>{{ download.toolName }}</strong>.</p>
-                <small>From Order: {{ download.orderId }} | {{ download.downloadDate | date:'short' }}</small>
+                <p><strong>{{ order.customerName }}</strong> downloaded <strong>{{ order.items[0]?.toolName
+                        }}</strong>.</p>
+                <small>From Order: {{ order.id.slice(0, 8) }}... | {{ order.date | date:'short' }}</small>
             </div>
         </div>
-        <div *ngIf="downloadActivities.length === 0" class="empty-state">
+        <div *ngIf="downloadOrders.length === 0 && !isLoading" class="empty-state">
             <p>No recent download activity.</p>
         </div>
     </div>
 </section>
+
+<ng-template #orderModal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title">Order Details</h4>
+        <div class="d-flex justify-content-end">
+            <svg style="position: relative; top: -60px" viewBox="0 -0.5 25 25" height="32" width="32"
+                (click)="modal.dismiss('Cross click')" class="d-pointer cancel" fill="none"
+                xmlns="http://www.w3.org/2000/svg">
+                <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                <g id="SVGRepo_iconCarrier">
+                    <path
+                        d="M6.96967 16.4697C6.67678 16.7626 6.67678 17.2374 6.96967 17.5303C7.26256 17.8232 7.73744 17.8232 8.03033 17.5303L6.96967 16.4697ZM13.0303 12.5303C13.3232 12.2374 13.3232 11.7626 13.0303 11.4697C12.7374 11.1768 12.2626 11.1768 11.9697 11.4697L13.0303 12.5303ZM11.9697 11.4697C11.6768 11.7626 11.6768 12.2374 11.9697 12.5303C12.2626 12.8232 12.7374 12.8232 13.0303 12.5303L11.9697 11.4697ZM18.0303 7.53033C18.3232 7.23744 18.3232 6.76256 18.0303 6.46967C17.7374 6.17678 17.2626 6.17678 16.9697 6.46967L18.0303 7.53033ZM13.0303 11.4697C12.7374 11.1768 12.2626 11.1768 11.9697 11.4697C11.6768 11.7626 11.6768 12.2374 11.9697 12.5303L13.0303 11.4697ZM16.9697 17.5303C17.2626 17.8232 17.7374 17.8232 18.0303 17.5303C18.3232 17.2374 18.3232 16.7626 18.0303 16.4697L16.9697 17.5303ZM11.9697 12.5303C12.2626 12.8232 12.7374 12.8232 13.0303 12.5303C13.3232 12.2374 13.3232 11.7626 13.0303 11.4697L11.9697 12.5303ZM8.03033 6.46967C7.73744 6.17678 7.26256 6.17678 6.96967 6.46967C6.67678 6.76256 6.67678 7.23744 6.96967 7.53033L8.03033 6.46967ZM8.03033 17.5303L13.0303 12.5303L11.9697 11.4697L6.96967 16.4697L8.03033 17.5303ZM13.0303 12.5303L18.0303 7.53033L16.9697 6.46967L11.9697 11.4697L13.0303 12.5303ZM11.9697 12.5303L16.9697 17.5303L18.0303 16.4697L13.0303 11.4697L11.9697 12.5303ZM13.0303 11.4697L8.03033 6.46967L6.96967 7.53033L11.9697 12.5303L13.0303 11.4697Z"
+                        fill="#fff"></path>
+                </g>
+            </svg>
+        </div>
+    </div>
+    <div class="p-4" *ngIf="selectedOrder">
+        <div class="order-details-container">
+            <div class="detail-section">
+                <div class="detail-group">
+                    <span class="detail-label">Order ID</span>
+                    <span class="detail-value code">{{ selectedOrder.id }}</span>
+                </div>
+                <div class="detail-group">
+                    <span class="detail-label">Order Date</span>
+                    <span class="detail-value">{{ selectedOrder.date | date:'EEE, dd MMM yyyy' }} , {{
+                        selectedOrder.date |
+                        date:'shortTime' }}</span>
+                </div>
+            </div>
+            <div class="detail-section customer-info">
+                <div class="detail-group">
+                    <span class="detail-label">Customer</span>
+                    <span class="detail-value">{{ selectedOrder.customerName }}</span>
+                    <span class="detail-sub-value">{{ selectedOrder.customerEmail }}</span>
+                </div>
+            </div>
+            <div class="detail-section">
+                <div class="detail-group">
+                    <label for="status-update" class="detail-label">Status</label>
+                    <div class="status-update-wrapper">
+                        <select id="status-update" class="form-select" [ngModel]="selectedOrder.status"
+                            (ngModelChange)="updateOrderStatus($event)">
+                            <option *ngFor="let status of orderStatuses" [value]="status">{{ status }}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="detail-group">
+                    <span class="detail-label">Payment Method</span>
+                    <span class="detail-value">{{ selectedOrder.paymentMethod }}</span>
+                </div>
+            </div>
+
+            <div class="items-section">
+                <h5 class="section-title">Tool in Order</h5>
+                <ul class="item-list">
+                    <li *ngFor="let item of selectedOrder.items" class="item">
+                        <span class="detail-label">{{ item.toolName }}</span>
+                        <span class="item-price">{{ item.price * item.quantity | currency }}</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</ng-template>

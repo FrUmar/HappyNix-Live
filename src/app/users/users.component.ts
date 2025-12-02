@@ -7,22 +7,29 @@ import { MatrixRainComponent } from './matrix-rain/matrix-rain.component';
 import { filter } from 'rxjs';
 import { UserService } from '../services/User/user.service';
 import { AccountService } from '../services/account/account.service';
+import { ConfirmationService, MessageService } from 'primeng/api';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-users',
-  imports: [RouterOutlet, CommonModule, MatrixRainComponent, RouterModule, FooterComponent],
+  imports: [RouterOutlet, ConfirmDialogModule, FormsModule, CommonModule, MatrixRainComponent, RouterModule, FooterComponent],
   templateUrl: './users.component.html',
-  styleUrl: './users.component.scss'
+  styleUrl: './users.component.scss',
+  providers: [ConfirmationService, MessageService]
+
 })
 export class UsersComponent {
   isMenuOpen = false;
+  position: any = 'topright';
+  searchQuery: string = '';
   isInProfilePage = false;
   user = {
     isLoggedIn: false,
     name: 'Name',
     avatar: 'https://img.freepik.com/premium-photo/portrait-anonymous-hacker-hacking-computer-system-cyber-crime-cyber-security-cybercrime_825385-827.jpg'
   };
-  constructor(private router: Router, private userService: UserService, private accountService: AccountService) {
+  constructor(private router: Router, private userService: UserService, private accountService: AccountService, private confirmationService: ConfirmationService,) {
     this.isLoginUser();
   }
   ngOnInit() {
@@ -52,6 +59,21 @@ export class UsersComponent {
     });
   }
   public Logout() {
-    this.accountService.doLogout();
+    // this.position = "center";
+    this.confirmationService.confirm({
+      message: 'Are you sure you want to proceed?',
+      header: 'Confirmation',
+      icon: 'pi pi-info-circle',
+      acceptIcon: "none",
+      rejectIcon: "none",
+      rejectButtonStyleClass: "p-button-text",
+      accept: () => {
+        this.accountService.doLogout();
+
+      },
+      reject: () => {
+      },
+      key: 'positionDialog'
+    });
   }
 }

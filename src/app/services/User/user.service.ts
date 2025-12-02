@@ -72,6 +72,14 @@ export class UserService {
             title: title
         });
     }
+    // products/search-products?query=ai%20p
+    searchProducts(query: string): Observable<toolDetails[]> {
+        return this.repositoryService.get(`products/search-products?query=${encodeURIComponent(query)}`, true)
+            .pipe(
+                map((data: any) => data as toolDetails[])
+            );
+    }
+
     getCategoryNameList(): Observable<AdminCategory[]> {
         return this.repositoryService.get('category/get-category-name-list', true)
             .pipe(

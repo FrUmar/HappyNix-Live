@@ -2,6 +2,7 @@ import { AdminService } from './../../services/Admin/admin.service';
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 interface OrderItem {
   toolId: number;
@@ -16,8 +17,7 @@ interface DownloadActivity {
   downloadDate: Date;
   orderId: string;
 }
-
-type OrderStatus = 'Completed' | 'Pending' | 'Failed' | 'Processing';
+type OrderStatus = 'Completed' | 'Pending' | 'Failed' | 'Processing' | 'Download';
 
 interface Order {
   id: string;
@@ -27,6 +27,7 @@ interface Order {
   status: OrderStatus;
   items: OrderItem[];
   total: number;
+  paymentMethod?: string;
 }
 
 @Component({
@@ -38,66 +39,84 @@ interface Order {
 })
 export class OrdersComponent implements OnInit {
   allOrders: Order[] = [];
+  downloadOrders: Order[] = [];
   filteredOrders: Order[] = [];
   selectedOrder: Order | null = null;
   currentFilter: OrderStatus | 'All' = 'All';
   orderStatuses: OrderStatus[] = ['Pending', 'Processing', 'Completed', 'Failed'];
   isLoading = false;
 
-  downloadActivities: DownloadActivity[] = [
-    { customerName: 'John Doe', toolName: 'Ghost Cloaker', downloadDate: new Date('2024-05-20T10:00:00Z'), orderId: 'ORD123' },
-    { customerName: 'Sam Fisher', toolName: 'Port Scanner', downloadDate: new Date('2024-05-21T11:00:00Z'), orderId: 'ORD126' },
-    { customerName: 'John Doe', toolName: 'Ghost Cloaker', downloadDate: new Date('2024-05-21T12:30:00Z'), orderId: 'ORD123' },
-  ];
-
-  constructor(private adminService: AdminService) { }
+  constructor(private adminService: AdminService, private modalService: NgbModal) { }
 
   ngOnInit(): void {
-    this.getOrderList(null);
+    this.loadOrders();
   }
-  getOrderList(statusId: number | null) {
+  loadOrders(): void {
     this.isLoading = true;
-    this.filteredOrders = [];
     this.selectedOrder = null;
 
-    switch (statusId) {
-      case 1: this.currentFilter = 'Pending'; break;
-      case 2: this.currentFilter = 'Processing'; break;
-      case 3: this.currentFilter = 'Completed'; break;
-      case 4: this.currentFilter = 'Failed'; break;
-      default: this.currentFilter = 'All';
-    }
-
-    let filter = {
+    const filter = {
       pageNumber: 1,
-      pageSize: 10,
-      statusId: statusId
-    }
-    this.adminService.getAllOrders(filter).subscribe((response) => {
-      this.allOrders = response.orders.map((order: any) => ({
-        id: order.id,
-        customerName: order.userName,
-        customerEmail: order.userEmail,
-        date: new Date(order.createdAt),
-        status: order.statusName,
-        total: order.amount,
-        items: [{
-          toolId: 0, // Not available in API response
-          toolName: order.productName,
-          quantity: 1, // Assuming 1
-          price: order.amount
-        }]
-      }));
-      this.filteredOrders = [...this.allOrders];
-      this.filteredOrders.sort((a, b) => b.date.getTime() - a.date.getTime());
-      this.isLoading = false;
-    }, () => {
-      this.isLoading = false;
-    });
+      pageSize: 100, // Fetch more for client-side filtering
+      statusId: null,
+    };
+
+    this.adminService.getAllOrders(filter).subscribe(
+      (response) => {
+        const allFetchedOrders: Order[] = response.orders.map((order: any) => ({
+          id: order.id,
+          customerName: order.userName,
+          customerEmail: order.userEmail,
+          date: new Date(order.createdAt),
+          status: order.statusName,
+          total: order.amount,
+          paymentMethod: order.paymentMethod,
+          items: [
+            {
+              toolId: 0, // Not available in API response
+              toolName: order.productName,
+              quantity: 1, // Assuming 1
+              price: order.amount,
+            },
+          ],
+        }));
+
+        this.downloadOrders = allFetchedOrders
+          .filter((order) => order.status === 'Download')
+          .sort((a, b) => b.date.getTime() - a.date.getTime());
+
+        this.allOrders = allFetchedOrders.filter((order) => order.status !== 'Download');
+
+        this.applyFilter();
+        this.isLoading = false;
+      },
+      () => {
+        this.isLoading = false;
+      }
+    );
   }
 
-  selectOrder(order: Order): void {
+  applyFilter(): void {
+    if (this.currentFilter === 'All') {
+      this.filteredOrders = [...this.allOrders];
+    } else {
+      this.filteredOrders = this.allOrders.filter((o) => o.status === this.currentFilter);
+    }
+    this.filteredOrders.sort((a, b) => b.date.getTime() - a.date.getTime());
+  }
+
+  filterBy(status: OrderStatus | 'All'): void {
+    this.currentFilter = status;
+    this.applyFilter();
+  }
+
+  openToolModal(modal: any, order: Order): void {
+
     this.selectedOrder = order;
+    this.modalService.open(modal, { size: 'md', centered: true, backdrop: 'static' }).result.then(
+      () => { this.clearSelection(); },
+      () => { this.clearSelection(); }
+    );
   }
 
   clearSelection(): void {

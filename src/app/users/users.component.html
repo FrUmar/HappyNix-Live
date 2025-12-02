@@ -24,8 +24,8 @@
                     <a [routerLink]="'/about'" [routerLinkActive]="'router-link-active'">About</a>
                 </nav>
                 <div class="search-bar">
-                    <input type="search" placeholder="Search tools, exploits...">
-                    <button>Search</button>
+                    <input type="search" [(ngModel)]="searchQuery" placeholder="Search tools, exploits...">
+                    <button [routerLink]="['/tools']" [queryParams]="{ Search: searchQuery }">Search</button>
                 </div>
                 <div class="user-actions">
                     <div *ngIf="user.isLoggedIn; else loginButton" class="user-profile">
@@ -91,3 +91,5 @@
         </div>
     </div>
 </div>
+
+<p-confirmDialog key="positionDialog" [position]="position" rejectButtonStyleClass="p-button-outlined" />

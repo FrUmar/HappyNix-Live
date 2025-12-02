@@ -39,7 +39,7 @@
                 <div class="tool-actions">
                     <button class="neon-button" [routerLink]="'/details'"
                         [queryParams]="{ toolId: tool.productId}">Details</button>
-                    <button class="neon-button green">Download</button>
+                    <button class="neon-button green" (click)="placeOrder(tool)">Download</button>
                 </div>
             </div>
             }

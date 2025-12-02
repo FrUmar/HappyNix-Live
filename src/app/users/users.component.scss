@@ -413,3 +413,50 @@ svg{
   }
 }
 
+::ng-deep.p-dialog {
+  background: #2f4858 !important;
+  border-radius: 10px !important;
+margin: 50px;
+  .p-dialog-header {
+    color: #fff;
+    padding: 10px;
+  }
+  .p-dialog-header-actions{
+    display: none !important;
+  }
+  .p-confirmdialog-message {
+    color: #fff;
+    padding: 10px;
+  }
+
+  .p-dialog-footer {
+    justify-content: center !important;
+    gap: 13px !important;
+    padding: 8px !important;
+  }
+
+  .p-confirmdialog-reject-button {
+    background: #fff !important;
+    border: 1px solid black;
+    color: #2f4858 !important;
+    border-radius: 8px !important;
+width: 100px !important;
+    &:hover {
+      background: #e43232 !important;
+      color: #fff !important;
+    }
+  }
+
+  .p-confirmdialog-accept-button {
+    background: #ffffff !important;
+    border: 1px solid black;
+    color: #2f4858 !important;
+    border-radius: 8px !important;
+    width: 100px !important;
+
+    &:hover {
+      background: #71be61 !important;
+      color: #fff !important;
+    }
+  }
+}

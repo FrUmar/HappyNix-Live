@@ -97,6 +97,13 @@ export class AdminService {
                 map((data: any) => data as any)
             );
     }
+    // User/update-order-status
+    updateOrderStatus(body: any): Observable<any> {
+        return this.repositoryService.put(`User/update-order-status`, body)
+            .pipe(
+                map((data: any) => data as any)
+            );
+    }
 
 
 }

@@ -40,7 +40,11 @@ const routes: Routes = [
         component: AboutComponent,
       },
       {
-        path: 'tools/:toolId',
+        path: 'tools/:mainId',
+        component: ToolsListComponent,
+      },
+      {
+        path: 'tools',
         component: ToolsListComponent,
       },
     ],

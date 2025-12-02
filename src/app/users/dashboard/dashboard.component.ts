@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy, AfterViewInit, ElementRef, QueryList, ViewChildren, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { CardLoadingComponent } from "../../reuse/card-loading/card-loading.component";
 import { UserService } from '../../services/User/user.service';
 import { toolDetails } from '../../models/user';
@@ -99,7 +99,7 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChildren('animatedSection', { read: ElementRef }) animatedSections!: QueryList<ElementRef>;
   private observer?: IntersectionObserver;
   private sectionsSubscription?: Subscription;
-  constructor(private modalService: NgbModal) {
+  constructor(private modalService: NgbModal, private userService: UserService, private router: Router) {
 
   }
   ngOnInit(): void {
@@ -186,5 +186,33 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
 
   nextSlide(): void {
     this.currentSlide = (this.currentSlide + 1) % this.slides.length;
+  }
+  placeOrder(product: any): void {
+
+    const expiration = new Date(localStorage.getItem('exploits_expiration') ?? '');
+    if (
+      !localStorage.getItem('exploits_access_token') ||
+      !localStorage.getItem('exploits_userId') ||
+      expiration < new Date()
+    ) {
+      this.router.navigateByUrl(`/auth/login`);
+      return;
+    }
+    const payload: any = {
+      amount: 0,
+      productName: product.name,
+      paymentMethod: 'Download',
+      savedCardId: null, // Not available from form
+      cryptoWalletAddress: null // Not available from form
+    };
+
+    this.userService.createOrder(payload).subscribe({
+      next: (response) => {
+
+      },
+      error: (err) => {
+        console.error('Order placement failed:', err);
+      }
+    });
   }
 }

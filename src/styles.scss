@@ -22,6 +22,7 @@
   --status-failed: #ff5555;
   --font-hacker: 'Share Tech Mono', monospace;
 }
+
 @keyframes glitch-anim-1 {
   0% { clip: rect(42px, 9999px, 44px, 0); }
   5% { clip: rect(17px, 9999px, 94px, 0); }
