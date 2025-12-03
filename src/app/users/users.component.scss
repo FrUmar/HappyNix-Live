@@ -189,6 +189,7 @@
 // Responsive Styles
 @media (max-width: 1024px) {
   .dashboard-header {
+    margin-bottom: 10px;
     .search-bar {
       display: none !important;
     }
@@ -420,6 +421,8 @@ margin: 50px;
   .p-dialog-header {
     color: #fff;
     padding: 10px;
+    font-family: 'Share Tech Mono', monospace;
+
   }
   .p-dialog-header-actions{
     display: none !important;
@@ -427,6 +430,8 @@ margin: 50px;
   .p-confirmdialog-message {
     color: #fff;
     padding: 10px;
+    font-family: 'Share Tech Mono', monospace;
+
   }
 
   .p-dialog-footer {
@@ -437,26 +442,27 @@ margin: 50px;
 
   .p-confirmdialog-reject-button {
     background: #fff !important;
-    border: 1px solid black;
     color: #2f4858 !important;
     border-radius: 8px !important;
 width: 100px !important;
+font-family: 'Share Tech Mono', monospace;
+background: #e43232 !important;
+color: #fff !important;
     &:hover {
-      background: #e43232 !important;
-      color: #fff !important;
+      opacity: 0.8;
     }
   }
 
   .p-confirmdialog-accept-button {
     background: #ffffff !important;
-    border: 1px solid black;
     color: #2f4858 !important;
     border-radius: 8px !important;
     width: 100px !important;
-
+    font-family: 'Share Tech Mono', monospace;
+    background: #71be61 !important;
+    color: #fff !important;
     &:hover {
-      background: #71be61 !important;
-      color: #fff !important;
+      opacity: 0.8;
     }
   }
 }

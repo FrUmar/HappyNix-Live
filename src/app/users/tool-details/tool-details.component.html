@@ -56,7 +56,8 @@
                     <h3 *ngIf="!tool.isFree" class="price">$ {{ tool.price }}</h3>
                     <h3 *ngIf="tool.isFree" class="price">Free</h3>
                 </div>
-                <button *ngIf="!tool.isFree" class="neon-button green" data-text="Buy Now">
+                <button (click)="OpenBuyNowPopUp(tool)" *ngIf="!tool.isFree" class="neon-button green"
+                    data-text="Buy Now">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                         stroke-linecap="round" stroke-linejoin="round">
                         <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
@@ -65,7 +66,7 @@
                     </svg>
                     Buy Now
                 </button>
-                <button *ngIf="tool.isFree" class="neon-button green" data-text="Download">
+                <button (click)="placeOrder(tool)" *ngIf="tool.isFree" class="neon-button green" data-text="Download">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                         stroke-linecap="round" stroke-linejoin="round">
                         <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>

@@ -39,6 +39,7 @@ interface Order {
   styleUrls: ['./user-profile.component.scss']
 })
 export class UserProfileComponent implements OnInit {
+  orderLoading: boolean = false;
   user: userDetails = {
     id: '',
     name: '',
@@ -91,9 +92,14 @@ export class UserProfileComponent implements OnInit {
       this.isUpdating = false;
       this.userCacheService.patchUserProfile(data);
       this.userService.Toast('success', 'Profile updated successfully');
-    });
+    }, error => {
+      this.isUpdating = false;
+      this.userService.Toast('error', 'Failed to update profile');
+    }
+    );
   }
   getUserOrdersHistory(): void {
+    this.orderLoading = true;
     this.userService.getUserOrdersHistory().subscribe(response => {
       // Map the response to the Order interface if necessary
       this.orders = response.map((order: any) => ({
@@ -106,6 +112,10 @@ export class UserProfileComponent implements OnInit {
         statusName: order.statusName,
         productName: order.productName
       }));
+      this.orderLoading = false;
+    }, error => {
+
+      this.orderLoading = false;
     });
   }
 

@@ -9,6 +9,7 @@ import { AdminCategory } from '../../models/admin';
 import { UserCacheService } from '../../services/UserCacheData/userCacheService';
 import { BuyNowComponent } from '../buy-now/buy-now.component';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { FormsModule } from '@angular/forms';
 
 // Define interfaces for better type safety
 interface Slide {
@@ -30,12 +31,13 @@ interface VmwareTool {
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, RouterModule, CardLoadingComponent],
+  imports: [CommonModule, RouterModule, FormsModule, CardLoadingComponent],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss'
 })
 export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
   private behaviorSubject = inject(UserCacheService);
+  searchQuery: string = '';
 
   slides: Slide[] = [
     {

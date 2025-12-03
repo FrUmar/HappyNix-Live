@@ -9,12 +9,14 @@
             <h2>All Orders</h2>
             <div class="filter-bar">
                 <button (click)="filterBy('All')" [class.active]="currentFilter === 'All'">All</button>
-                <button (click)="filterBy('Pending')" [class.active]="currentFilter === 'Pending'">Pending</button>
+                <button (click)="filterBy('Pending')"
+                    [class.active]="currentFilter !== 'All' && currentFilter.type === 'Pending'">Pending</button>
                 <button (click)="filterBy('Processing')"
-                    [class.active]="currentFilter === 'Processing'">Processing</button>
+                    [class.active]="currentFilter !== 'All' && currentFilter.type === 'Processing'">Processing</button>
                 <button (click)="filterBy('Completed')"
-                    [class.active]="currentFilter === 'Completed'">Completed</button>
-                <button (click)="filterBy('Failed')" [class.active]="currentFilter === 'Failed'">Failed</button>
+                    [class.active]="currentFilter !== 'All' && currentFilter.type === 'Completed'">Completed</button>
+                <button (click)="filterBy('Failed')"
+                    [class.active]="currentFilter !== 'All' && currentFilter.type === 'Failed'">Failed</button>
             </div>
         </div>
 
@@ -40,7 +42,9 @@
                             order.date |
                             date:'shortTime' }}
                         </td>
-                        <td><span class="status-badge status-{{ order.status.toLowerCase() }}">{{ order.status }}</span>
+                        <td>
+                            <div class="status-badge {{ order.status.type.toLowerCase() }}">{{ order.status.type
+                                }}</div>
                         </td>
                         <td>{{ order.paymentMethod === 'Download' ? 'N/A' : order.paymentMethod }}</td>
                         <td>{{ order.total | currency }}</td>
@@ -142,9 +146,11 @@
                 <div class="detail-group">
                     <label for="status-update" class="detail-label">Status</label>
                     <div class="status-update-wrapper">
-                        <select id="status-update" class="form-select" [ngModel]="selectedOrder.status"
+                        <select id="status-update" class="form-select" [ngModel]="selectedOrder.status.type"
                             (ngModelChange)="updateOrderStatus($event)">
-                            <option *ngFor="let status of orderStatuses" [value]="status">{{ status }}</option>
+                            <option *ngFor="let status of orderStatuses | slice:0:6" [value]="status.type">{{
+                                status.type }}
+                            </option>
                         </select>
                     </div>
                 </div>

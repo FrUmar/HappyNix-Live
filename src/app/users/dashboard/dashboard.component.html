@@ -1,4 +1,12 @@
 <!-- Slider/Banner -->
+<div class="search">
+
+    <div class="search-bar">
+        <input type="search" [(ngModel)]="searchQuery" placeholder="Search tools, exploits...">
+        <button [routerLink]="['/tools']" [queryParams]="{ Search: searchQuery }">Search</button>
+    </div>
+</div>
+
 <div class="slider-container">
     @for (slide of slides; track slide.title; let i = $index) {
     <div class="slide" [class.active]="i === currentSlide" [style.backgroundImage]="'url(' + slide.image + ')'">

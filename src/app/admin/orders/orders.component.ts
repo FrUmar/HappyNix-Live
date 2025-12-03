@@ -11,13 +11,11 @@ interface OrderItem {
   price: number;
 }
 
-interface DownloadActivity {
-  customerName: string;
-  toolName: string;
-  downloadDate: Date;
-  orderId: string;
+
+interface OrderStatus {
+  id: number;
+  type: string;
 }
-type OrderStatus = 'Completed' | 'Pending' | 'Failed' | 'Processing' | 'Download';
 
 interface Order {
   id: string;
@@ -43,7 +41,15 @@ export class OrdersComponent implements OnInit {
   filteredOrders: Order[] = [];
   selectedOrder: Order | null = null;
   currentFilter: OrderStatus | 'All' = 'All';
-  orderStatuses: OrderStatus[] = ['Pending', 'Processing', 'Completed', 'Failed'];
+  orderStatuses: OrderStatus[] = [
+    { id: 1, type: 'Pending' },
+    { id: 2, type: 'Processing' },
+    { id: 3, type: 'Completed' },
+    { id: 4, type: 'Failed' },
+    { id: 5, type: 'Cancelled' },
+    { id: 6, type: 'Refunded' },
+    { id: 7, type: 'Download' },
+  ];
   isLoading = false;
 
   constructor(private adminService: AdminService, private modalService: NgbModal) { }
@@ -68,7 +74,7 @@ export class OrdersComponent implements OnInit {
           customerName: order.userName,
           customerEmail: order.userEmail,
           date: new Date(order.createdAt),
-          status: order.statusName,
+          status: this.orderStatuses.find(s => s.type === order.statusName)!,
           total: order.amount,
           paymentMethod: order.paymentMethod,
           items: [
@@ -82,10 +88,10 @@ export class OrdersComponent implements OnInit {
         }));
 
         this.downloadOrders = allFetchedOrders
-          .filter((order) => order.status === 'Download')
+          .filter((order) => order.status.type === 'Download')
           .sort((a, b) => b.date.getTime() - a.date.getTime());
 
-        this.allOrders = allFetchedOrders.filter((order) => order.status !== 'Download');
+        this.allOrders = allFetchedOrders.filter((order) => order.status.type !== 'Download');
 
         this.applyFilter();
         this.isLoading = false;
@@ -105,8 +111,10 @@ export class OrdersComponent implements OnInit {
     this.filteredOrders.sort((a, b) => b.date.getTime() - a.date.getTime());
   }
 
-  filterBy(status: OrderStatus | 'All'): void {
-    this.currentFilter = status;
+  filterBy(statusType: string): void {
+    this.currentFilter = statusType === 'All'
+      ? 'All'
+      : this.orderStatuses.find(s => s.type === statusType)!;
     this.applyFilter();
   }
 
@@ -123,27 +131,20 @@ export class OrdersComponent implements OnInit {
     this.selectedOrder = null;
   }
 
-  updateOrderStatus(newStatus: OrderStatus): void {
+  updateOrderStatus(newStatusType: string): void {
     if (!this.selectedOrder) return;
+    const newStatus = this.orderStatuses.find(s => s.type === newStatusType);
+    if (!newStatus) return;
 
-    // Here you would typically call a service to update the order on the backend.
-    // For now, we'll just update the local state.
-    this.selectedOrder.status = newStatus;
-
-    const indexInAll = this.allOrders.findIndex(o => o.id === this.selectedOrder!.id);
-    if (indexInAll !== -1) {
-      this.allOrders[indexInAll].status = newStatus;
-    }
-
-    // If the current filter is not 'All' and the status changed, the item might disappear from the list.
-    if (this.currentFilter !== 'All' && this.currentFilter !== newStatus) {
-      this.filteredOrders = this.filteredOrders.filter(o => o.id !== this.selectedOrder!.id);
-      this.clearSelection();
-    } else {
-      const indexInFiltered = this.filteredOrders.findIndex(o => o.id === this.selectedOrder!.id);
-      if (indexInFiltered !== -1) {
-        this.filteredOrders[indexInFiltered].status = newStatus;
+    const body = {
+      orderId: this.selectedOrder.id,
+      statusId: newStatus.id
+    };
+    this.adminService.updateOrderStatus(body).subscribe({
+      next: () => {
+        this.selectedOrder!.status = newStatus;
+        this.applyFilter();
       }
-    }
+    });
   }
 }

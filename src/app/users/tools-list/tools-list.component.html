@@ -1,5 +1,5 @@
 <section class="tools-section">
-    <h2>{{paramName}}</h2>
+    <h2>{{paramName?paramName:'Search: '+searchQuery}}</h2>
     <div class="controls">
         <div class="filter">
             <label>Filter:</label>
@@ -35,8 +35,9 @@
             <div class="tool-actions">
                 <button class="neon-button" [routerLink]="'/details'"
                     [queryParams]="{ toolId: tool.productId}">Details</button>
-                <button class="neon-button green" *ngIf="tool.isFree">Download</button>
-                <button class="neon-button green" *ngIf="!tool.isFree">Buy Now</button>
+                <button class="neon-button green" *ngIf="tool.isFree" (click)="placeOrder(tool)">Download</button>
+                <button class="neon-button green" *ngIf="!tool.isFree"
+                    (click)="OpenBuyNowPopUp(tool.productId,tool)">Buy Now</button>
             </div>
         </div>
         } @empty {

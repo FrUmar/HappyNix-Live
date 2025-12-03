@@ -176,7 +176,7 @@
 table {
   width: 100%;
   border-collapse: collapse;
-  border: 2px solid #0ff;
+  // border: 2px solid #0ff;
   box-shadow: 0 0 12px rgba(0, 255, 255, 0.3);
 
   thead tr {
@@ -207,23 +207,41 @@ table {
   }
 
   .status {
-    padding: 4px 8px;
     border-radius: 12px;
-    font-weight: bold;
+    padding: 0.25rem 0.75rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    width:120px ;
+    text-align: center;
     &.completed {
       background-color: rgba(0, 255, 0, 0.2);
       color: #0ff;
-      border: 1px solid #0ff;
     }
     &.pending {
       background-color: rgba(255, 255, 0, 0.2);
       color: #ff0;
-      border: 1px solid #ff0;
     }
     &.failed {
       background-color: rgba(255, 0, 0, 0.2);
       color: #f00;
-      border: 1px solid #f00;
+    }
+    &.processing {
+      background-color: rgba(255, 165, 0, 0.2);
+      color: #ffa500;
+    }
+    &.download{
+      background-color: rgba(0, 191, 255, 0.2);
+      color: #00b0ff;
+    }
+    &.refunded {
+      background-color: rgba(128, 0, 128, 0.2);
+      color: #800080;
+  }
+  &.cancelled{
+      background-color: rgba(255, 20, 147, 0.2);
+      color: #ff1493;
     }
   }
 }

@@ -73,15 +73,34 @@
                             <th>Status</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody *ngIf="!orderLoading">
                         <tr *ngFor="let order of orders">
                             <td data-label="Order ID">{{ order.id.slice(0,6)}}</td>
                             <td data-label="Date">{{ order.createdAt }}</td>
                             <td data-label="Item">{{ order.productName }}</td>
                             <td data-label="Price">$ {{ order.amount }}</td>
                             <td data-label="Status">
-                                <span class="status" [ngClass]="order.statusName.toLowerCase()">{{ order.statusName
-                                    }}</span>
+                                <div class="status" [ngClass]="order.statusName.toLowerCase()">{{ order.statusName
+                                    }}</div>
+                            </td>
+                        </tr>
+                    </tbody>
+                    <tbody *ngIf="orderLoading">
+                        <tr *ngFor="let i of [1, 2, 3, ]">
+                            <td>
+                                <div class="skeleton-loader"></div>
+                            </td>
+                            <td>
+                                <div class="skeleton-loader"></div>
+                            </td>
+                            <td>
+                                <div class="skeleton-loader"></div>
+                            </td>
+                            <td>
+                                <div class="skeleton-loader"></div>
+                            </td>
+                            <td>
+                                <div class="skeleton-loader"></div>
                             </td>
                         </tr>
                     </tbody>
