@@ -310,3 +310,48 @@ table {
         }
     }
 }
+
+.pagination-controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 1rem;
+    gap: 1rem;
+
+    .btn-page {
+        padding: 0.5rem 1rem;
+        border: 1px solid #ddd;
+        background: white;
+        border-radius: 4px;
+        cursor: pointer;
+
+        &:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        &:hover:not(:disabled) {
+            background-color: #f8f9fa;
+        }
+    }
+
+    .page-info {
+        font-size: 0.9rem;
+        color: #666;
+    }
+}
+
+// tost styles
+::ng-deep {
+    .swal2-toast {
+      background-color: #010409 !important;
+  
+      .swal2-title {
+        color: #c9d1d9 !important;
+      }
+  
+      .swal2-timer-progress-bar {
+        background: #00f7ff !important;
+      }
+    }
+  }

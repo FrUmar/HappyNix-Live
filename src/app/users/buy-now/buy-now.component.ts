@@ -31,14 +31,6 @@ interface CryptoOption {
   icon: string; // SVG path data
 }
 
-// नया इंटरफ़ेस
-interface CardDetails {
-  number: string;
-  expiry: string;
-  cvv: string;
-  holder: string;
-}
-
 @Component({
   selector: 'app-buy-now',
   // FormsModule को imports में जोड़ा गया है ताकि [(ngModel)] काम करे
@@ -74,13 +66,7 @@ export class BuyNowComponent implements OnInit {
   orderStatus: 'idle' | 'success' | 'error' = 'idle';
   orderId: string | null = null;
   isCardFormValid: boolean = false;
-
-  cardDetails: CardDetails = { // Card details initialization
-    number: '',
-    expiry: '',
-    cvv: '',
-    holder: ''
-  };
+  cryptoWalletAddress: string = '';
 
   cryptoOptions: CryptoOption[] = [
     {
@@ -167,39 +153,48 @@ export class BuyNowComponent implements OnInit {
     if (this.paymentMethod === 'Card') {
       return this.isCardFormValid;
     } else if (this.paymentMethod === 'Crypto') {
-      // Check if a crypto option is selected
-      return true;
+      // Check if a crypto option is selected and wallet address is provided
+      return !!this.cryptoWalletAddress?.trim();
     }
     return false;
   }
 
   placeOrder(): void {
     const product = this.selectedProduct;
-
     if (!product || !this.isPaymentValid()) {
       this.orderStatus = 'error';
       return;
     }
-
     this.isPlacingOrder = true;
     this.orderStatus = 'idle';
 
-    const payload: any = {
-      amount: product.price,
-      productName: product.name,
-      paymentMethod: this.paymentMethod,
-      savedCardId: null, // Not available from form
-      cryptoWalletAddress: null // Not available from form
-    };
+    let payload: any;
 
-    if (this.paymentMethod === 'Card' && this.creditCardComponent) {
-      const cardData = this.creditCardComponent.getFormValue();
-      payload.savedCardName = cardData.name;
-      payload.savedCardId = cardData.cardnumber;
-      payload.savedCardSecurityCode = cardData.securitycode;
-      payload.savedCardExpireDate = cardData.expirationdate;
+    if (this.paymentMethod === 'Card') {
+      // In a real application, you would use Stripe.js to create a PaymentMethod ID
+      // from the card details and send that ID to your backend.
+      // Since we don't have Stripe implemented here, we'll simulate this.
+      const paymentMethodId = 'pm_card_placeholder_id'; // Simulated Stripe PaymentMethod ID
+
+      payload = {
+        productId: product.productId,
+        paymentMethod: 'Card',
+        paymentMethodId: paymentMethodId,
+        cryptoWalletAddress: null
+      };
+      this.sendOrder(payload);
+    } else if (this.paymentMethod === 'Crypto') {
+      payload = {
+        productId: product.productId,
+        paymentMethod: 'Crypto',
+        paymentMethodId: null,
+        cryptoWalletAddress: this.cryptoWalletAddress
+      };
+      this.sendOrder(payload);
     }
+  }
 
+  private sendOrder(payload: any) {
     this.userService.createOrder(payload).subscribe({
       next: (response) => {
         this.orderId = response.orderId; // Assuming response contains orderId
@@ -213,5 +208,4 @@ export class BuyNowComponent implements OnInit {
       }
     });
   }
-
 }

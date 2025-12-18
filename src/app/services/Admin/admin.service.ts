@@ -92,7 +92,14 @@ export class AdminService {
     }
     // /User/admin/orders
     getAllOrders(filter: any): Observable<any> {
-        return this.repositoryService.post('User/admin/orders', filter, true)
+        return this.repositoryService.post('User/admin/orders-list', filter, true)
+            .pipe(
+                map((data: any) => data as any)
+            );
+    }
+    // User/admin/user-downloads-list
+    getRecentDownloads() {
+        return this.repositoryService.get('User/admin/user-downloads-list', true)
             .pipe(
                 map((data: any) => data as any)
             );

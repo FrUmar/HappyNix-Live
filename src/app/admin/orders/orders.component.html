@@ -33,7 +33,7 @@
                     </tr>
                 </thead>
                 <tbody *ngIf="!isLoading">
-                    <tr *ngFor="let order of filteredOrders" (click)="openToolModal(orderModal,order)"
+                    <tr *ngFor="let order of paginatedOrders" (click)="openToolModal(orderModal, order)"
                         [class.selected]="selectedOrder?.id === order.id">
                         <td>{{ order.id.slice(0,5) }}</td>
                         <td>{{ order.customerName }}</td>
@@ -75,6 +75,21 @@
                         </td>
                     </tr>
                 </tbody>
+
+                <div class="pagination-controls" *ngIf="filteredOrders.length > pageSize">
+                    <button [disabled]="currentPage === 1" (click)="currentPage = currentPage - 1" class="btn-page">
+                        Previous
+                    </button>
+
+                    <span class="page-info">
+                        Page <strong>{{ currentPage }}</strong> of {{ totalPages }}
+                    </span>
+
+                    <button [disabled]="currentPage >= totalPages" (click)="currentPage = currentPage + 1"
+                        class="btn-page">
+                        Next
+                    </button>
+                </div>
             </table>
         </div>
     </section>
@@ -93,9 +108,9 @@
                 </svg>
             </div>
             <div class="download-info">
-                <p><strong>{{ order.customerName }}</strong> downloaded <strong>{{ order.items[0]?.toolName
+                <p><strong>{{ order.userName }}</strong> downloaded <strong>{{ order.productName
                         }}</strong>.</p>
-                <small>From Order: {{ order.id.slice(0, 8) }}... | {{ order.date | date:'short' }}</small>
+                <small>From Order: {{ order.orderId.slice(0, 8) }}... | {{ order.createdAt | date:'short' }}</small>
             </div>
         </div>
         <div *ngIf="downloadOrders.length === 0 && !isLoading" class="empty-state">

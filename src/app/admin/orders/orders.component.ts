@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import Swal from 'sweetalert2';
 
 interface OrderItem {
   toolId: number;
@@ -16,7 +17,13 @@ interface OrderStatus {
   id: number;
   type: string;
 }
-
+interface download {
+  orderId: string;
+  userName: string;
+  productName: string;
+  createdAt: Date;
+  statusName: string;
+}
 interface Order {
   id: string;
   customerName: string;
@@ -37,7 +44,9 @@ interface Order {
 })
 export class OrdersComponent implements OnInit {
   allOrders: Order[] = [];
-  downloadOrders: Order[] = [];
+  downloadOrders: download[] = [];
+  currentPage = 1;
+  pageSize = 10;
   filteredOrders: Order[] = [];
   selectedOrder: Order | null = null;
   currentFilter: OrderStatus | 'All' = 'All';
@@ -56,50 +65,80 @@ export class OrdersComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadOrders();
+    this.getUserDownload();
   }
   loadOrders(): void {
+
     this.isLoading = true;
     this.selectedOrder = null;
 
     const filter = {
-      pageNumber: 1,
-      pageSize: 100, // Fetch more for client-side filtering
+      pageNumber: this.currentPage,
+      pageSize: this.pageSize,
       statusId: null,
     };
 
     this.adminService.getAllOrders(filter).subscribe(
-      (response) => {
-        const allFetchedOrders: Order[] = response.orders.map((order: any) => ({
-          id: order.id,
-          customerName: order.userName,
-          customerEmail: order.userEmail,
-          date: new Date(order.createdAt),
-          status: this.orderStatuses.find(s => s.type === order.statusName)!,
-          total: order.amount,
-          paymentMethod: order.paymentMethod,
-          items: [
-            {
-              toolId: 0, // Not available in API response
-              toolName: order.productName,
-              quantity: 1, // Assuming 1
-              price: order.amount,
-            },
-          ],
-        }));
+      (response: any) => {
+        // --- KEY CHANGES START HERE ---
+        const allFetchedOrders: Order[] = response.orders.map((order: any) => {
 
-        this.downloadOrders = allFetchedOrders
-          .filter((order) => order.status.type === 'Download')
-          .sort((a, b) => b.date.getTime() - a.date.getTime());
+          // Safety check: find status by name, fallback to 'Pending' (index 0) if not found to prevent errors
+          const matchedStatus = this.orderStatuses.find(s => s.type === order.statusName) || this.orderStatuses[0];
 
-        this.allOrders = allFetchedOrders.filter((order) => order.status.type !== 'Download');
+          return {
+            id: order.orderId,               // JSON uses 'orderId', not 'id'
+            customerName: order.userName,    // Matches JSON
+            customerEmail: order.userEmail,  // Matches JSON
+            date: new Date(order.createdAt), // Matches JSON
+            status: matchedStatus,           // Logic adjusted for safety
+            total: order.price,              // JSON uses 'price', not 'amount'
+            paymentMethod: order.paymentMethod,
+            items: [
+              {
+                toolId: 0,                   // Not in API, default to 0
+                toolName: order.name,        // JSON uses 'name', not 'productName'
+                quantity: 1,                 // Assumed 1
+                price: order.price,          // JSON uses 'price', not 'amount'
+              },
+            ],
+          };
+        });
+        // --- KEY CHANGES END HERE ---
+
+        // this.downloadOrders = allFetchedOrders
+        //   .filter((order) => order.status.type === 'Download')
+        //   .sort((a, b) => b.date.getTime() - a.date.getTime());
+
+        this.allOrders = allFetchedOrders
 
         this.applyFilter();
         this.isLoading = false;
       },
-      () => {
+      (error) => {
+        console.error('Error loading orders', error);
         this.isLoading = false;
       }
     );
+
+  }
+
+  getUserDownload() {
+    this.adminService.getRecentDownloads().subscribe(dt => {
+      for (let a = 0; a < dt.length; a++) {
+
+        let data = {
+          orderId: dt[a].orderId,
+          userName: dt[a].userName,
+          productName: dt[a].name,
+          createdAt: new Date(dt[a].createdAt),
+          statusName: dt[a].statusName
+
+        };
+        this.downloadOrders.push(data);
+      }
+
+    });
   }
 
   applyFilter(): void {
@@ -111,12 +150,7 @@ export class OrdersComponent implements OnInit {
     this.filteredOrders.sort((a, b) => b.date.getTime() - a.date.getTime());
   }
 
-  filterBy(statusType: string): void {
-    this.currentFilter = statusType === 'All'
-      ? 'All'
-      : this.orderStatuses.find(s => s.type === statusType)!;
-    this.applyFilter();
-  }
+
 
   openToolModal(modal: any, order: Order): void {
 
@@ -141,10 +175,51 @@ export class OrdersComponent implements OnInit {
       statusId: newStatus.id
     };
     this.adminService.updateOrderStatus(body).subscribe({
-      next: () => {
+      next: (rec) => {
         this.selectedOrder!.status = newStatus;
         this.applyFilter();
+        this.modalService.dismissAll();
+        if (rec.statusCode === 200) {
+          const Toast = Swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+              toast.onmouseenter = Swal.stopTimer;
+              toast.onmouseleave = Swal.resumeTimer;
+            }
+          });
+          Toast.fire({
+            icon: "success",
+            title: "Order status updated successfully"
+          });
+        }
+      },
+      error: (error) => {
+        console.error('Error updating order status', error);
       }
     });
+  }
+
+
+  // Add this getter to handle the slicing logic
+  get paginatedOrders(): Order[] {
+    const startIndex = (this.currentPage - 1) * this.pageSize;
+    return this.filteredOrders.slice(startIndex, startIndex + this.pageSize);
+  }
+
+  // Add this to reset page when filtering
+  filterBy(statusType: string): void {
+    this.currentPage = 1; // Reset to page 1 on new filter
+    this.currentFilter = statusType === 'All'
+      ? 'All'
+      : this.orderStatuses.find(s => s.type === statusType)!;
+    this.applyFilter();
+  }
+  // Helper for total pages
+  get totalPages(): number {
+    return Math.ceil(this.filteredOrders.length / this.pageSize);
   }
 }
