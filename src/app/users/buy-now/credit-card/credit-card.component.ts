@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, AfterViewInit, ViewChild, ElementRef, Output, EventEmitter } from '@angular/core';
+import { Component, OnDestroy, OnInit, AfterViewInit, ViewChild, ElementRef, Output, EventEmitter, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs';
@@ -58,7 +58,7 @@ export class CreditCardComponent implements OnInit, AfterViewInit, OnDestroy {
   public svgSingleIconHtml: string = '';
   private formValueChangesSub!: Subscription;
   amex_single = amex_single
-  constructor(private formBuilder: FormBuilder) { }
+  constructor(private formBuilder: FormBuilder, private cdr: ChangeDetectorRef) { }
 
   ngOnInit(): void {
     this.initializeForm();
@@ -70,6 +70,7 @@ export class CreditCardComponent implements OnInit, AfterViewInit, OnDestroy {
     // Use a property to control the 'preload' class in the template.
     // This avoids direct DOM manipulation and is a cleaner Angular approach.
     this.isViewInitialized = true;
+    this.cdr.detectChanges();
   }
 
   ngOnDestroy(): void {

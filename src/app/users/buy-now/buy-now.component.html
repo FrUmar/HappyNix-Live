@@ -61,7 +61,12 @@
         </div>
 
     </form> -->
-    <app-credit-card (formValidityChange)="onCardFormValidityChange($event)"></app-credit-card>
+    <!-- <app-credit-card (formValidityChange)="onCardFormValidityChange($event)"></app-credit-card> -->
+    <ngx-stripe-card [options]="cardOptions" [elementsOptions]="elementsOptions">
+    </ngx-stripe-card>
+    <!-- <button class="btn btn-primary mt-3" (click)="pay()" [disabled]="isProcessing ">
+        Pay Now
+    </button> -->
     }
 
     @if (paymentMethod === 'Crypto') {
@@ -95,7 +100,7 @@
         </div>
         } @else {
         <button class="neon-button green" (click)="placeOrder()"
-            [disabled]="!selectedProduct || isPlacingOrder || !isPaymentValid()">
+            [disabled]="!selectedProduct || (paymentMethod === 'Crypto' && !cryptoWalletAddress)">
             @if (isPlacingOrder) {
             PROCESSING...
             } @else {

@@ -6,6 +6,7 @@ export const environment = {
   production: false,
   // apiUrl: 'https://gtlibs.com:7023/api',
   apiUrl: 'https://localhost:7204/api',
+  stripePublicKey: 'pk_test_51SgWhWADJ1lSNi6OCz5YPctXUeEBofB8tJ1UM9W2WOsLFQ0yyJ0ooWjL0hYtbRzh4AHEp40qUGQzKaQE9GUqmhZp00oOuRWKNb'
 
 };
 

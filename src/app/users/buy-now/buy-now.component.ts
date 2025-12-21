@@ -7,6 +7,13 @@ import { AccountService } from '../../services/account/account.service';
 import { UserService } from '../../services/User/user.service';
 import { Router } from '@angular/router';
 
+import { StripeService, NgxStripeModule, StripeCardComponent } from 'ngx-stripe';
+import {
+  StripeCardElementOptions,
+  StripeElementsOptions
+} from '@stripe/stripe-js';
+import { HttpClient } from '@angular/common/http';
+
 interface toolDetails {
   productId: string;
   name: string;
@@ -34,7 +41,8 @@ interface CryptoOption {
 @Component({
   selector: 'app-buy-now',
   // FormsModule को imports में जोड़ा गया है ताकि [(ngModel)] काम करे
-  imports: [CommonModule, FormsModule, CreditCardComponent],
+  imports: [CommonModule, FormsModule, CreditCardComponent,
+    NgxStripeModule],
   templateUrl: './buy-now.component.html',
   styleUrl: './buy-now.component.scss',
   standalone: true // Added standalone for simplicity in new Angular projects
@@ -43,7 +51,13 @@ export class BuyNowComponent implements OnInit {
   @Input() modalRef!: NgbModalRef;
   @Input() toolId!: any;
   @ViewChild(CreditCardComponent) creditCardComponent!: CreditCardComponent;
+  cardOptions: StripeCardElementOptions = {
+    hidePostalCode: true
+  };
 
+  elementsOptions: StripeElementsOptions = {
+    locale: 'en'
+  };
   private _products: toolDetails[] = [];
   @Input()
   set product(value: toolDetails | toolDetails[]) {
@@ -66,8 +80,10 @@ export class BuyNowComponent implements OnInit {
   orderStatus: 'idle' | 'success' | 'error' = 'idle';
   orderId: string | null = null;
   isCardFormValid: boolean = false;
+  isProcessing: boolean = false;
   cryptoWalletAddress: string = '';
-
+  @ViewChild(StripeCardComponent)
+  card!: StripeCardComponent;
   cryptoOptions: CryptoOption[] = [
     {
       key: 'BTC',
@@ -82,8 +98,8 @@ export class BuyNowComponent implements OnInit {
   ];
 
 
-  constructor(private accountService: AccountService, private router: Router, private userService: UserService,
-  ) {
+  constructor(private accountService: AccountService, private router: Router, private userService: UserService, private stripeService: StripeService,
+    private http: HttpClient) {
     // Initializing defaults
     // Since `product` is an array, we select the first one as default if needed,
     // but the component typically expects it to be set by the parent.
@@ -151,7 +167,9 @@ export class BuyNowComponent implements OnInit {
     }
 
     if (this.paymentMethod === 'Card') {
-      return this.isCardFormValid;
+      let d = this.card.getCard();
+      debugger
+      return d ? true : false;
     } else if (this.paymentMethod === 'Crypto') {
       // Check if a crypto option is selected and wallet address is provided
       return !!this.cryptoWalletAddress?.trim();
@@ -174,15 +192,14 @@ export class BuyNowComponent implements OnInit {
       // In a real application, you would use Stripe.js to create a PaymentMethod ID
       // from the card details and send that ID to your backend.
       // Since we don't have Stripe implemented here, we'll simulate this.
-      const paymentMethodId = 'pm_card_placeholder_id'; // Simulated Stripe PaymentMethod ID
+      // const paymentMethodId = 'pm_card_placeholder_id'; // Simulated Stripe PaymentMethod ID
+      const formValue = this.creditCardComponent.getFormValue();
+      // IMPORTANT: To use raw card data (number, exp, cvc) directly like this,
+      // you MUST enable "Process payments with raw card details" in your Stripe Dashboard.
+      // Settings > Integration > Legacy > Handle card information directly.
 
-      payload = {
-        productId: product.productId,
-        paymentMethod: 'Card',
-        paymentMethodId: paymentMethodId,
-        cryptoWalletAddress: null
-      };
-      this.sendOrder(payload);
+      this.pay()
+
     } else if (this.paymentMethod === 'Crypto') {
       payload = {
         productId: product.productId,
@@ -208,4 +225,80 @@ export class BuyNowComponent implements OnInit {
       }
     });
   }
+
+
+  pay() {
+    this.isProcessing = true;
+
+    this.stripeService.createPaymentMethod({
+      type: 'card',
+      card: this.card.element
+    }).subscribe(result => {
+
+      if (result.error) {
+        alert(result.error.message);
+        this.isProcessing = false;
+      } else {
+        let payload = {
+          productId: this.product[0].productId,
+          paymentMethod: 'Card',
+          paymentMethodId: result.paymentMethod!.id,
+          cryptoWalletAddress: null
+        };
+        this.sendOrder(payload);
+      }
+    });
+
+    // const formValue = this.creditCardComponent.getFormValue();
+    // return this.stripeService
+    //   .createPaymentMethod({
+    //     type: 'card',
+    //     card: {
+    //       number: formValue.cardnumber,
+    //       exp_month: parseInt(formValue.expirationdate.substring(0, 2), 10),
+    //       exp_year: parseInt('20' + formValue.expirationdate.substring(2, 4), 10),
+    //       cvc: formValue.securitycode
+    //     },
+    //     billing_details: {
+    //       name: formValue.name
+    //     }
+    //   } as any).subscribe(result => {
+
+    //     if (result.error) {
+    //       alert(result.error.message);
+    //       this.isProcessing = false;
+    //       return;
+    //     }
+
+    //     this.createOrder(result.paymentMethod!.id);
+    //   });
+  }
+
+  private createOrder(paymentMethodId: string) {
+    const product = this.selectedProduct;
+    if (!product || !this.isPaymentValid()) {
+      this.orderStatus = 'error';
+      return;
+    }
+    const payload = {
+      productId: product.productId,
+      paymentMethod: 'Card',
+      paymentMethodId
+    };
+
+    this.http.post(
+      'https://localhost:5001/api/orders/create-order',
+      payload
+    ).subscribe({
+      next: () => {
+        alert('Payment Successful');
+        this.isProcessing = false;
+      },
+      error: err => {
+        alert(err.error);
+        this.isProcessing = false;
+      }
+    });
+  }
+
 }

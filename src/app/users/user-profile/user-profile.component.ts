@@ -14,21 +14,27 @@ interface User {
   bio: string;
   joinedDate: string;
 }
-// orderId: string;
-// date: string;
-// item: string;
-// price: number;
-// status: 'Completed' | 'Pending' | 'Failed';
 
+// "orderId": "4bb2360e-e1cf-41bb-f441-08de3e4b0dcb",
+// "userId": "dc024044-6c2a-451f-aa41-416dc5a223d0",
+// "paymentMethod": "Download",
+// "createdAt": "2025-12-18T15:35:20.787",
+// "statusId": 7,
+// "name": "WiFi Crackers ",
+// "productId": "f5fd1d12-313f-4bdf-979d-8874250dab0e",
+// "price": 50.00,
+// "statusName": "Download"
 interface Order {
-  id: string;
+  orderId: string;
   userId: string;
   paymentMethod: string;
   amount: number;
-  productName: string;
   createdAt: string;
   statusId: number;
   statusName: string;
+  name: string;
+  price: number;
+  productId: string;
 }
 
 @Component({
@@ -103,14 +109,16 @@ export class UserProfileComponent implements OnInit {
     this.userService.getUserOrdersHistory().subscribe(response => {
       // Map the response to the Order interface if necessary
       this.orders = response.map((order: any) => ({
-        id: order.id,
+        orderId: order.orderId,
         userId: order.userId,
         paymentMethod: order.paymentMethod,
         amount: order.amount,
         createdAt: order.createdAt,
         statusId: order.statusId,
         statusName: order.statusName,
-        productName: order.productName
+        name: order.name,
+        price: order.price,
+        productId: order.productId
       }));
       this.orderLoading = false;
     }, error => {
